@@ -1,0 +1,33 @@
+@mixin inverse($color, $color-inverse) {
+    background: none;
+    color: $color;
+    transition: all 0.3s ease;
+    &:hover {
+        background: $color;
+        color: $color-inverse;
+    }
+}
+
+@mixin noneToInverse($color, $color-inverse, $color-background) {
+    background: none;
+    color: $color;
+    transition: all 0.3s ease;
+    &:hover {
+        background: $color-background;
+        color: $color-inverse;
+    }
+}
+
+@mixin noneToInverseChild($color, $color-inverse, $color-background) {
+    transition: all 0.3s ease;
+    background: none;
+    * {
+        color: $color;
+    }
+    &:hover {
+        background: $color-background;
+        * {
+            color: $color-inverse;
+        }
+    }
+}

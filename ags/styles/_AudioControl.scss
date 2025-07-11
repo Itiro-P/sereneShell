@@ -1,0 +1,8 @@
+@use 'common/Colors';
+@use 'common/Layout';
+@use 'common/Transitions';
+
+.AudioControl {
+    @extend %widget;
+    @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+}

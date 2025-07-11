@@ -1,0 +1,96 @@
+@use 'common/Colors';
+@use 'common/Layout';
+
+.Media {
+    .MprisInfo {
+        @extend %widget;
+        background-color: rgba(Colors.$surface0, 0.8);
+        border-radius: 20px;
+        transition: all 0.25s ease;
+
+        &:hover {
+            background-color: rgba(Colors.$blue, 0.8);
+            color: Colors.$crust;
+        }
+    }
+
+    .MprisPlayer {
+        background-color: rgba(Colors.$crust, 0.6);
+
+        .Cava, .Cava > * {
+            margin: 0;
+            padding: 0;
+            color: rgba(Colors.$blue, 0.8);
+        }
+
+        .PlayerInfo {
+            padding: 16px;
+            .Info {
+                margin-left: 12px;
+                .Title {
+                    font-size: 20px;
+                    color: Colors.$text;
+                }
+
+                .Artist {
+                    font-size: 18px;
+                    color: rgba(Colors.$text, 0.7);
+                }
+
+                .Album {
+                    font-size: 16px;
+                    color: rgba(Colors.$text, 0.5);
+                    font-style: italic;
+                }
+            }
+            .LowerPart {
+                margin-top: 12px;
+                padding: 12px;
+
+                .PlayerSlider {
+                    padding: 4px;
+                    background-color: rgba(Colors.$crust, 0.8);
+                    border: none;
+                    border-radius: 14px;
+
+                    margin: 5px;
+                    .Slider {
+                        min-width: 160px;
+                        min-height: 1px;
+
+                        highlight {
+                            background-color: Colors.$blue;
+                        }
+                    }
+
+                    .TimeLabel {
+                        margin-left: 10px;
+                        font-size: 0.9em;
+                        opacity: 0.8;
+                        min-width: 40px;
+                    }
+                }
+
+                .Controllers {
+                    .Previous, .PlayPause, .Next {
+                        transition: all 0.25s ease;
+                        margin: 4px;
+                        background: Colors.$base;
+                        border: none;
+                        border-radius: 8px;
+                        image {
+                            margin: 12px;
+                            color: Colors.$blue;
+                        }
+                        &:hover {
+                            image {
+                                color: Colors.$base;
+                            }
+                            background: Colors.$blue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

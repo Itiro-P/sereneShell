@@ -1,0 +1,8 @@
+@use 'common/Colors';
+@use 'common/Layout';
+@use 'common/Transitions';
+
+.MemoryUsage {
+    @extend %widget;
+    @include Transitions.inverse(Colors.$peach, Colors.$base);
+}

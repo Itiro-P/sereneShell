@@ -1,0 +1,17 @@
+@use 'common/Colors';
+@use 'common/Layout';
+
+.Battery {
+    @extend %widget;
+    border-radius: 20px;
+    .BatteryIcon, .BatteryLabel {
+        color: Colors.$lavender;
+    }
+}
+
+.BatteryCritical {
+    background-color: Colors.$red;
+    .BatteryIcon, .BatteryUsageLabel {
+        color: Colors.$crust;
+    }
+}

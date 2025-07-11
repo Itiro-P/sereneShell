@@ -1,0 +1,35 @@
+@use 'common/Colors';
+@use 'common/Font';
+@use 'Time';
+@use 'MemoryUsage';
+@use 'Battery';
+@use 'CpuUsage';
+@use 'AudioControl';
+@use 'Clients';
+@use 'Workspaces';
+@use 'TrayItem';
+@use 'Media';
+
+/* Resetting every decoration applied earlier */
+* {
+    font-family: Font.$font-family;
+    font-size: Font.$font-size-normal;
+    -gtk-icon-size: Font.$icon-size;
+
+    color: Colors.$text;
+    background: none;
+
+    border: none;
+    box-shadow: none;
+    outline: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+.Bar {
+    background: Colors.$base;
+    border-radius: 20px;
+    margin: 4px 6px;
+    padding: 1px;
+}

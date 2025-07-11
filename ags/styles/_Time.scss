@@ -1,0 +1,9 @@
+@use 'common/Colors';
+@use 'common/Layout';
+
+.Time {
+    @extend %widget;
+    background-color: rgba(Colors.$surface0, 0.6);
+    border-radius: 16px;
+    margin: 4px;
+}

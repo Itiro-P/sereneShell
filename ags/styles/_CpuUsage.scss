@@ -1,0 +1,8 @@
+@use 'common/Colors';
+@use 'common/Layout';
+@use 'common/Transitions';
+
+.CpuUsage {
+    @extend %widget;
+    @include Transitions.inverse(Colors.$green, Colors.$base);
+}

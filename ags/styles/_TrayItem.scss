@@ -1,0 +1,39 @@
+@use 'common/Colors';
+
+.TrayItem {
+    padding: 2px 4px;
+    border-radius: 16px;
+    margin: 2px;
+    -gtk-icon-size: 18px;
+    transition: all 0.25s ease;
+
+    &:hover {
+        background-color: rgba(Colors.$blue, 0.8);
+        color: Colors.$crust;
+    }
+
+    &:active {
+        background-color: rgba(Colors.$blue, 0.6);
+        color: Colors.$crust;
+    }
+
+    popover.menu {
+        margin: 10px;
+        background-color: Colors.$surface0;
+        border-radius: 10px;
+    }
+
+    popover.menu modelbutton {
+        padding: 2px;
+        border-radius: 4px;
+        margin: 0 2px;
+    }
+
+    popover.menu modelbutton:hover {
+        background: rgba(Colors.$surface1, 0.2);
+    }
+
+    popover.menu modelbutton:active {
+        background: rgba(Colors.$surface1, 0.4);
+    }
+}
