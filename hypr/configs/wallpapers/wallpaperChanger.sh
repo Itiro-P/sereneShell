@@ -25,7 +25,7 @@ change_wall() {
       --resize fit \
       --outputs "${outputs[i]}" \
       --transition-type grow \
-      --transition-duration 2 \
+      --transition-duration 1.5 \
       "${images[idxs[i]]}"
   done
 }
@@ -42,4 +42,3 @@ change_wall IMAGES
 while sleep "$INTERVAL"; do
   change_wall IMAGES
 done
-
