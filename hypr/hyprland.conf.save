@@ -51,5 +51,5 @@ source = $HOME/.config/hypr/configs/keybind.conf
 ### WINDOWS AND WORKSPACES ###
 ##############################
 
-source = $HOME/.config/hypr/configs/windows.conf
+source = $HOME/.config/hypr/configs/windows.rconf
 source = $HOME/.config/hypr/workspaces.conf
