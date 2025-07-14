@@ -45,9 +45,6 @@ function TrayItem({ item }: { item: InstanceType<typeof Tray.TrayItem> }) {
                     clickSecondary.disconnect(handlers.secondary);
                     item.disconnect(handlers.menuModel);
                     item.disconnect(handlers.actionG);
-                    self.remove_controller(clickPrimary);
-                    self.remove_controller(clickMiddle);
-                    self.remove_controller(clickSecondary);
                 }
             }
             child ={

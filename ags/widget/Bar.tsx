@@ -27,7 +27,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
                     <box halign={Gtk.Align.CENTER}>
                         <Clients />
                         <Media />
-                        <Workspaces />
+                        <Workspaces monitor={gdkmonitor} />
                     </box>
                     <box halign={Gtk.Align.END}>
                         <MiniTime />

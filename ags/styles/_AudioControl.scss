@@ -6,3 +6,48 @@
     @extend %widget;
     @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
 }
+
+.MixerPopover {
+    padding: 6px;
+    background-color: rgba(Colors.$surface0, 0.8);
+    border: none;
+    border-radius: 10px;
+
+    .MixerEntry {
+        background-color: Colors.$surface1;
+        padding: 4px;
+        border: none;
+        border-radius: 10px;
+
+        .EntryName {
+            margin-bottom: 4px;
+            padding: 4px;
+            border: none;
+            border-radius: 12px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .Playing {
+            background-color: Colors.$blue;
+            * { color: Colors.$crust; }
+        }
+
+        .Muted {
+            background-color: Colors.$crust;
+            * { color: Colors.$blue; }
+        }
+
+        .EntrySlider {
+            min-width: 160px;
+            min-height: 1px;
+            background-color: Colors.$surface2;
+            border: none;
+            border-radius: 10px;
+
+            highlight {
+                margin: 2px;
+                background-color: Colors.$blue;
+            }
+        }
+    }
+}

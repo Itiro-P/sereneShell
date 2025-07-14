@@ -1,0 +1,7 @@
+@use 'common/Colors';
+
+tooltip {
+    padding: 6px;
+    background-color: Colors.$surface0;
+    border-radius: 10px;
+}
