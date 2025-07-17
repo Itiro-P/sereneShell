@@ -2,7 +2,7 @@ import { Gtk, Gdk } from "astal/gtk4";
 import Mpris from "gi://AstalMpris";
 import { GLib, GObject, Variable, bind } from "astal";
 import {  Overlay, Slider } from "astal/gtk4/widget";
-import Cava from "./Cava";
+import { Cava, CavaButton } from "./Cava";
 
 type PlayerAction = 'previous' | 'next' | 'playpause';
 
@@ -521,9 +521,7 @@ function PlayerInfo() {
 }
 
 function MprisInfo() {
-    return (
-        <label cssClasses={["MprisInfo"]} label={bind(mediaState).as(c => formatState(c.currentState))} widthChars={12}/>
-    );
+    return (<label cssClasses={["MprisInfo"]} label={bind(mediaState).as(c => formatState(c.currentState))} widthChars={12}/>);
 }
 
 export function MprisPlayer() {
@@ -541,6 +539,12 @@ export function MprisPlayer() {
                     self.set_clip_overlay(playerInfo, false);
                 }
             }
+            onDestroy={() => {
+                if(mprisHandlers.length > 0) {
+                    mpris.disconnect(mprisHandlers[0]);
+                    mpris.disconnect(mprisHandlers[1]);
+                }
+            }}
             overflow={Gtk.Overflow.HIDDEN}
         />
     );
@@ -551,17 +555,15 @@ export default function Media() {
     initializeMpris();
 
     return (
-        <box
-            cssClasses={["Media"]}
-            child={
-                <menubutton
-                    hexpand
-                    alwaysShowArrow={false}
-                    sensitive={bind(mediaState).as(c => c.lastPlayer !== null)}
-                    child={<MprisInfo />}
-                    popover={<popover child={<MprisPlayer />} /> as Gtk.Popover}
-                />
-            }
-        />
+        <box cssClasses={["Media"]}>
+            <menubutton
+                hexpand
+                alwaysShowArrow={false}
+                sensitive={bind(mediaState).as(c => c.lastPlayer !== null)}
+                child={<MprisInfo />}
+                popover={<popover child={<MprisPlayer />} /> as Gtk.Popover}
+            />
+            <CavaButton />
+        </box>
     );
 }

@@ -1,10 +1,40 @@
 @use 'common/Colors';
 @use 'common/Layout';
 
+.Cava, .Cava > *, .CavaOverlay, .CavaOverlay > * {
+    margin: 0;
+    padding: 0;
+}
+
+.Cava, .Cava > * {
+    color: rgba(Colors.$blue, 0.8);
+}
+
+.CavaOverlay, .CavaOverlay > * {
+    color: rgba(Colors.$blue, 0.5);
+}
+
 .Media {
+    @extend %widget;
+    background-color: rgba(Colors.$surface0, 0.8);
+    border-radius: 20px;
+
     .MprisInfo {
-        @extend %widget;
-        background-color: rgba(Colors.$surface0, 0.8);
+        margin: 2px;
+        background-color: rgba(Colors.$surface1, 0.8);
+        border-radius: 20px;
+        transition: all 0.25s ease;
+
+        &:hover {
+            background-color: rgba(Colors.$blue, 0.8);
+            color: Colors.$crust;
+        }
+    }
+
+    .CavaButton {
+        margin: 2px;
+        padding: 0px 10px;
+        background-color: rgba(Colors.$surface1, 0.8);
         border-radius: 20px;
         transition: all 0.25s ease;
 
@@ -16,12 +46,6 @@
 
     .MprisPlayer {
         background-color: rgba(Colors.$crust, 0.6);
-
-        .Cava, .Cava > * {
-            margin: 0;
-            padding: 0;
-            color: rgba(Colors.$blue, 0.8);
-        }
 
         .PlayerInfo {
             padding: 16px;

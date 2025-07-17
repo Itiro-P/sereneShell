@@ -1,11 +1,12 @@
 import { App, Gdk, Gtk } from "astal/gtk4"
 import style from "./styles/index.scss"
 import Bar from "./widget/Bar"
+import CavaBackground from "./widget/CavaBackground"
 
 App.start({
     css: style,
     main() {
-        const monitorBars: Map<Gdk.Monitor, Gtk.Widget> = new Map();
+        const monitorWidgets: Map<Gdk.Monitor, { bar: Gtk.Widget, background: Gtk.Widget }> = new Map();
 
         function getMonitorId(monitor: Gdk.Monitor): string {
             const geometry = monitor.get_geometry();
@@ -21,31 +22,46 @@ App.start({
             const currentMonitorIds = new Set(currentMonitors.map(getMonitorId));
 
             currentMonitors.forEach(monitor => {
-                if (!monitorBars.has(monitor)) {
+                if (!monitorWidgets.has(monitor)) {
                     const bar = Bar(monitor);
-                    monitorBars.set(monitor, bar);
+                    const background = CavaBackground(monitor);
+                    monitorWidgets.set(monitor, { bar, background });
                 }
             });
 
             const removedMonitors: Gdk.Monitor[] = [];
-            monitorBars.forEach((bar, monitor) => {
+            monitorWidgets.forEach((widgets, monitor) => {
                 if (!currentMonitorIds.has(getMonitorId(monitor))) {
                     removedMonitors.push(monitor);
                 }
             });
 
             removedMonitors.forEach(monitor => {
-                const bar = monitorBars.get(monitor);
+                const widgets = monitorWidgets.get(monitor);
 
-                if (bar) {
-                    bar.unparent();
-                    monitorBars.delete(monitor);
+                if (widgets) {
+                    try {
+                        widgets.bar.unparent();
+                    } catch (error) {
+                        console.warn("Error destroying bar widget:", error);
+                    }
+
+                    try {
+                        widgets.background.unparent();
+                    } catch (error) {
+                        console.warn("Error destroying background widget:", error);
+                    }
+
+                    monitorWidgets.delete(monitor);
                 }
             });
         }
 
         updateMonitors();
         App.notify("monitors");
-        App.connect("notify::monitors", () => updateMonitors());
+
+        App.connect("notify::monitors", () => {
+            updateMonitors();
+        });
     },
 })

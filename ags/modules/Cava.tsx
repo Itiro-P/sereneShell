@@ -3,6 +3,9 @@ import { mediaState } from "./Media";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
+import { bind, Variable } from "astal";
+
+export const cavaOnBackground = Variable<boolean>(false);
 
 const CavaConfig = {
     autosens: true,
@@ -78,6 +81,8 @@ class CavaWidget extends Gtk.DrawingArea {
         if (!cavaInstance || !this.get_mapped()) return;
 
         try {
+            if (!this.visible) return;
+
             const width = this.get_allocated_width();
             const height = this.get_allocated_height();
 
@@ -171,8 +176,27 @@ class CavaWidget extends Gtk.DrawingArea {
 
 const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
-export default function Cava() {
+export function Cava() {
     return (
-        <box cssClasses={["Cava"]} overflow={Gtk.Overflow.HIDDEN} child={new _cava()} />
+        <box cssClasses={["Cava"]} overflow={Gtk.Overflow.HIDDEN} child={new _cava()} visible={bind(cavaOnBackground).as(cob => !cob)} />
+    );
+}
+
+export function CavaOverlay() {
+    return (
+        <box cssClasses={["CavaOverlay"]} child={new _cava()} />
+    );
+}
+
+export function CavaButton() {
+    const click = new Gtk.GestureClick();
+    const handler = click.connect('pressed', () => cavaOnBackground.set(!cavaOnBackground.get()));
+    return (
+        <label
+            cssClasses={["CavaButton"]}
+            setup={(self) => self.add_controller(click)}
+            onDestroy={(self) => { self.remove_controller(click); click.disconnect(handler); cavaOnBackground.drop(); }}
+            label={bind(cavaOnBackground).as(cob => cob ? '-' : '+')}
+        />
     );
 }
