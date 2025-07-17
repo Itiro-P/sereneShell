@@ -37,6 +37,7 @@ export const mediaState = Variable<MediaStats>({
 
 const playerDuration = Variable<PlayerTime>({position: 0, duration: 0});
 const progressPercent = Variable<number>(0);
+const cava = Cava();
 
 let updateTimeout: number | null = null;
 let retryTimeout: number | null = null;
@@ -530,7 +531,6 @@ export function MprisPlayer() {
             cssClasses={["MprisPlayer"]}
             setup={
                 (self: Gtk.Overlay) => {
-                    const cava = Cava();
                     const playerInfo = PlayerInfo();
 
                     self.set_child(cava);

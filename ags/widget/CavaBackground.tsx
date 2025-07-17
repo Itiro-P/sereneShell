@@ -2,10 +2,10 @@ import { App, Astal, Gdk } from "astal/gtk4"
 import { cavaOnBackground, CavaOverlay } from "../modules/Cava";
 import { bind } from "astal";
 
-const cava = CavaOverlay();
-
 export default function CavaBackground(gdkmonitor: Gdk.Monitor) {
     const { LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
+    const cava = CavaOverlay();
+    cava.heightRequest = gdkmonitor.get_height_mm() * 2;
 
     return (
         <window
@@ -16,7 +16,6 @@ export default function CavaBackground(gdkmonitor: Gdk.Monitor) {
             exclusivity={Astal.Exclusivity.IGNORE}
             anchor={ RIGHT | LEFT | BOTTOM}
             application={App}
-            heightRequest={gdkmonitor.get_height_mm() * 2}
             visible={bind(cavaOnBackground).as(cob => cob)}
             child={cava}
         />
