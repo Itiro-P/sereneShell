@@ -20,49 +20,104 @@ const CavaConfig = {
     lerpFactor: 1
 };
 
-const cavaInstance = AstalCava.get_default();
-if(!cavaInstance) console.log("Cava instance not found");
-cavaInstance?.set_autosens(CavaConfig.autosens);
-cavaInstance?.set_bars(CavaConfig.bars);
-cavaInstance?.set_framerate(CavaConfig.framerate);
-cavaInstance?.set_input(CavaConfig.input);
-cavaInstance?.set_noise_reduction(CavaConfig.noiseReduction);
-cavaInstance?.set_stereo(CavaConfig.stereo);
+let cavaInstance: AstalCava.Cava | null = null;
+let globalHandler: number | null = null;
+let activeWidgets: Set<CavaWidget> = new Set();
+
+let cavaValues = new Float32Array(CavaConfig.bars);
+let cavaNorm = new Float32Array(CavaConfig.bars);
+
+function initializeCava(): AstalCava.Cava | null {
+    if (!cavaInstance) {
+        try {
+            cavaInstance = AstalCava.get_default();
+            if (!cavaInstance) {
+                console.log("Cava instance not found");
+                return null;
+            }
+
+            cavaInstance.set_autosens(CavaConfig.autosens);
+            cavaInstance.set_bars(CavaConfig.bars);
+            cavaInstance.set_framerate(CavaConfig.framerate);
+            cavaInstance.set_input(CavaConfig.input);
+            cavaInstance.set_noise_reduction(CavaConfig.noiseReduction);
+            cavaInstance.set_stereo(CavaConfig.stereo);
+        } catch (error) {
+            console.warn("Erro ao inicializar Cava:", error);
+        }
+    }
+    return cavaInstance;
+}
+
+function setupGlobalHandler() {
+    if (!globalHandler && cavaInstance) {
+        globalHandler = cavaInstance.connect("notify::values", () => {
+            try {
+                const raw = cavaInstance!.get_values();
+                if (!raw || raw.length === 0) return;
+
+                const bars = Math.min(CavaConfig.bars, raw.length);
+                const sens = CavaConfig.sensitivity;
+                const lerp = CavaConfig.lerpFactor;
+
+                for (let i = 0; i < bars; i++) {
+                    const vRaw = (raw[i] || 0) * sens;
+                    cavaValues[i] += (vRaw - cavaValues[i]) * lerp;
+                }
+
+                activeWidgets.forEach(widget => {
+                    if (widget.get_mapped() && widget.get_realized()) {
+                        widget.queue_draw();
+                    }
+                });
+            } catch (error) {
+                console.warn("Erro no handler global do Cava:", error);
+            }
+        });
+    }
+}
+
+function cleanupGlobalHandler() {
+    if (globalHandler && cavaInstance && activeWidgets.size === 0) {
+        try {
+            cavaInstance.disconnect(globalHandler);
+            globalHandler = null;
+        } catch (error) {
+            console.warn("Erro ao desconectar handler global:", error);
+        }
+    }
+}
+
+function registerWidget(widget: CavaWidget) {
+    activeWidgets.add(widget);
+
+    if (!cavaInstance) {
+        initializeCava();
+    }
+
+    if (activeWidgets.size === 1) {
+        setupGlobalHandler();
+    }
+}
+
+function unregisterWidget(widget: CavaWidget) {
+    activeWidgets.delete(widget);
+
+    if (activeWidgets.size === 0) {
+        cleanupGlobalHandler();
+    }
+}
 
 class CavaWidget extends Gtk.DrawingArea {
-    private values!: Float32Array;
-    private norm!: Float32Array;
-    private _handler: number | null = null;
     private _lastWidth = 0;
     private _lastHeight = 0;
-    private _pathBuilder: Gsk.PathBuilder | null = null;
 
     constructor() {
         super();
-        this.setupRect();
-        this.setupCava();
         this.set_hexpand(true);
         this.set_vexpand(true);
-    }
 
-    private setupRect() {
-        this.values = new Float32Array(CavaConfig.bars);
-        this.norm = new Float32Array(CavaConfig.bars);
-        this.add_css_class("Container");
-    }
-
-    private setupCava() {
-        try {
-            if (cavaInstance && !this._handler) {
-                this._handler = cavaInstance.connect("notify::values", () => {
-                    if (this.get_mapped() && this.get_realized()) {
-                        this.queue_draw();
-                    }
-                });
-            }
-        } catch (error) {
-            console.warn("Erro ao configurar Cava:", error);
-        }
+        registerWidget(this);
     }
 
     override vfunc_size_allocate(width: number, height: number, baseline: number): void {
@@ -71,8 +126,6 @@ class CavaWidget extends Gtk.DrawingArea {
         if (this._lastWidth !== width || this._lastHeight !== height) {
             this._lastWidth = width;
             this._lastHeight = height;
-            this._pathBuilder = null;
-
             this.queue_draw();
         }
     }
@@ -95,41 +148,33 @@ class CavaWidget extends Gtk.DrawingArea {
     }
 
     private draw_catmull_rom(snapshot: Gtk.Snapshot, width: number, height: number): void {
-        if (!cavaInstance || !mediaState.get().lastPlayer) return;
+        if (!mediaState.get().lastPlayer) return;
 
         try {
-            const raw = cavaInstance!.get_values() || null;
-            if (!raw || raw.length === 0) return;
-
-            const bars = Math.min(CavaConfig.bars, raw.length);
+            const bars = CavaConfig.bars;
             if (bars === 0) return;
 
             const barWidth = width / (bars - 1);
             const color = this.parent.get_color();
-            const sens = CavaConfig.sensitivity;
-            const lerp = CavaConfig.lerpFactor;
-            const invSix = 1 / 6;
 
             for (let i = 0; i < bars; i++) {
-                const vRaw = (raw[i] || 0) * sens;
-                const v = this.values[i] += (vRaw - this.values[i]) * lerp;
-                this.norm[i] = height - height * Math.max(0, Math.min(1, v));
+                const v = Math.max(0, Math.min(1, cavaValues[i]));
+                cavaNorm[i] = height - height * v;
             }
 
-            const builder = this._pathBuilder = new Gsk.PathBuilder();
+            const builder = new Gsk.PathBuilder();
+            builder.move_to(0, cavaNorm[0]);
 
-            builder.move_to(0, this.norm[0]);
-
+            const invSix = 1 / 6;
             for (let i = 0; i < bars - 1; i++) {
-
                 const p0x = (i - 1) * barWidth;
-                const p0y = this.norm[Math.max(0, i - 1)];
+                const p0y = cavaNorm[Math.max(0, i - 1)];
                 const p1x = i * barWidth;
-                const p1y = this.norm[i];
+                const p1y = cavaNorm[i];
                 const p2x = (i + 1) * barWidth;
-                const p2y = this.norm[i + 1];
+                const p2y = cavaNorm[i + 1];
                 const p3x = (i + 2) * barWidth;
-                const p3y = this.norm[Math.min(bars - 1, i + 2)];
+                const p3y = cavaNorm[Math.min(bars - 1, i + 2)];
 
                 const c1x = p1x + (p2x - p0x) * invSix;
                 const c1y = p1y + (p2y - p0y) * invSix;
@@ -154,23 +199,7 @@ class CavaWidget extends Gtk.DrawingArea {
     }
 
     public destroy() {
-        if (this._handler && cavaInstance) {
-            try {
-                cavaInstance.disconnect(this._handler);
-            } catch (error) {
-                console.warn("Erro ao desconectar handler:", error);
-            }
-            this._handler = null;
-        }
-
-        if (this.values) {
-            this.values.fill(0);
-        }
-        if (this.norm) {
-            this.norm.fill(0);
-        }
-
-        this._pathBuilder = null;
+        unregisterWidget(this);
     }
 }
 
@@ -195,7 +224,11 @@ export function CavaButton() {
         <label
             cssClasses={["CavaButton"]}
             setup={(self) => self.add_controller(click)}
-            onDestroy={(self) => { self.remove_controller(click); click.disconnect(handler); cavaOnBackground.drop(); }}
+            onDestroy={(self) => {
+                self.remove_controller(click);
+                click.disconnect(handler);
+                cavaOnBackground.drop();
+            }}
             label={bind(cavaOnBackground).as(cob => cob ? '-' : '+')}
         />
     );

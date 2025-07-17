@@ -26,10 +26,7 @@ function setupScrollHandler(target: Wp.Endpoint | Wp.Stream): { controller: Gtk.
     const controller = new Gtk.EventControllerScroll({ flags: Gtk.EventControllerScrollFlags.VERTICAL });
     const handlerId = controller.connect("scroll", (controler: Gtk.EventControllerScroll, dx: number, dy: number) => handleScroll(target, dy));
 
-    return {
-        controller,
-        handlerId
-    };
+    return { controller, handlerId };
 }
 
 function setupMuteHandler(target: Wp.Endpoint | Wp.Stream): { controllers: { left: Gtk.GestureClick, right: Gtk.GestureClick }, handlerIds: { left: number, right: number } } {
@@ -66,7 +63,7 @@ function MixerEntry({ stream }: MixerEntryProps) {
                 onDestroy={() => muteHandler.controllers.left.disconnect(muteHandler.handlerIds.left)}
             >
                 <image iconName={bind(stream, "volume_icon")} />
-                <label label={stream.get_name()} />
+                <label label={stream.get_name()} maxWidthChars={22} ellipsize={3} />
             </box>
             <slider
                 cssClasses={["EntrySlider"]}
@@ -98,15 +95,11 @@ export default function AudioControl() {
     const muteHandler = setupMuteHandler(audio);
 
     return (
-        <box
-            cssClasses={["AudioControl"]}
-            tooltipText={ bind(audio, "description").as(n => `Dispositivo atual: ${n}`) }
-        >
+        <box cssClasses={["AudioControl"]} tooltipText={bind(audio, "description").as(n => `Dispositivo atual: ${n}`)}>
             <box
                 setup={
                     (self) => {
                         self.add_controller(scrollHandler.controller);
-
                         self.add_controller(muteHandler.controllers.left);
                         self.add_controller(muteHandler.controllers.right);
                     }

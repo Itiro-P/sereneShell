@@ -7,6 +7,13 @@ import Media from "../modules/Media";
 import Workspaces from "../modules/Workspaces";
 import Clients from "../modules/Clients";
 
+const systemTray = SystemTray();
+const clients = Clients();
+const media = Media();
+const miniTime = MiniTime();
+const audioControl = AudioControl();
+const systemMonitor = SystemMonitor();
+
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
@@ -22,17 +29,17 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             child={
                 <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
                     <box halign={Gtk.Align.START}>
-                        <SystemTray />
+                        {systemTray}
                     </box>
                     <box halign={Gtk.Align.CENTER}>
-                        <Clients />
-                        <Media />
+                        {clients}
+                        {media}
                         <Workspaces monitor={gdkmonitor} />
                     </box>
                     <box halign={Gtk.Align.END}>
-                        <MiniTime />
-                        <AudioControl />
-                        <SystemMonitor />
+                        {miniTime}
+                        {audioControl}
+                        {systemMonitor}
                     </box>
                 </box>
             }

@@ -55,17 +55,21 @@ const calculateMetrics = () => {
 
 const metrics = Variable({ cpu: 0, mem: 0 }).poll(POLL_INTERVAL, calculateMetrics);
 
-const CpuUsage = () => (
-    <label cssClasses={["CpuUsage"]} label={bind(metrics).as(m => `CPU: ${m.cpu}%`)} />
-);
+function CpuUsage() {
+    return (
+        <label cssClasses={["CpuUsage"]} label={bind(metrics).as(m => `CPU: ${m.cpu}%`)} />
+    );
+}
 
-const MemoryUsage = () => (
-    <label cssClasses={["MemoryUsage"]} label={bind(metrics).as(m => `MEM: ${m.mem}%`)} />
-);
+function MemoryUsage() {
+    return (
+        <label cssClasses={["MemoryUsage"]} label={bind(metrics).as(m => `MEM: ${m.mem}%`)} />
+    );
+}
 
 let batteryHandler: number | null = null;
 
-const Battery = () => {
+function Battery() {
     return (
         <box
             cssClasses={["Battery"]}
