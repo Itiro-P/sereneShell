@@ -22,8 +22,9 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             namespace='AstalBar'
             cssClasses={["Bar"]}
             visible
-            gdkmonitor={gdkmonitor}
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
+            layer={Astal.Layer.BACKGROUND}
+            gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT}
             application={App}
             child={

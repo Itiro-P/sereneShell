@@ -4,5 +4,5 @@
 
 .CpuUsage {
     @extend %widget;
-    @include Transitions.inverse(Colors.$green, Colors.$base);
+    @include Transitions.noneToInverse(Colors.$green, Colors.$base, Colors.$green);
 }

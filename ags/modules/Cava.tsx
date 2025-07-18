@@ -216,20 +216,3 @@ export function CavaOverlay() {
         <box cssClasses={["CavaOverlay"]} child={new _cava()} />
     );
 }
-
-export function CavaButton() {
-    const click = new Gtk.GestureClick();
-    const handler = click.connect('pressed', () => cavaOnBackground.set(!cavaOnBackground.get()));
-    return (
-        <label
-            cssClasses={["CavaButton"]}
-            setup={(self) => self.add_controller(click)}
-            onDestroy={(self) => {
-                self.remove_controller(click);
-                click.disconnect(handler);
-                cavaOnBackground.drop();
-            }}
-            label={bind(cavaOnBackground).as(cob => cob ? '-' : '+')}
-        />
-    );
-}

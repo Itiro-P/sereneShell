@@ -1,7 +1,8 @@
 import { App, Gdk, Gtk } from "astal/gtk4"
 import style from "./styles/index.scss"
 import Bar from "./widget/Bar"
-import CavaBackground from "./widget/CavaBackground"
+import CavaBackground from "./widget/Background"
+import Background from "./widget/Background"
 
 App.start({
     css: style,
@@ -24,7 +25,7 @@ App.start({
             currentMonitors.forEach(monitor => {
                 if (!monitorWidgets.has(monitor)) {
                     const bar = Bar(monitor);
-                    const background = CavaBackground(monitor);
+                    const background = Background(monitor);
                     monitorWidgets.set(monitor, { bar, background });
                 }
             });

@@ -1,5 +1,7 @@
 @use 'common/Colors';
+@use 'common/Font';
 @use 'common/Layout';
+@use 'common/Transitions';
 
 .Cava, .Cava > *, .CavaOverlay, .CavaOverlay > * {
     margin: 0;
@@ -7,7 +9,7 @@
 }
 
 .Cava, .Cava > * {
-    color: rgba(Colors.$blue, 0.8);
+    color: rgba(Colors.$blue, 0.5);
 }
 
 .CavaOverlay, .CavaOverlay > * {
@@ -21,48 +23,28 @@
 
     .MprisInfo {
         margin: 2px;
-        background-color: rgba(Colors.$surface1, 0.8);
         border-radius: 20px;
-        transition: all 0.25s ease;
-
-        &:hover {
-            background-color: rgba(Colors.$blue, 0.8);
-            color: Colors.$crust;
-        }
-    }
-
-    .CavaButton {
-        margin: 2px;
-        padding: 0px 8px;
-        background-color: rgba(Colors.$surface1, 0.8);
-        border-radius: 20px;
-        transition: all 0.25s ease;
-
-        &:hover {
-            background-color: rgba(Colors.$blue, 0.8);
-            color: Colors.$crust;
-        }
+        @include Transitions.noneToInverseChild(Colors.$text, Colors.$crust, Colors.$blue);
     }
 
     .MprisPlayer {
-        background-color: rgba(Colors.$crust, 0.6);
-
+        background-color: rgba(Colors.$mantle, 0.8);
         .PlayerInfo {
             padding: 16px;
             .Info {
                 margin-left: 12px;
                 .Title {
-                    font-size: 20px;
+                    font-size: Font.$font-size-large;
                     color: Colors.$text;
                 }
 
                 .Artist {
-                    font-size: 18px;
+                    font-size: Font.$font-size-normal;
                     color: rgba(Colors.$text, 0.7);
                 }
 
                 .Album {
-                    font-size: 16px;
+                    font-size: Font.$font-size-small;
                     color: rgba(Colors.$text, 0.5);
                     font-style: italic;
                 }
@@ -73,23 +55,22 @@
 
                 .PlayerSlider {
                     padding: 4px;
-                    background-color: rgba(Colors.$crust, 0.8);
+                    background-color: rgba(Colors.$base, 0.6);
                     border: none;
                     border-radius: 14px;
 
                     margin: 5px;
                     .Slider {
                         min-width: 160px;
-                        min-height: 1px;
-
-                        highlight {
-                            background-color: Colors.$blue;
+                        & highlight {
+                            background: Colors.$sapphire;
                         }
                     }
 
                     .TimeLabel {
+                        color: Colors.$text;
                         margin-left: 10px;
-                        font-size: 0.9em;
+                        font-size: Font.$font-size-small;
                         opacity: 0.8;
                         min-width: 40px;
                     }
@@ -97,24 +78,19 @@
 
                 .Controllers {
                     .Previous, .PlayPause, .Next {
-                        transition: all 0.25s ease;
                         margin: 4px;
-                        background: Colors.$base;
                         border: none;
                         border-radius: 8px;
                         image {
                             margin: 12px;
-                            color: Colors.$blue;
                         }
-                        &:hover {
-                            image {
-                                color: Colors.$base;
-                            }
-                            background: Colors.$blue;
-                        }
+                        @include Transitions.inverseChild(Colors.$base, Colors.$blue);
                     }
                 }
             }
+        }
+        .Cava, .Cava > * {
+            color: rgba(Colors.$blue, 0.5);
         }
     }
 }

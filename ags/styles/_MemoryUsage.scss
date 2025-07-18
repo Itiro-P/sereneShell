@@ -4,5 +4,5 @@
 
 .MemoryUsage {
     @extend %widget;
-    @include Transitions.inverse(Colors.$peach, Colors.$base);
+    @include Transitions.noneToInverse(Colors.$peach, Colors.$base, Colors.$peach);
 }

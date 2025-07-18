@@ -1,10 +1,11 @@
 @use 'common/Colors';
+@use 'common/Layout';
+@use 'common/Font';
 
 .TrayItem {
-    padding: 2px 4px;
-    border-radius: 16px;
+    @extend %component-circle;
     margin: 2px;
-    -gtk-icon-size: 18px;
+    -gtk-icon-size: Font.$icon-size;
     transition: all 0.25s ease;
 
     &:hover {

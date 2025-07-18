@@ -1,17 +1,41 @@
 @use 'common/Colors';
 @use 'common/Layout';
-
+@use 'common/Transitions';
 .Battery {
     @extend %widget;
     border-radius: 20px;
-    .BatteryIcon, .BatteryLabel {
-        color: Colors.$lavender;
-    }
+    transition: all 0.25s ease-in-out;
+}
+
+.BatteryNormal {
+    @include Transitions.noneToInverseChild(Colors.$lavender, Colors.$crust, Colors.$lavender);
 }
 
 .BatteryCritical {
-    background-color: Colors.$red;
-    .BatteryIcon, .BatteryUsageLabel {
-        color: Colors.$crust;
+    @include Transitions.noneToInverseChild(Colors.$red, Colors.$crust, Colors.$lavender);
+}
+
+.BatteryPopover {
+    background-color: rgba(Colors.$surface0, 0.8);
+    padding: 2px;
+    border-radius: 16px;
+    .Title, .BatteryLife, .ToggleButton {
+        margin: 2px;
+    }
+
+    .Title {
+        color: Colors.$text;
+        font-weight: bold;
+    }
+
+    .BatteryLife {
+        color: Colors.$text;
+    }
+
+    .ToggleButton {
+        margin: 2px 4px;
+        padding: 2px;
+        border-radius: 10px;
+        @include Transitions.inverse(rgba(Colors.$crust, 0.75), Colors.$blue);
     }
 }

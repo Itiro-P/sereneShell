@@ -5,20 +5,15 @@
 .Workspaces {
     @extend %widget;
     background-color: rgba(Colors.$surface0, 0.8);
-    padding: 2px 4px;
-    margin: 2px;
     border-radius: 18px;
 
     .Workspace, .WorkspacePopoverItem, .MoreWorkspacesButton {
+        @extend %component-circle;
         font-weight: bold;
         background-color: rgba(Colors.$crust, 0.8);
         border: none;
-        border-radius: 50%;
-        padding: 0;
         margin: 2px;
         transition: all 0.2s ease;
-        min-width: 24px;
-        min-height: 24px;
     }
 
     .MoreWorkspacesButton {
@@ -28,7 +23,6 @@
     .Active {
         background-color: rgba(Colors.$blue, 0.9);
         color: Colors.$crust;
-        font-weight: 700;
     }
 
     .Inactive {

@@ -32,7 +32,6 @@ function TrayItem({ item }: { item: InstanceType<typeof Tray.TrayItem> }) {
                             actionG: item.connect("notify::action-group", () => { self.insert_action_group("dbusmenu", item.actionGroup); })
                         };
 
-
                         self.add_controller(clickPrimary);
                         self.add_controller(clickMiddle);
                         self.add_controller(clickSecondary);
@@ -50,6 +49,8 @@ function TrayItem({ item }: { item: InstanceType<typeof Tray.TrayItem> }) {
             child ={
                 <image gicon={bind(item, "gicon")} pixelSize={16} />
             }
+            halign={Gtk.Align.CENTER}
+            valign={Gtk.Align.CENTER}
         />
 
     ) as Gtk.MenuButton;

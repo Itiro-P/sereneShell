@@ -522,7 +522,7 @@ function PlayerInfo() {
 }
 
 function MprisInfo() {
-    return (<label cssClasses={["MprisInfo"]} label={bind(mediaState).as(c => formatState(c.currentState))} widthChars={12}/>);
+    return (<label label={bind(mediaState).as(c => formatState(c.currentState))} widthChars={12}/>);
 }
 
 export function MprisPlayer() {
@@ -555,15 +555,18 @@ export default function Media() {
     initializeMpris();
 
     return (
-        <box cssClasses={["Media"]}>
-            <menubutton
-                hexpand
-                alwaysShowArrow={false}
-                sensitive={bind(mediaState).as(c => c.lastPlayer !== null)}
-                child={<MprisInfo />}
-                popover={<popover child={<MprisPlayer />} /> as Gtk.Popover}
-            />
-            <CavaButton />
-        </box>
+        <box
+            cssClasses={["Media"]}
+            child={
+                <menubutton
+                    hexpand
+                    alwaysShowArrow={false}
+                    cssClasses={["MprisInfo"]}
+                    sensitive={bind(mediaState).as(c => c.lastPlayer !== null)}
+                    child={<MprisInfo />}
+                    popover={<popover child={<MprisPlayer />} /> as Gtk.Popover}
+                />
+            }
+        />
     );
 }

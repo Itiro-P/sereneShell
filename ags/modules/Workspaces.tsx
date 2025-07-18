@@ -69,6 +69,8 @@ function Workspace({ workspace, isInPopover = false }: WorkspaceProps) {
             label={`${workspace.id}`}
             widthChars={1}
             maxWidthChars={1}
+            halign={Gtk.Align.CENTER}
+            valign={Gtk.Align.CENTER}
         />
     );
 }
@@ -90,6 +92,10 @@ function MainWorkspace({ workspace }: MainWorkspaceProps) {
                 return ["Workspace", ws.id === focused.id ? "Active" : "Inactive"];
             }))}
             label={bind(workspace).as(w => `${w?.id ?? ' '}`)}
+            widthChars={1}
+            maxWidthChars={1}
+            halign={Gtk.Align.CENTER}
+            valign={Gtk.Align.CENTER}
         />
     );
 }

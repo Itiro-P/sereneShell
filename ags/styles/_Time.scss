@@ -1,9 +1,24 @@
 @use 'common/Colors';
 @use 'common/Layout';
+@use 'common/Font';
+
+.DateTime {
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(Colors.$crust, 0.6);
+    .Time {
+        font-size: Font.$font-size-large * 6;
+        font-weight: bold;
+        padding: 10px;
+    }
+    .Date {
+        font-size: Font.$font-size-normal * 2;
+        padding: 5px;
+    }
+}
 
 .Time {
     @extend %widget;
-    background-color: rgba(Colors.$surface0, 0.6);
-    border-radius: 16px;
-    margin: 4px;
+    font-weight: bold;
 }

@@ -1,4 +1,5 @@
 import { Variable, bind } from "astal"
+import { Gtk } from "astal/gtk4";
 
 type ClockDate = {
     clock: string;
@@ -19,8 +20,16 @@ export function MiniTime() {
     return (
         <label
             cssClasses={["Time"]}
-            onDestroy={ () => time.drop() }
             label={bind(time).as(t => `${t.clock}`)}
         />
+    );
+}
+
+export function DateTime() {
+    return (
+        <box cssClasses={["DateTime"]} orientation={Gtk.Orientation.VERTICAL}>
+            <label cssClasses={["Time"]} label={bind(time).as(t => `${t.clock}`)} />
+            <label cssClasses={["Date"]} label={bind(time).as(t => `${t.date}`)} />
+        </box>
     );
 }
