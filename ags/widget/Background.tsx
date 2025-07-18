@@ -17,16 +17,16 @@ export default function Background(gdkmonitor: Gdk.Monitor) {
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT | BOTTOM}
             application={App}
-            orientation={Gtk.Orientation.VERTICAL}
             visible={bind(clientFocused)}
+            child={
+                <overlay
+                    setup={(self) => {
+                        self.set_child(<box halign={Gtk.Align.END} valign={Gtk.Align.START} child={<DateTime />} />);
+                        self.add_overlay(<box halign={Gtk.Align.FILL} valign={Gtk.Align.END} heightRequest={Math.floor(gdkmonitor.get_geometry().height * .4)} child={<CavaOverlay />} />);
+                    }}
+                />
+            }
         >
-            <overlay
-                setup={(self) => {
-                    self.set_child(<box halign={Gtk.Align.END} valign={Gtk.Align.START} child={<DateTime />} />);
-                    self.add_overlay(<box halign={Gtk.Align.FILL} valign={Gtk.Align.END} heightRequest={Math.floor(gdkmonitor.get_geometry().height * .4)} child={<CavaOverlay />} />);
-                }}
-            >
-            </overlay>
         </window>
     );
 }

@@ -2,7 +2,7 @@ import { Gtk, Gdk } from "astal/gtk4";
 import Mpris from "gi://AstalMpris";
 import { GLib, GObject, Variable, bind } from "astal";
 import {  Overlay, Slider } from "astal/gtk4/widget";
-import { Cava, CavaButton } from "./Cava";
+import { Cava } from "./Cava";
 
 type PlayerAction = 'previous' | 'next' | 'playpause';
 

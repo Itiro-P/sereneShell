@@ -29,9 +29,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             application={App}
             child={
                 <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
-                    <box halign={Gtk.Align.START}>
-                        {systemTray}
-                    </box>
+                    <box halign={Gtk.Align.START} child={systemTray} />
                     <box halign={Gtk.Align.CENTER}>
                         {clients}
                         {media}
