@@ -3,6 +3,7 @@ import Mpris from "gi://AstalMpris";
 import { GLib, GObject, Variable, bind } from "astal";
 import {  Overlay, Slider } from "astal/gtk4/widget";
 import { Cava } from "./Cava";
+import { formatTime } from "../services/TimeFormatter";
 
 type PlayerAction = 'previous' | 'next' | 'playpause';
 
@@ -61,21 +62,7 @@ function formatState(state: Mpris.PlaybackStatus): string {
         case Mpris.PlaybackStatus.STOPPED:
             return "Nada tocando";
         default:
-            return "Estado desconhecido";
-    }
-}
-
-function formatTime(seconds: number): string {
-    if (!seconds || seconds < 0) return "0:00";
-
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-
-    if (hours > 0) {
-        return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    } else {
-        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            return "Desconhecido";
     }
 }
 

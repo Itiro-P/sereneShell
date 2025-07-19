@@ -1,10 +1,8 @@
 import { App, Astal, Gdk, Gtk } from "astal/gtk4"
 import { DateTime } from "../modules/DateTime";
-import { bind, Variable } from "astal";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import { bind } from "astal";
 import { CavaOverlay } from "../modules/Cava";
-
-const clientFocused = Variable.derive([bind(AstalHyprland.get_default(), "focusedClient")], (fc) => !fc);
+import { hasAnyClient } from "../services/Hyprland";
 
 export default function Background(gdkmonitor: Gdk.Monitor) {
     const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
@@ -17,12 +15,12 @@ export default function Background(gdkmonitor: Gdk.Monitor) {
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT | BOTTOM}
             application={App}
-            visible={bind(clientFocused)}
+            visible={bind(hasAnyClient)}
             child={
                 <overlay
                     setup={(self) => {
                         self.set_child(<box halign={Gtk.Align.END} valign={Gtk.Align.START} child={<DateTime />} />);
-                        self.add_overlay(<box halign={Gtk.Align.FILL} valign={Gtk.Align.END} heightRequest={Math.floor(gdkmonitor.get_geometry().height * .4)} child={<CavaOverlay />} />);
+                        self.add_overlay(<box halign={Gtk.Align.FILL} valign={Gtk.Align.END} heightRequest={Math.floor(gdkmonitor.get_geometry().height * .25)} child={<CavaOverlay />} />);
                     }}
                 />
             }

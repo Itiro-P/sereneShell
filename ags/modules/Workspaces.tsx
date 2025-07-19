@@ -1,22 +1,7 @@
 import { bind, Variable } from "astal";
 import { Gtk, Gdk } from "astal/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-
-interface WorkspaceProps {
-    workspace: AstalHyprland.Workspace;
-    isInPopover?: boolean;
-}
-
-interface MainWorkspaceProps {
-    workspace: Variable<AstalHyprland.Workspace | null>;
-}
-
-interface WorkspacesProps {
-    monitor: Gdk.Monitor;
-}
-
-const hyprland = AstalHyprland.get_default();
-const focusedWorkspace = bind(hyprland, "focusedWorkspace");
+import { focusedWorkspace, hyprland, workspaces } from "../services/Hyprland";
 
 function getMonitorName(monitor: Gdk.Monitor): string {
     const connector = monitor.get_connector();
@@ -32,7 +17,7 @@ function getMonitorName(monitor: Gdk.Monitor): string {
 function createWorkspaceData(monitor: Gdk.Monitor) {
     const monitorName = getMonitorName(monitor);
 
-    return Variable.derive([bind(hyprland, "workspaces")], (workspaces) => {
+    return Variable.derive([workspaces], (workspaces) => {
         const filtered = workspaces.filter(ws => { return ws.get_monitor().get_name() === monitorName });
 
         const sorted = filtered.sort((a, b) => a.id - b.id);
@@ -51,31 +36,26 @@ function setupWorkspaceClick(widget: Gtk.Widget, workspaceId: number) {
     if (!clickHandlers.has(widget)) {
         const click = new Gtk.GestureClick();
         click.connect("pressed", () => {
-            if(focusedWorkspace.get().id !== workspaceId)
-                hyprland.dispatch("workspace", `${workspaceId}`);
+            if(focusedWorkspace.get().id !== workspaceId) hyprland.dispatch("workspace", `${workspaceId}`);
         });
         widget.add_controller(click);
         clickHandlers.set(widget, click);
     }
 }
 
-function Workspace({ workspace, isInPopover = false }: WorkspaceProps) {
+function Workspace({ workspace, isInPopover = false }: { workspace: AstalHyprland.Workspace, isInPopover: boolean }) {
     const baseClasses = isInPopover ? ["Workspace", "WorkspacePopoverItem"] : ["Workspace"];
 
     return (
         <label
             setup={(self) => setupWorkspaceClick(self, workspace.id)}
             cssClasses={focusedWorkspace.as(focused => [...baseClasses, workspace.id === focused.id ? "Active" : "Inactive"])}
-            label={`${workspace.id}`}
-            widthChars={1}
-            maxWidthChars={1}
-            halign={Gtk.Align.CENTER}
-            valign={Gtk.Align.CENTER}
+            label={`${workspace.id}`} widthChars={1} maxWidthChars={1} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
         />
     );
 }
 
-function MainWorkspace({ workspace }: MainWorkspaceProps) {
+function MainWorkspace({ workspace }: { workspace: Variable<AstalHyprland.Workspace | null> }) {
     return (
         <label
             setup={(self) => {
@@ -141,7 +121,7 @@ function MoreWorkspacesButton({ workspaceData }: { workspaceData: Variable<any> 
     );
 }
 
-export default function Workspaces({ monitor }: WorkspacesProps) {
+export default function Workspaces({ monitor }: { monitor: Gdk.Monitor }) {
     const workspaceData = createWorkspaceData(monitor);
 
     return (

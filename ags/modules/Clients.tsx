@@ -1,10 +1,7 @@
 import { bind, Variable } from "astal";
 import { Gtk } from "astal/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-
-const hyprland = AstalHyprland.get_default();
-const focusedClient = bind(hyprland, "focusedClient");
-const clients = bind(hyprland, "clients");
+import { clients, focusedClient, hyprland } from "../services/Hyprland";
 
 const clientData = Variable.derive([clients, focusedClient], (allClients, focused) => {
     const filtered = focused ? allClients.filter(client => client.address !== focused.address) : allClients;
@@ -30,10 +27,7 @@ function setupClientClick(widget: Gtk.Widget, clientAddress: string) {
 
 function ActiveClient() {
     return (
-        <label
-            cssClasses={["Client"]} widthChars={24} maxWidthChars={21} ellipsize={3}
-            label={bind(clientData).as(({ title }) => title)}
-        />
+        <label cssClasses={["Client"]} widthChars={24} maxWidthChars={21} ellipsize={3} label={bind(clientData).as(({ title }) => title)} />
     );
 }
 

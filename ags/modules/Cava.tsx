@@ -4,8 +4,8 @@ import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
 import { bind, Variable } from "astal";
-
-export const cavaOnBackground = Variable<boolean>(false);
+import { hasAnyClient } from "../services/Hyprland";
+import { animationsEnabled } from "../services/Animations";
 
 const CavaConfig = {
     autosens: true,
@@ -207,12 +207,12 @@ const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
 export function Cava() {
     return (
-        <box cssClasses={["Cava"]} overflow={Gtk.Overflow.HIDDEN} child={new _cava()} visible={bind(cavaOnBackground).as(cob => !cob)} />
+        <box cssClasses={["Cava"]} overflow={Gtk.Overflow.HIDDEN} child={new _cava()} visible={bind(hasAnyClient).as(hac => !hac)} />
     );
 }
 
 export function CavaOverlay() {
     return (
-        <box cssClasses={["CavaOverlay"]} child={new _cava()} />
+        <box cssClasses={["CavaOverlay"]} child={new _cava()} visible={bind(animationsEnabled)} />
     );
 }

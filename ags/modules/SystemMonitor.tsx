@@ -2,16 +2,17 @@ import AstalBattery from "gi://AstalBattery"
 import { Variable, bind, exec } from "astal"
 import GTop from "gi://GTop?version=2.0";
 import { Gtk } from "astal/gtk4";
-
-const formatTime = (seconds: number): string => seconds >= 3600 ? `${Math.floor(seconds / 3600)}h${Math.floor((seconds % 3600) / 60)}m` : `${Math.floor(seconds / 60)}m`;
+import { formatTimeVerbose } from "../services/TimeFormatter";
+import { animationsEnabled, syncAnimationState, toggleAnimations } from "../services/Animations";
 
 const POLL_INTERVAL = 3000;
 const cpu = new GTop.glibtop_cpu();
 const mem = new GTop.glibtop_mem();
 const battery = AstalBattery.get_default();
-const isCritical = Variable.derive([bind(battery, "percentage"), bind(battery, "charging")], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-const batteryLifeLabel = Variable.derive([bind(battery, "charging")], (c) => c ? `Carregando: ${formatTime(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTime(battery.time_to_empty)} restante(s)`);
-const batteryUsageLabel = Variable.derive([bind(battery, "percentage")], (p) => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)
+const batteryPercentage = bind(battery, "percentage");
+const isCharging = bind(battery, "charging");
+const isCritical = Variable.derive([batteryPercentage, isCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
+const batteryLifeLabel = Variable.derive([isCharging], (c) => c ? `Carregando: ${formatTimeVerbose(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(battery.time_to_empty)} restante(s)`);
 
 
 const cpuData = {
@@ -72,37 +73,6 @@ function MemoryUsage() {
     );
 }
 
-const getAnimationState = () => {
-    try {
-        const result = exec("hyprctl getoption animations:enabled -j");
-        const parsed = JSON.parse(result);
-        return parsed.int === 1;
-    } catch (error) {
-        console.warn("Erro ao verificar estado das animações:", error);
-        return false;
-    }
-};
-
-const animationsEnabled = Variable<boolean>(getAnimationState());
-
-function syncAnimationState() {
-    animationsEnabled.set(getAnimationState());
-}
-
-function toggleAnimations() {
-    const currentState = animationsEnabled.get();
-    const newState = !currentState;
-
-    try {
-        exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);
-        exec(`hyprctl keyword decoration:shadow:enabled ${newState ? 1 : 0}`);
-        animationsEnabled.set(newState);
-    } catch (error) {
-        console.error("Erro ao alterar animações:", error);
-        syncAnimationState();
-    }
-}
-
 function BatteryPopover() {
     const toggleAnimationsClick = new Gtk.GestureClick();
     const handler = toggleAnimationsClick.connect("pressed", () => {
@@ -138,7 +108,7 @@ function Battery() {
             child={
                 <box>
                     <image cssClasses={["BatteryIcon"]} iconName={bind(battery, "batteryIconName")} />
-                    <label cssClasses={["BatteryUsageLabel"]} label={bind(batteryUsageLabel)} />
+                    <label cssClasses={["BatteryUsageLabel"]} label={bind(battery, "percentage").as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
                 </box>
             }
 

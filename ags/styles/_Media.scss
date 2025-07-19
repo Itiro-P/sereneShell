@@ -12,8 +12,10 @@
     color: rgba(Colors.$blue, 0.5);
 }
 
-.CavaOverlay, .CavaOverlay > * {
-    color: rgba(Colors.$blue, 0.5);
+.CavaOverlay {
+    border: none;
+    border-radius:  40px 40px 0px 0px;
+    @include Transitions.noneToInverse(rgba(Colors.$blue, 0.6), Colors.$base, Colors.$blue);
 }
 
 .Media {
