@@ -1,7 +1,8 @@
 # Sobre
 
 Aqui eu guardo minhas configurações pessoais para configuração rápida de um sistema Archlinux + Hyprland.
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ce89fdc7-efca-47ea-b573-cf61eb571017" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1b2bcd27-8b89-44f4-abaa-d6a04104b1c7" />
+
 
 
 ## Dependências
