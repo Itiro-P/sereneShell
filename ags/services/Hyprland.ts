@@ -9,4 +9,4 @@ export const focusedWorkspace = bind(hyprland, "focusedWorkspace");
 export const clients = bind(hyprland, "clients");
 export const focusedClient = bind(hyprland, "focusedClient");
 
-export const hasAnyClient = Variable.derive([focusedClient], (fc) => !fc);
+export const hasAnyClient = Variable.derive([focusedClient], (fc) => !fc || fc.floating && fc.workspace.clients.length <= 1);
