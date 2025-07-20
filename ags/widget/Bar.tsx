@@ -28,6 +28,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                 </box>
                 <box halign={Gtk.Align.CENTER}>
                     <Clients />
+                    <Media />
                     <Workspaces monitor={gdkmonitor} />
                 </box>
                 <box halign={Gtk.Align.END}>

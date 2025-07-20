@@ -84,7 +84,7 @@ function MoreWorkspacesButton({ theRest }: { theRest: Accessor<AstalHyprland.Wor
 
 export default function Workspaces({ monitor }: { monitor: Gdk.Monitor }) {
     const monitorWorkspaces = createComputed([workspaces], (workspaces) => {
-        return workspaces.filter((workspace) => workspace?.get_monitor().get_model() === monitor.get_model() || false);
+        return workspaces.filter((workspace) => workspace ? workspace.get_monitor().get_model() === monitor.get_model() : false);
     })
 
     const threeFirst = createComputed([monitorWorkspaces], (workspaces) => { return { first: workspaces[0], second: workspaces[1], third: workspaces[2] } });

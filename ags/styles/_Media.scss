@@ -24,11 +24,11 @@
     border-radius: 20px;
     @include Transitions.noneToInverseChild(Colors.$text, Colors.$crust, Colors.$blue);
 
-    .MprisPlayer {
+    .MprisPopover {
         background-color: rgba(Colors.$mantle, 0.8);
-        .PlayerInfo {
+        .MprisPlayer {
             padding: 16px;
-            .Info {
+            .Metadata {
                 margin-left: 12px;
                 .Title {
                     font-size: Font.$font-size-large;
