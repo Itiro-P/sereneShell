@@ -1,5 +1,5 @@
-import { exec, Variable } from "astal";
-
+import { exec } from "ags/process";
+import { createState } from "ags";
 
 export const getAnimationState = () => {
     try {
@@ -12,20 +12,19 @@ export const getAnimationState = () => {
     }
 };
 
-export const animationsEnabled = Variable<boolean>(getAnimationState());
+export const [animationsEnabled, setAnimationsEnabled] = createState(getAnimationState());
 
 export function syncAnimationState() {
-    animationsEnabled.set(getAnimationState());
+    setAnimationsEnabled(getAnimationState());
 }
 
 export function toggleAnimations() {
-    const currentState = animationsEnabled.get();
-    const newState = !currentState;
+    const newState = !animationsEnabled.get();
 
     try {
         exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);
         exec(`hyprctl keyword decoration:shadow:enabled ${newState ? 1 : 0}`);
-        animationsEnabled.set(newState);
+        setAnimationsEnabled(newState);
     } catch (error) {
         console.error("Erro ao alterar animações:", error);
         syncAnimationState();

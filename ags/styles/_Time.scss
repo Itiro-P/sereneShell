@@ -1,19 +1,45 @@
 @use 'common/Colors';
 @use 'common/Layout';
 @use 'common/Font';
+@use 'common/Transitions';
 
-.DateTime {
+.DateTimeCalendar {
     margin: 10px;
     border: none;
     border-radius: 10px;
     padding: 5px;
     background-color: rgba(Colors.$crust, 0.6);
-    .Time {
-        font-size: Font.$font-size-large * 8;
-        font-weight: bold;
+
+    .Calendar {
+        header {
+            padding: 4px;
+            border-radius: 6px;
+            background-color: rgba(Colors.$surface0, 0.8);
+        }
+
+        button {
+            margin: 2px;
+            border-radius: 100%;
+            @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
+        }
+
+        grid {
+            padding: 6px;
+            border-radius: 8px;
+            margin: 4px;
+            background-color: rgba(Colors.$surface1, 0.7);
+        }
     }
-    .Date {
-        font-size: Font.$font-size-normal * 2;
+
+    .DateTime {
+        margin: 5px;
+        .Time {
+            font-size: Font.$font-size-large * 8;
+            font-weight: bold;
+        }
+        .Date {
+            font-size: Font.$font-size-normal * 2;
+        }
     }
 }
 

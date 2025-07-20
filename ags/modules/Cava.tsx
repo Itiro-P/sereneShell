@@ -1,11 +1,10 @@
-import { Gtk } from "astal/gtk4";
-import { mediaState } from "./Media";
+import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
-import { bind, Variable } from "astal";
 import { hasAnyClient } from "../services/Hyprland";
 import { animationsEnabled } from "../services/Animations";
+import { createComputed } from "ags";
 
 const CavaConfig = {
     autosens: true,
@@ -148,8 +147,6 @@ class CavaWidget extends Gtk.DrawingArea {
     }
 
     private draw_catmull_rom(snapshot: Gtk.Snapshot, width: number, height: number): void {
-        if (!mediaState.get().lastPlayer) return;
-
         try {
             const bars = CavaConfig.bars;
             if (bars === 0) return;
@@ -205,14 +202,20 @@ class CavaWidget extends Gtk.DrawingArea {
 
 const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
+const shouldCavaAppear = createComputed([hasAnyClient, animationsEnabled], (hac, an) => !hac && !an);
+
 export function Cava() {
     return (
-        <box cssClasses={["Cava"]} overflow={Gtk.Overflow.HIDDEN} child={new _cava()} visible={bind(hasAnyClient).as(hac => !hac)} />
+        <box cssClasses={["Cava"]} overflow={Gtk.Overflow.HIDDEN} visible={shouldCavaAppear}>
+            {new _cava()}
+        </box>
     );
 }
 
 export function CavaOverlay() {
     return (
-        <box cssClasses={["CavaOverlay"]} child={new _cava()} visible={bind(animationsEnabled)} />
+        <box cssClasses={["CavaOverlay"]} visible={animationsEnabled}>
+            {new _cava()}
+        </box>
     );
 }

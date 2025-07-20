@@ -1,6 +1,6 @@
-import { Variable, bind } from "astal"
-import { Gtk } from "astal/gtk4";
+import { Gtk } from "ags/gtk4";
 import { hasAnyClient } from "../services/Hyprland";
+import { createState } from "ags";
 
 type ClockDate = {
     clock: string;
@@ -25,35 +25,36 @@ function calculateNextMinute(): number {
   return secondsToNextMinute * 1000;
 }
 
-const clock = Variable<ClockDate>(formatDateTime());
+const [clock, setClock] = createState(formatDateTime());
 
-function startOptimizedClock() {
+function startClock() {
     const update = () => {
-        clock.set(formatDateTime());
+        setClock(formatDateTime());
         setTimeout(update, calculateNextMinute());
     };
 
     setTimeout(update, calculateNextMinute());
 }
 
-startOptimizedClock();
+startClock();
+
+const time = clock.as(c => c.clock);
+const date = clock.as(c => c.date);
 
 export function MiniTime() {
     return (
-        <label
-            cssClasses={["Time"]}
-            label={bind(clock).as(t => t.clock)}
-            tooltipMarkup={bind(clock).as(t => t.date)}
-            visible={bind(hasAnyClient).as(hac => !hac)}
-        />
+        <label cssClasses={["Time"]} label={time} tooltipMarkup={date} visible={hasAnyClient.as(hac => !hac)} />
     );
 }
 
-export function DateTime() {
+export function DateTimeCalendar() {
     return (
-        <box cssClasses={["DateTime"]} orientation={Gtk.Orientation.VERTICAL}>
-            <label cssClasses={["Time"]} label={bind(clock).as(t => t.clock)} />
-            <label cssClasses={["Date"]} label={bind(clock).as(t => t.date)} />
+        <box cssClasses={["DateTimeCalendar"]}>
+            <Gtk.Calendar cssClasses={["Calendar"]} />
+            <box cssClasses={["DateTime"]} orientation={Gtk.Orientation.VERTICAL}>
+                <label cssClasses={["Time"]} label={time} />
+                <label cssClasses={["Date"]} label={date} />
+            </box>
         </box>
     );
 }

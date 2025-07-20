@@ -1,6 +1,7 @@
-import Wp from "gi://AstalWp"
-import { bind, GLib } from "astal"
-import { Gtk, Gdk } from "astal/gtk4";
+import Wp from "gi://AstalWp";
+import GLib from "gi://GLib?version=2.0";
+import { Gtk, Gdk } from "ags/gtk4";
+import { createBinding, For, onCleanup } from "ags";
 
 interface MixerEntryProps {
     stream: Wp.Stream;
@@ -55,37 +56,40 @@ function MixerEntry({ stream }: MixerEntryProps) {
     const scrollHandler = setupScrollHandler(stream);
     const muteHandler = setupMuteHandler(stream);
 
+    onCleanup(() => {
+        muteHandler.controllers.left.disconnect(muteHandler.handlerIds.left);
+        scrollHandler.controller.disconnect(scrollHandler.handlerId);
+    });
+
     return (
         <box cssClasses={["MixerEntry"]} orientation={Gtk.Orientation.VERTICAL}>
             <box
-                cssClasses={bind(stream, "mute").as(m => ["EntryName", m ? "Playing" : "Muted"])}
-                setup={(self) => self.add_controller(muteHandler.controllers.left)}
-                onDestroy={() => muteHandler.controllers.left.disconnect(muteHandler.handlerIds.left)}
+                cssClasses={createBinding(stream, "mute").as(m => ["EntryName", m ? "Playing" : "Muted"])}
+                $={(self) => self.add_controller(muteHandler.controllers.left)}
             >
-                <image iconName={bind(stream, "volume_icon")} />
+                <image iconName={createBinding(stream, "volume_icon")} />
                 <label label={stream.get_name()} maxWidthChars={22} ellipsize={3} />
             </box>
             <slider
                 cssClasses={["EntrySlider"]}
-                value={bind(stream, "volume")}
+                value={createBinding(stream, "volume")}
                 onChangeValue={({ value }) => stream.set_volume(value)}
-                setup={(self) => self.add_controller(scrollHandler.controller)}
-                onDestroy={() => scrollHandler.controller.disconnect(scrollHandler.handlerId)}
+                $={(self) => self.add_controller(scrollHandler.controller)}
             />
         </box>
     );
 }
 
+const streams = createBinding(audioObj, "streams");
 function MixerPopover() {
     return (
-        <popover
-            cssClasses={["MixerPopover"]}
-            child={
-                <box orientation={Gtk.Orientation.VERTICAL}>
-                    {bind(audioObj, "streams").as(c => c.map(stream => <MixerEntry stream={stream} />))}
-                </box>
-            }
-        />
+        <popover cssClasses={["MixerPopover"]}>
+            <box orientation={Gtk.Orientation.VERTICAL}>
+                <For each={streams}>
+                    {(stream) => MixerEntry({ stream })}
+                </For>
+            </box>
+        </popover>
     );
 }
 
@@ -94,31 +98,30 @@ export default function AudioControl() {
     const scrollHandler = setupScrollHandler(audio);
     const muteHandler = setupMuteHandler(audio);
 
+    onCleanup(() => {
+        scrollHandler.controller.disconnect(scrollHandler.handlerId);
+
+        muteHandler.controllers.left.disconnect(muteHandler.handlerIds.left);
+        if(muteHandler.handlerIds.right != 0) {
+            muteHandler.controllers.right.disconnect(muteHandler.handlerIds.right);
+        }
+    });
+
     return (
-        <box cssClasses={["AudioControl"]} tooltipText={bind(audio, "description").as(n => `Dispositivo atual: ${n}`)}>
+        <box cssClasses={["AudioControl"]} tooltipText={createBinding(audio, "description").as(n => `Dispositivo atual: ${n}`)}>
             <box
-                setup={
+                $={
                     (self) => {
                         self.add_controller(scrollHandler.controller);
                         self.add_controller(muteHandler.controllers.left);
                         self.add_controller(muteHandler.controllers.right);
                     }
                 }
-                onDestroy={
-                    () => {
-                        scrollHandler.controller.disconnect(scrollHandler.handlerId);
-
-                        muteHandler.controllers.left.disconnect(muteHandler.handlerIds.left);
-                        if(muteHandler.handlerIds.right != 0) {
-                            muteHandler.controllers.right.disconnect(muteHandler.handlerIds.right);
-                        }
-                    }
-                }
             >
-                <image cssClasses={["AudioIcon"]} iconName={bind(audio, "volumeIcon")} />
-                <label cssClasses={["AudioLabel"]} label={bind(audio, "volume").as(a => `${Math.round(a * 100)}%`)} widthChars={3} maxWidthChars={3} />
+                <image cssClasses={["AudioIcon"]} iconName={createBinding(audio, "volumeIcon")} />
+                <label cssClasses={["AudioLabel"]} label={createBinding(audio, "volume").as(a => `${Math.round(a * 100)}%`)} widthChars={3} maxWidthChars={3} />
             </box>
-            <menubutton cssClasses={["AudioMixer"]} sensitive={bind(audioObj, "streams").as(s => s.length > 0)} popover={MixerPopover() as Gtk.Popover} />
+            <menubutton cssClasses={["AudioMixer"]} sensitive={createBinding(audioObj, "streams").as(s => s.length > 0)} popover={MixerPopover() as Gtk.Popover} />
         </box>
     );
 }

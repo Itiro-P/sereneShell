@@ -1,18 +1,19 @@
 import AstalBattery from "gi://AstalBattery"
-import { Variable, bind, exec } from "astal"
 import GTop from "gi://GTop?version=2.0";
-import { Gtk } from "astal/gtk4";
+import { Gtk } from "ags/gtk4";
 import { formatTimeVerbose } from "../services/TimeFormatter";
 import { animationsEnabled, syncAnimationState, toggleAnimations } from "../services/Animations";
+import { createBinding, createComputed, onCleanup } from "ags";
+import { createPoll } from "ags/time";
 
 const POLL_INTERVAL = 3000;
 const cpu = new GTop.glibtop_cpu();
 const mem = new GTop.glibtop_mem();
 const battery = AstalBattery.get_default();
-const batteryPercentage = bind(battery, "percentage");
-const isCharging = bind(battery, "charging");
-const isCritical = Variable.derive([batteryPercentage, isCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-const batteryLifeLabel = Variable.derive([isCharging], (c) => c ? `Carregando: ${formatTimeVerbose(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(battery.time_to_empty)} restante(s)`);
+const batteryPercentage = createBinding(battery, "percentage");
+const isCharging = createBinding(battery, "charging");
+const isCritical = createComputed([batteryPercentage, isCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
+const batteryLifeLabel = createComputed([isCharging], (c) => c ? `Carregando: ${formatTimeVerbose(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(battery.time_to_empty)} restante(s)`);
 
 
 const cpuData = {
@@ -59,17 +60,17 @@ const calculateMetrics = () => {
     }
 };
 
-const metrics = Variable({ cpu: 0, mem: 0 }).poll(POLL_INTERVAL, calculateMetrics);
+const metrics = createPoll({ cpu: 0, mem: 0 }, POLL_INTERVAL, calculateMetrics);
 
 function CpuUsage() {
     return (
-        <label cssClasses={["CpuUsage"]} label={bind(metrics).as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
+        <label cssClasses={["CpuUsage"]} label={metrics.as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
     );
 }
 
 function MemoryUsage() {
     return (
-        <label cssClasses={["MemoryUsage"]} label={bind(metrics).as(m => `MEM: ${m.mem}%`)} widthChars={4} />
+        <label cssClasses={["MemoryUsage"]} label={metrics.as(m => `MEM: ${m.mem}%`)} widthChars={4} />
     );
 }
 
@@ -79,47 +80,40 @@ function BatteryPopover() {
         syncAnimationState();
         toggleAnimations();
     });
+
+    onCleanup(() => toggleAnimationsClick.disconnect(handler));
+
     return (
-        <popover
-            onShow={() => syncAnimationState()}
-            child={
-                <box cssClasses={["BatteryPopover"]} orientation={Gtk.Orientation.VERTICAL}>
-                    <label cssClasses={["Title"]} label={"Informaçoẽs da bateria"} />
-                    <label cssClasses={["BatteryLife"]} label={bind(batteryLifeLabel)} />
-                    <label
-                        cssClasses={["ToggleButton"]}
-                        setup={(self) => self.add_controller(toggleAnimationsClick)}
-                        onDestroy={() => toggleAnimationsClick.disconnect(handler)}
-                        label={bind(animationsEnabled).as(ae => ae ? "Desativar animações" : "Ativar animações")}
-                        widthChars={20}
-                    />
-                    <box />
-                </box>
-            }
-        />
+        <popover onShow={() => syncAnimationState()}>
+            <box cssClasses={["BatteryPopover"]} orientation={Gtk.Orientation.VERTICAL}>
+                <label cssClasses={["Title"]} label={"Informaçoẽs da bateria"} />
+                <label cssClasses={["BatteryLife"]} label={batteryLifeLabel} />
+                <label
+                    cssClasses={["ToggleButton"]}
+                    $={(self) => self.add_controller(toggleAnimationsClick)}
+                    label={animationsEnabled.as(ae => ae ? "Desativar animações" : "Ativar animações")}
+                    widthChars={20}
+                />
+                <box />
+            </box>
+        </popover>
     );
 }
 
 function Battery() {
     return (
-        <menubutton
-            cssClasses={bind(isCritical)}
-            tooltipText={bind(batteryLifeLabel)}
-            child={
-                <box>
-                    <image cssClasses={["BatteryIcon"]} iconName={bind(battery, "batteryIconName")} />
-                    <label cssClasses={["BatteryUsageLabel"]} label={bind(battery, "percentage").as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
-                </box>
-            }
-
-            popover={<BatteryPopover /> as Gtk.Popover}
-        />
+        <menubutton cssClasses={isCritical} tooltipText={batteryLifeLabel} popover={<BatteryPopover /> as Gtk.Popover}>
+            <box>
+                <image cssClasses={["BatteryIcon"]} iconName={createBinding(battery, "batteryIconName")} />
+                <label cssClasses={["BatteryUsageLabel"]} label={batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
+            </box>
+        </menubutton>
     );
 };
 
 export default function SystemMonitor() {
     return (
-        <box cssClasses={["SystemMonitor"]} onDestroy={() => metrics.drop()}>
+        <box cssClasses={["SystemMonitor"]}>
             <CpuUsage />
             <MemoryUsage />
             <Battery />

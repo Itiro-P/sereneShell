@@ -20,14 +20,9 @@
 
 .Media {
     @extend %widget;
-    background-color: rgba(Colors.$surface0, 0.8);
+    margin: 2px;
     border-radius: 20px;
-
-    .MprisInfo {
-        margin: 2px;
-        border-radius: 20px;
-        @include Transitions.noneToInverseChild(Colors.$text, Colors.$crust, Colors.$blue);
-    }
+    @include Transitions.noneToInverseChild(Colors.$text, Colors.$crust, Colors.$blue);
 
     .MprisPlayer {
         background-color: rgba(Colors.$mantle, 0.8);
