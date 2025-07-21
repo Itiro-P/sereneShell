@@ -1,24 +1,17 @@
 import { Gtk, Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-import { focusedWorkspace, hyprland, workspaces } from "../services/Hyprland";
+import { focusedWorkspace, workspaces } from "../services/Hyprland";
 import { Accessor, createComputed, For, onCleanup } from "ags";
-
-function setupWorkspaceClick(widget: Gtk.Widget, workspaceId: number): { click: Gtk.GestureClick, handler_id: number } {
-    const click = new Gtk.GestureClick();
-    widget.add_controller(click);
-    const handler_id = click.connect("pressed", () => {
-        if(focusedWorkspace.get().id !== workspaceId) hyprland.dispatch("workspace", `${workspaceId}`);
-    });
-    return { click, handler_id };
-}
 
 function Workspace({ workspace, isInPopover = false }: { workspace: AstalHyprland.Workspace, isInPopover: boolean }) {
     const baseClasses = isInPopover ? ["Workspace", "WorkspacePopoverItem"] : ["Workspace"];
-    let clickHandler: { click: Gtk.GestureClick, handler_id: number };
-    onCleanup(() => {if(clickHandler) clickHandler.click.disconnect(clickHandler.handler_id)})
+    const click = new Gtk.GestureClick();
+    const handler_id = click.connect("pressed", () => { if(focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() });
+    onCleanup(() => { if (handler_id) click.disconnect(handler_id) });
+
     return (
         <label
-            $={self => clickHandler = setupWorkspaceClick(self, workspace.id)}
+            $={self => self.add_controller(click)}
             cssClasses={focusedWorkspace.as(focused => [...baseClasses, workspace.id === focused.id ? "Active" : "Inactive"])}
             label={`${workspace.id}`} widthChars={1} maxWidthChars={1} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
         />
@@ -83,19 +76,22 @@ function MoreWorkspacesButton({ theRest }: { theRest: Accessor<AstalHyprland.Wor
 }
 
 export default function Workspaces({ monitor }: { monitor: Gdk.Monitor }) {
-    const monitorWorkspaces = createComputed([workspaces], (workspaces) => {
-        return workspaces.filter((workspace) => workspace ? workspace.get_monitor().get_model() === monitor.get_model() : false);
-    })
-
-    const threeFirst = createComputed([monitorWorkspaces], (workspaces) => { return { first: workspaces[0], second: workspaces[1], third: workspaces[2] } });
-    const theRest = createComputed([monitorWorkspaces], (workspaces) => { return workspaces.slice(3) });
+    const monitorWorkspaces = workspaces.as(ws => {
+        const filtered = ws.filter((workspace) => workspace ? workspace.get_monitor().get_model() === monitor.get_model() : false);
+        return {
+            first: filtered[0],
+            second: filtered[1],
+            third: filtered[2],
+            theRest: filtered.slice(3)
+        };
+    });
 
     return (
         <box cssClasses={["Workspaces"]}>
-            <MainWorkspace workspace={threeFirst.as(({ first }) => first)} />
-            <MainWorkspace workspace={threeFirst.as(({ second }) => second)} />
-            <MainWorkspace workspace={threeFirst.as(({ third }) => third)} />
-            <MoreWorkspacesButton theRest={theRest} />
+            <MainWorkspace workspace={monitorWorkspaces.as(({ first }) => first)} />
+            <MainWorkspace workspace={monitorWorkspaces.as(({ second }) => second)} />
+            <MainWorkspace workspace={monitorWorkspaces.as(({ third }) => third)} />
+            <MoreWorkspacesButton theRest={monitorWorkspaces.as(({ theRest }) => theRest)} />
         </box>
     );
 }

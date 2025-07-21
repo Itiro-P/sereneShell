@@ -2,32 +2,15 @@ import { Accessor, createBinding, createComputed, createConnection, createExtern
 import { Gdk, Gtk } from "ags/gtk4";
 import AstalMpris from "gi://AstalMpris?version=0.1";
 
-type PlayerAction = 'previous' | 'next' | 'playpause';
+type PlayerButton = 'previous' | 'next' | 'playing' | 'paused' | 'stopped';
 
 const PlayerButtonIcons = {
     playing: "media-playback-start-symbolic",
     paused: "media-playback-pause-symbolic",
-    stop: "media-playback-stop-symbolic",
+    stopped: "media-playback-stop-symbolic",
     next: "media-skip-forward-symbolic",
     previous: "media-skip-backward-symbolic"
 }
-
-const mpris = AstalMpris.get_default();
-
-const activePlayer = createComputed([createBinding(mpris, "players")],
-    (players) => {
-        let playing: AstalMpris.Player | null = null;
-        let paused: AstalMpris.Player | null = null;
-        for(const player of players) {
-            if(player.get_playback_status() === AstalMpris.PlaybackStatus.PLAYING) {
-                playing = player;
-            } else if(player.get_playback_status() === AstalMpris.PlaybackStatus.PAUSED) {
-                paused = player;
-            }
-        }
-        return playing || paused;
-    }
-);
 
 function getPlayerStatus(status: AstalMpris.PlaybackStatus) {
     switch(status) {
@@ -39,161 +22,137 @@ function getPlayerStatus(status: AstalMpris.PlaybackStatus) {
             return 'Nada tocando';
     }
 }
-/*
-function createPlayerPosition(player: AstalMpris.Player | null): Accessor<number> {
-    if (!player) {
-        return createState(0)[0]
+
+function getPlayerStatusIcon(status: PlayerButton) {
+    switch(status) {
+        case 'previous':
+            return PlayerButtonIcons.previous;
+        case 'playing':
+            return PlayerButtonIcons.playing;
+        case 'paused':
+            return PlayerButtonIcons.paused;
+        case 'stopped':
+            return PlayerButtonIcons.stopped;
+        case 'next':
+            return PlayerButtonIcons.next;
+        default:
+            return PlayerButtonIcons.stopped;
     }
+}
 
-    const basePosition = createBinding(player, 'position');
-    const playbackStatus = createBinding(player, 'playbackStatus');
+const mpris = AstalMpris.get_default();
 
-    return createExternal(
-        basePosition.get(),
-        (set) => {
-            let timer: GLib.Source | null = null;
-
-            const unsubscribePosition = basePosition.subscribe(() => {
-                set(basePosition.get())
-            });
-
-            const unsubscribeStatus = playbackStatus.subscribe(() => {
-                const isPlaying = playbackStatus.get() === AstalMpris.PlaybackStatus.PLAYING;
-
-                if (isPlaying && !timer) {
-                    timer = setInterval(() => {
-                        set(prev => prev + 1);
-                    }, 1000);
-                } else if (!isPlaying && timer) {
-                    clearInterval(timer);
-                    timer = null;
-                }
-            });
-
-            return () => {
-                unsubscribePosition();
-                unsubscribeStatus();
-                if (timer) {
-                    clearInterval(timer);
-                }
-            };
+const activePlayer = createBinding(mpris, "players").as(
+    (players) => {
+        for(const player of players) {
+            if(player.get_playback_status() === AstalMpris.PlaybackStatus.PLAYING) {
+                return player;
+            } else if(player.get_playback_status() === AstalMpris.PlaybackStatus.PAUSED) {
+                return player;
+            }
         }
-    );
-}
+        return null;
+    }
+);
 
-function PlayerSlider() {
-    return (
-        <With value={activePlayer}>
-            {player => {
-                const hasPlayer = player !== null;
-                const position = createPlayerPosition(player);
-                const length = hasPlayer ? createBinding(player, 'length') : createState(0)[0];
-                const formattedPosition = position.as(pos => formatTime(pos));
-                const formattedLength = length.as(len => formatTime(len));
-                const formattedOutput = createComputed([formattedLength, formattedPosition], (fl, fp) => `${fp} / ${fl}`);
-                return (
-                    <box cssClasses={["PlayerSlider"]} hexpand>
-                        <slider cssClasses={["Slider"]} value={position} min={0} max={length} step={1} sensitive={false} drawValue />
-                        <label cssClasses={["TimeLabel"]} label={formattedOutput} />
-                    </box>
-                );
-            }}
-        </With>
-    );
-}
-*/
-function MprisPlayer() {
-    return (
-        <With value={activePlayer}>
-            {player => {
-                const hasPlayer = player !== null;
-                const title = hasPlayer ? createBinding(player, 'title') : '';
-                const artist = hasPlayer ? createBinding(player, 'artist') : '';
-                const album = hasPlayer ? createBinding(player, 'album') : '';
-                const statusIcon = hasPlayer ? createComputed(
-                    [createBinding(player, 'playback_status')],
-                        (status) => status === AstalMpris.PlaybackStatus.PLAYING ? PlayerButtonIcons.paused : PlayerButtonIcons.playing
-                ) : createState(PlayerButtonIcons.stop)[0];
+const playerData = activePlayer.as(ap => {
+    if(ap !== null) {
+        const status = createBinding(ap!, 'playbackStatus');
+        const canControl = createBinding(ap!, 'canControl');
+        return {
+            active: true,
+            title: createBinding(ap!, 'title'),
+            artist: createBinding(ap!, 'artist'),
+            album: createBinding(ap!, 'album'),
+            statusIcon: status.as(st => getPlayerStatusIcon(st === AstalMpris.PlaybackStatus.PLAYING ? 'paused' : 'playing')),
+            statusText: status.as(st => getPlayerStatus(st)),
+            next: () => ap!.next(),
+            previous: () => ap!.previous(),
+            playPause: () => ap!.play_pause()
+        };
+    }
+    return {
+        active: false,
+        title: '',
+        artist: '',
+        album: '',
+        statusIcon: PlayerButtonIcons.stopped,
+        statusText: getPlayerStatus(AstalMpris.PlaybackStatus.STOPPED),
+        next: () => {},
+        previous: () => {},
+        playPause: () => {}
+    };
+});
 
-                return (
-                    <box cssClasses={["MprisPlayer"]} orientation={Gtk.Orientation.VERTICAL}>
-                        <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
-                            <label cssClasses={["Title"]} label={title} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                            <label cssClasses={["Artist"]} label={artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                            <label cssClasses={["Album"]} label={album} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                        </box>
-                        <box cssClasses={["LowerPart"]} orientation={Gtk.Orientation.VERTICAL}>
-                            {/* <PlayerSlider /> */}
-                            <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
-                                <box cssClasses={["Previous"]} sensitive={hasPlayer}
-                                    $={
-                                        (self) => {
-                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                            const handler = click.connect("pressed", () => {if(hasPlayer && player.get_can_go_previous()) player.previous()});
-                                            self.add_controller(click);
-                                            onCleanup(() =>{click.disconnect(handler)});
-                                        }
-                                    }
-                                >
-                                    <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.previous} />
-                                </box>
-                                <box cssClasses={["PlayPause"]} sensitive={hasPlayer}
-                                    $={
-                                        (self) => {
-                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                            const handler = click.connect("pressed", () => {if(hasPlayer && player.get_can_control()) player.play_pause()});
-                                            self.add_controller(click);
-                                            onCleanup(() =>{click.disconnect(handler)});
-                                        }
-                                    }
-                                >
-                                    <image iconSize={Gtk.IconSize.LARGE} iconName={statusIcon} />
-                                </box>
-                                <box cssClasses={["Next"]} sensitive={hasPlayer}
-                                    $={
-                                        (self) => {
-                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                            const handler = click.connect("pressed", () => {if(hasPlayer && player.get_can_go_next()) player.next()});
-                                            self.add_controller(click);
-                                            onCleanup(() =>{click.disconnect(handler)});
-                                        }
-                                    }
-                                >
-                                    <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.next} />
-                                </box>
-                            </box>
-                        </box>
-                    </box>
-                );
-            }}
-        </With>
-    );
-}
-function MprisPopover() {
-    return (
-        <overlay
-            cssClasses={["MprisPopover"]}
-            overflow={Gtk.Overflow.HIDDEN}
-        >
-            <MprisPlayer />
-        </overlay>
-    );
-}
 export default function Media() {
+
     return (
-        <menubutton
-            alwaysShowArrow={false}
-            cssClasses={["Media"]}
-            sensitive={activePlayer.as(ac => ac !== null)}
-            popover={<popover><MprisPopover /></popover> as Gtk.Popover}
-        >
-            <With value={activePlayer}>
-                {player => {
-                    const hasPlayer = player !== null;
-                    const status = hasPlayer ? createBinding(player, "playback_status") : createState(AstalMpris.PlaybackStatus.STOPPED)[0];
-                    return <label label={createComputed([status], (st) => getPlayerStatus(st))} widthChars={12}/>
-                }}
-            </With>
-        </menubutton>
+        <box>
+        <With value={playerData}>
+            {player => {
+                return (
+                    <menubutton
+                        alwaysShowArrow={false}
+                        cssClasses={["Media"]}
+                        sensitive={player.active}
+                        popover={
+                            <popover>
+                                <box cssClasses={["MprisPopover"]} overflow={Gtk.Overflow.HIDDEN}>
+                                    <box cssClasses={["MprisPlayer"]} orientation={Gtk.Orientation.VERTICAL}>
+                                        <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
+                                            <label cssClasses={["Title"]} label={player.title} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                            <label cssClasses={["Artist"]} label={player.artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                            <label cssClasses={["Album"]} label={player.album} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                        </box>
+                                        <box cssClasses={["LowerPart"]} orientation={Gtk.Orientation.VERTICAL}>
+                                            <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
+                                                <box cssClasses={["Previous"]} sensitive={player.active}
+                                                    $={
+                                                        (self) => {
+                                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+                                                            const handler = click.connect("pressed", () => player.previous());
+                                                            self.add_controller(click);
+                                                            onCleanup(() =>{click.disconnect(handler)});
+                                                        }
+                                                    }
+                                                >
+                                                    <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.previous} />
+                                                </box>
+                                                <box cssClasses={["PlayPause"]} sensitive={player.active}
+                                                    $={
+                                                        (self) => {
+                                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+                                                            const handler = click.connect("pressed", () => player.playPause());
+                                                            self.add_controller(click);
+                                                            onCleanup(() =>{click.disconnect(handler)});
+                                                        }
+                                                    }
+                                                >
+                                                    <image iconSize={Gtk.IconSize.LARGE} iconName={player.statusIcon} />
+                                                </box>
+                                                <box cssClasses={["Next"]} sensitive={player.active}
+                                                    $={
+                                                        (self) => {
+                                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+                                                            const handler = click.connect("pressed", () => player.next());
+                                                            self.add_controller(click);
+                                                            onCleanup(() =>{click.disconnect(handler)});
+                                                        }
+                                                    }
+                                                >
+                                                    <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.next} />
+                                                </box>
+                                            </box>
+                                        </box>
+                                    </box>
+                                </box>
+                            </popover> as Gtk.Popover}
+                    >
+                        <label label={player.statusText} widthChars={12}/>
+                    </menubutton>
+                );
+            }}
+        </With>
+        </box>
     );
 }

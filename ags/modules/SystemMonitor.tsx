@@ -13,7 +13,7 @@ const battery = AstalBattery.get_default();
 const batteryPercentage = createBinding(battery, "percentage");
 const isCharging = createBinding(battery, "charging");
 const isCritical = createComputed([batteryPercentage, isCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-const batteryLifeLabel = createComputed([isCharging], (c) => c ? `Carregando: ${formatTimeVerbose(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(battery.time_to_empty)} restante(s)`);
+const batteryLifeLabel = isCharging.as(c => c ? `Carregando: ${formatTimeVerbose(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(battery.time_to_empty)} restante(s)`);
 
 
 const cpuData = {
