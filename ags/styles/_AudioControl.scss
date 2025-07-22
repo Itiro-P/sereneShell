@@ -7,45 +7,36 @@
     @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
 }
 
-.MixerPopover {
+.Mixer {
     padding: 6px;
+    border-radius: 16px;
     background-color: rgba(Colors.$surface0, 0.8);
     border: none;
-    border-radius: 10px;
+
+    .Label {
+        font-weight: bold;
+        font-size: 24px;
+        margin: 6px;
+        color: Colors.$text;
+    }
 
     .MixerEntry {
         background-color: Colors.$surface1;
-        padding: 4px;
+        padding: 2px;
+        margin: 2px;
         border: none;
-        border-radius: 10px;
+        border-radius: 16px;
 
-        .EntryName {
-            margin-bottom: 4px;
-            padding: 4px;
-            border: none;
-            border-radius: 12px;
-            transition: all 0.2s ease-in-out;
+        .Icon {
+            @extend %component-circle;
+            @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
         }
 
-        .Playing {
-            background-color: Colors.$blue;
-            * { color: Colors.$crust; }
-        }
-
-        .Muted {
-            background-color: Colors.$crust;
-            * { color: Colors.$blue; }
-        }
-
-        .EntrySlider {
-            min-width: 160px;
-            min-height: 1px;
+        .Slider {
+            @extend %component-slider;
             background-color: Colors.$surface2;
-            border: none;
-            border-radius: 10px;
 
-            highlight {
-                margin: 2px;
+            & highlight {
                 background-color: Colors.$blue;
             }
         }

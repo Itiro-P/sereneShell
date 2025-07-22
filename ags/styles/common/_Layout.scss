@@ -1,4 +1,6 @@
 $circle-diameter: 24px;
+$slider-width: 160px;
+$slider-height: 20px;
 
 %widget {
     background: none;
@@ -16,4 +18,10 @@ $circle-diameter: 24px;
     border-radius: 100%;
     min-width: $circle-diameter;
     min-height: $circle-diameter;
+}
+
+%component-slider {
+    border-radius: 20px;
+    min-width: $slider-width;
+    min-height: $slider-height;
 }

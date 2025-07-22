@@ -12,7 +12,7 @@
 }
 
 .BatteryCritical {
-    @include Transitions.noneToInverseChild(Colors.$red, Colors.$crust, Colors.$lavender);
+    @include Transitions.noneToInverseChild(Colors.$red, Colors.$crust, Colors.$red);
 }
 
 .BatteryPopover {
@@ -36,6 +36,6 @@
         margin: 2px 4px;
         padding: 2px;
         border-radius: 10px;
-        @include Transitions.inverse(rgba(Colors.$crust, 0.75), Colors.$blue);
+        @include Transitions.inverse(rgba(Colors.$base, 0.75), rgba(Colors.$blue, 0.75));
     }
 }

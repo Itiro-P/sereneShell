@@ -13,13 +13,12 @@
         padding: 6px;
 
         .ClientEntry {
+            background-color: rgba(Colors.$surface1, 0.8);
             color: Colors.$text;
-            @include Transitions.inverse(Colors.$blue, Colors.$base);
-            border: 1px solid Colors.$blue;
             border-radius: 16px;
             padding: 4px;
             margin: 2px;
-            transition: all 0.25s ease;
+            @include Transitions.inverse(Colors.$blue, Colors.$base);
         }
     }
 }

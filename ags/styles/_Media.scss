@@ -3,21 +3,6 @@
 @use 'common/Layout';
 @use 'common/Transitions';
 
-.Cava, .Cava > *, .CavaOverlay, .CavaOverlay > * {
-    margin: 0;
-    padding: 0;
-}
-
-.Cava, .Cava > * {
-    color: rgba(Colors.$blue, 0.5);
-}
-
-.CavaOverlay {
-    border: none;
-    border-radius:  40px 40px 0px 0px;
-    @include Transitions.noneToInverse(rgba(Colors.$blue, 0.6), Colors.$base, Colors.$blue);
-}
-
 .Media {
     @extend %widget;
     margin: 2px;
@@ -90,4 +75,19 @@
             color: rgba(Colors.$blue, 0.5);
         }
     }
+}
+
+.Cava, .Cava > *, .CavaOverlay, .CavaOverlay > * {
+    margin: 0;
+    padding: 0;
+}
+
+.Cava, .Cava > * {
+    color: rgba(Colors.$blue, 0.5);
+}
+
+.CavaOverlay {
+    border: none;
+    border-radius:  40px 40px 0px 0px;
+    @include Transitions.noneToInverse(rgba(Colors.$blue, 0.6), Colors.$base, rgba(Colors.$blue, 0.6));
 }

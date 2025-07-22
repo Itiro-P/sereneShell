@@ -1,4 +1,4 @@
-import { Accessor, createBinding, createComputed, createConnection, createExternal, createState, onCleanup, With } from "ags";
+import { Accessor, createBinding, onCleanup, With } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
 import AstalMpris from "gi://AstalMpris?version=0.1";
 

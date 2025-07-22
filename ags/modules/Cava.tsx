@@ -202,7 +202,7 @@ class CavaWidget extends Gtk.DrawingArea {
 
 const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
-const shouldCavaAppear = createComputed([hasAnyClient, animationsEnabled], (hac, an) => !hac && !an);
+const shouldCavaAppear = createComputed([hasAnyClient, animationsEnabled], (hac, an) => !hac && an);
 
 export function Cava() {
     return (
