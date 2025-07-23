@@ -7,6 +7,7 @@ import Media from "../modules/Media";
 import Workspaces from "../modules/Workspaces";
 import Clients from "../modules/Clients";
 import app from "ags/gtk4/app";
+import ControlCenter from "../modules/ControlCenter";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
@@ -35,6 +36,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                     <MiniTime />
                     <AudioControl />
                     <SystemMonitor />
+                    <ControlCenter />
                 </box>
             </box>
         </window>

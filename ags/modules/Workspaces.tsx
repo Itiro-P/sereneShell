@@ -2,6 +2,7 @@ import { Gtk, Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import { focusedWorkspace, workspaces } from "../services/Hyprland";
 import { Accessor, createComputed, For, onCleanup } from "ags";
+import Adw from "gi://Adw?version=1";
 
 function Workspace({ workspace, isInPopover = false }: { workspace: AstalHyprland.Workspace, isInPopover: boolean }) {
     const baseClasses = isInPopover ? ["Workspace", "WorkspacePopoverItem"] : ["Workspace"];
@@ -40,28 +41,13 @@ function MainWorkspace({ workspace }: { workspace: Accessor<AstalHyprland.Worksp
     );
 }
 
-function chunkArray(array: AstalHyprland.Workspace[], size: number): AstalHyprland.Workspace[][] {
-    const result: AstalHyprland.Workspace[][] = [];
-    for (let i = 0; i < array.length; i += size) {
-        result.push(array.slice(i, i + size));
-    }
-    return result;
-}
-
 function WorkspacePopover({ theRest }: { theRest: Accessor<AstalHyprland.Workspace[]> }) {
-    const chunkedArray = theRest.as(tr => chunkArray(tr, 4));
     return (
         <popover cssClasses={["WorkspacePopover"]}>
-            <box orientation={Gtk.Orientation.VERTICAL} cssClasses={["WorkspacePopoverContent"]}>
-                <For each={chunkedArray}>
-                    {line => {
-                        return (
-                            <box orientation={Gtk.Orientation.HORIZONTAL} cssClasses={["WorkspacePopoverContentLine"]}>
-                                {line.map(workspace => <Workspace workspace={workspace} isInPopover={true} />)}
-                            </box>
-                        );
-                    }}
-                </For>
+            <box cssClasses={["WorkspacePopoverContent"]}>
+                <Adw.WrapBox lineHomogeneous naturalLineLength={128} naturalLineLengthUnit={Adw.LengthUnit.PX} justify={Adw.JustifyMode.SPREAD}>
+                    <For each={theRest} children={item => <Workspace workspace={item} isInPopover={true} />} />
+                </Adw.WrapBox>
             </box>
         </popover>
     );

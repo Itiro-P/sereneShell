@@ -4,7 +4,7 @@ import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
 import { hasAnyClient } from "../services/Hyprland";
 import { animationsEnabled } from "../services/Animations";
-import { createComputed } from "ags";
+import { createComputed, createState } from "ags";
 
 const CavaConfig = {
     autosens: true,
@@ -202,7 +202,7 @@ class CavaWidget extends Gtk.DrawingArea {
 
 const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
-const shouldCavaAppear = createComputed([hasAnyClient, animationsEnabled], (hac, an) => !hac && an);
+export const [shouldCavaAppear, setShouldCavaAppear] = createState(true);
 
 export function Cava() {
     return (
@@ -214,7 +214,7 @@ export function Cava() {
 
 export function CavaOverlay() {
     return (
-        <box cssClasses={["CavaOverlay"]} visible={animationsEnabled}>
+        <box cssClasses={["CavaOverlay"]} visible={shouldCavaAppear}>
             {new _cava()}
         </box>
     );

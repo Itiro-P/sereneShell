@@ -2,7 +2,6 @@ import AstalBattery from "gi://AstalBattery"
 import GTop from "gi://GTop?version=2.0";
 import { Gtk } from "ags/gtk4";
 import { formatTimeVerbose } from "../services/TimeFormatter";
-import { animationsEnabled, syncAnimationState, toggleAnimations } from "../services/Animations";
 import { createBinding, createComputed, onCleanup } from "ags";
 import { createPoll } from "ags/time";
 
@@ -74,40 +73,12 @@ function MemoryUsage() {
     );
 }
 
-function BatteryPopover() {
-    const toggleAnimationsClick = new Gtk.GestureClick();
-    const handler = toggleAnimationsClick.connect("pressed", () => {
-        syncAnimationState();
-        toggleAnimations();
-    });
-
-    onCleanup(() => toggleAnimationsClick.disconnect(handler));
-
-    return (
-        <popover onShow={() => syncAnimationState()}>
-            <box cssClasses={["BatteryPopover"]} orientation={Gtk.Orientation.VERTICAL}>
-                <label cssClasses={["Title"]} label={"Informaçoẽs da bateria"} />
-                <label cssClasses={["BatteryLife"]} label={batteryLifeLabel} />
-                <label
-                    cssClasses={["ToggleButton"]}
-                    $={(self) => self.add_controller(toggleAnimationsClick)}
-                    label={animationsEnabled.as(ae => ae ? "Desativar animações" : "Ativar animações")}
-                    widthChars={20}
-                />
-                <box />
-            </box>
-        </popover>
-    );
-}
-
 function Battery() {
     return (
-        <menubutton cssClasses={isCritical} tooltipText={batteryLifeLabel} popover={<BatteryPopover /> as Gtk.Popover}>
-            <box>
-                <image cssClasses={["BatteryIcon"]} iconName={createBinding(battery, "batteryIconName")} />
-                <label cssClasses={["BatteryUsageLabel"]} label={batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
-            </box>
-        </menubutton>
+        <box cssClasses={isCritical} tooltipText={batteryLifeLabel}>
+            <image cssClasses={["BatteryIcon"]} iconName={createBinding(battery, "batteryIconName")} />
+            <label cssClasses={["BatteryUsageLabel"]} label={batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
+        </box>
     );
 };
 

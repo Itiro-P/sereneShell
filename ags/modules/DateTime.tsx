@@ -1,6 +1,6 @@
 import { Gtk } from "ags/gtk4";
 import { hasAnyClient } from "../services/Hyprland";
-import { createState } from "ags";
+import { createComputed, createState } from "ags";
 
 type ClockDate = {
     clock: string;
@@ -41,15 +41,19 @@ startClock();
 const time = clock.as(c => c.clock);
 const date = clock.as(c => c.date);
 
+export const [isDTCvisible, setIsDTCvisible] = createState(true);
+
+const isMiniTimeVisible = createComputed([isDTCvisible, hasAnyClient], (idv, hac) => !hac || !idv);
+
 export function MiniTime() {
     return (
-        <label cssClasses={["Time"]} label={time} tooltipMarkup={date} visible={hasAnyClient.as(hac => !hac)} />
+        <label cssClasses={["Time"]} label={time} tooltipMarkup={date} visible={isMiniTimeVisible} />
     );
 }
 
 export function DateTimeCalendar() {
     return (
-        <box cssClasses={["DateTimeCalendar"]}>
+        <box cssClasses={["DateTimeCalendar"]} visible={isDTCvisible}>
             <Gtk.Calendar cssClasses={["Calendar"]} />
             <box cssClasses={["DateTime"]} orientation={Gtk.Orientation.VERTICAL}>
                 <label cssClasses={["Time"]} label={time} />
