@@ -11,7 +11,7 @@ export default function Background({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
         <window
             namespace='AstalBackground'
             cssClasses={["Background"]}
-            layer={Astal.Layer.BACKGROUND}
+            layer={Astal.Layer.BOTTOM}
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT | BOTTOM}
             application={app}
