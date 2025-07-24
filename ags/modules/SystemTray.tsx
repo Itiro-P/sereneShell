@@ -1,11 +1,18 @@
-import { createBinding, For, onCleanup } from "ags";
+import { Accessor, createBinding, For, onCleanup } from "ags";
 import { Gtk } from "ags/gtk4";
 import AstalTray from "gi://AstalTray?version=0.1";
 
-const tray = AstalTray.get_default();
+export default class SystemTray {
+    private static _instance: SystemTray;
+    private default: AstalTray.Tray;
+    private itemsBinding: Accessor<AstalTray.TrayItem[]>;
 
-function TrayItem({ item }: { item: AstalTray.TrayItem }) {
-    const init = (btn: Gtk.MenuButton, item: AstalTray.TrayItem) => {
+    private constructor() {
+        this.default = AstalTray.get_default();
+        this.itemsBinding = createBinding(this.default, "items");
+    }
+
+    private setupTrayItem = (btn: Gtk.MenuButton, item: AstalTray.TrayItem) => {
         btn.menuModel = item.menuModel;
         btn.insert_action_group("dbusmenu", item.actionGroup);
 
@@ -23,26 +30,34 @@ function TrayItem({ item }: { item: AstalTray.TrayItem }) {
         });
     };
 
-    return (
-        <menubutton
-            cssClasses={["TrayItem"]}
-            tooltipMarkup={createBinding(item, "tooltipMarkup")}
-            $={(self) => init(self, item)}
-            halign={Gtk.Align.CENTER}
-            valign={Gtk.Align.CENTER}
-        >
-            <image gicon={createBinding(item, "gicon")} />
-        </menubutton>
-    );
-}
+    private TrayItem({ item }: { item: AstalTray.TrayItem }) {
+        return (
+            <menubutton
+                cssClasses={["TrayItem"]}
+                tooltipMarkup={createBinding(item, "tooltipMarkup")}
+                $={(self) => this.setupTrayItem(self, item)}
+                halign={Gtk.Align.CENTER}
+                valign={Gtk.Align.CENTER}
+            >
+                <image gicon={createBinding(item, "gicon")} />
+            </menubutton>
+        );
+    }
 
-export default function SystemTray() {
-    const items = createBinding(tray, "items");
-    return (
-        <box cssClasses={["SystemTray"]}>
-            <For each={items}>
-                {(item) => <TrayItem item={item} />}
-            </For>
-        </box>
-    );
+    public get SystemTray() {
+        return (
+            <box cssClasses={["SystemTray"]}>
+                <For each={this.itemsBinding}>
+                    {(item) => this.TrayItem({ item })}
+                </For>
+            </box>
+        );
+    }
+
+    public static get instance() {
+        if(!this._instance) {
+            this._instance = new SystemTray;
+        }
+        return this._instance;
+    }
 }

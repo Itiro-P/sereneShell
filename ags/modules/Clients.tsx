@@ -1,44 +1,54 @@
-import { createComputed, For, onCleanup } from "ags";
+import { Accessor, createComputed, For, onCleanup } from "ags";
 import { Gtk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-import { clients, focusedClient } from "../services/Hyprland";
+import Hyprland from "../services/Hyprland";
 
-const filteredClients = createComputed([clients, focusedClient], (allClients, focused) => {
-    return focused ? allClients.filter(client => client.address !== focused.address) : allClients;
-});
+export default class Clients {
+    private static _instance: Clients;
+    private filteredClients: Accessor<AstalHyprland.Client[]>;
+    private activeClientTitle: Accessor<string>;
+    private hasMultipleClients: Accessor<boolean>;
 
-const activeClientTitle = createComputed([filteredClients, focusedClient], (clients, focused) => focused?.title || `${clients.length}`);
+    private constructor() {
+        this.filteredClients = createComputed([Hyprland.instance.clients, Hyprland.instance.focusedClient], (allClients, focused) => {
+            return focused ? allClients.filter(client => client.address !== focused.address) : allClients;
+        });
+        this.activeClientTitle = createComputed([this.filteredClients, Hyprland.instance.focusedClient], (clients, focused) => focused?.title || `${clients.length}`);
+        this.hasMultipleClients = this.filteredClients.as(clients => clients.length > 0);
+    }
 
-const hasMultipleClients = filteredClients.as(clients => clients.length > 0);
+    private ClientEntry(client: AstalHyprland.Client) {
+        const click = new Gtk.GestureClick();
+        const handler_id = click.connect("pressed", () => {client.focus()});
 
-function ActiveClient() {
-    return (
-        <label cssClasses={["Client"]} widthChars={24} maxWidthChars={21} ellipsize={3} label={activeClientTitle} />
-    );
-}
+        onCleanup(() => { if(handler_id) click.disconnect(handler_id) });
+        return (
+            <label cssClasses={["ClientEntry"]} $={self => self.add_controller(click)} maxWidthChars={22} ellipsize={3} label={client.title} />
+        );
+    }
 
-function ClientEntry(client: AstalHyprland.Client) {
-    const click = new Gtk.GestureClick();
-    const handler_id = click.connect("pressed", () => {client.focus()});
+    private ClientsPopover() {
+        return (
+            <popover cssClasses={["ClientsPopover"]}>
+                <box orientation={Gtk.Orientation.VERTICAL}>
+                    <For each={this.filteredClients} children={client => this.ClientEntry(client)} />
+                </box>
+            </popover>
+        );
+    }
 
-    onCleanup(() => { if(handler_id) click.disconnect(handler_id) });
-    return (
-        <label cssClasses={["ClientEntry"]} $={self => self.add_controller(click)} maxWidthChars={22} ellipsize={3} label={client.title} />
-    );
-}
+    public static get instance() {
+        if(!this._instance) {
+            this._instance = new Clients;
+        }
+        return this._instance;
+    }
 
-function ClientsPopover() {
-    return (
-        <box cssClasses={["ClientsPopover"]} orientation={Gtk.Orientation.VERTICAL}>
-            <For each={filteredClients} children={client => ClientEntry(client)} />
-        </box>
-    );
-}
-
-export default function Clients() {
-    return (
-        <menubutton cssClasses={["Clients"]} sensitive={hasMultipleClients} popover={<popover><ClientsPopover /></popover> as Gtk.Popover}>
-            <ActiveClient />
-        </menubutton>
-    );
+    public get Clients() {
+        return (
+            <menubutton cssClasses={["Clients"]} sensitive={this.hasMultipleClients} popover={this.ClientsPopover() as Gtk.Popover}>
+                <label cssClasses={["Client"]} widthChars={24} maxWidthChars={21} ellipsize={3} label={this.activeClientTitle} />
+            </menubutton>
+        );
+    }
 }

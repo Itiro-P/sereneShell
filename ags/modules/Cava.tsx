@@ -2,9 +2,7 @@ import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
-import { hasAnyClient } from "../services/Hyprland";
-import { animationsEnabled } from "../services/Animations";
-import { createComputed, createState } from "ags";
+import { createState } from "ags";
 
 const CavaConfig = {
     autosens: true,

@@ -11,8 +11,8 @@ type Metrics = {
 
 const POLL_INTERVAL = 3000;
 
-class SystemMonitorManager {
-    private static _instance: SystemMonitorManager;
+export default class SystemMonitor {
+    private static _instance: SystemMonitor;
     private battery: AstalBattery.Device;
     private batteryPercentage: Accessor<number>;
     private batteryCharging: Accessor<boolean>;
@@ -74,45 +74,21 @@ class SystemMonitorManager {
 
     public static get instance() {
         if(!this._instance) {
-            this._instance = new SystemMonitorManager;
+            this._instance = new SystemMonitor;
         }
         return this._instance;
     }
 
-    public get metrics() {
-        return this._metrics;
-    }
-
-    public get batIcon() {
-        return this.batteryIcon;
-    }
-
-    public get batPercent() {
-        return this.batteryPercentage;
-    }
-
-    public get batCharging() {
-        return this.batteryCharging;
-    }
-
-    public get batCritical() {
-        return this.batteryCritical;
-    }
-
-    public get batLifeLabel() {
-        return this.batteryLifeLabel;
-    }
-}
-
-export default function SystemMonitor() {
-    return (
-        <box cssClasses={["SystemMonitor"]}>
-            <label cssClasses={["CpuUsage"]} label={SystemMonitorManager.instance.metrics.as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
-            <label cssClasses={["MemoryUsage"]} label={SystemMonitorManager.instance.metrics.as(m => `MEM: ${m.mem}%`)} widthChars={4} />
-            <box cssClasses={SystemMonitorManager.instance.batCritical} tooltipText={SystemMonitorManager.instance.batLifeLabel}>
-                <image cssClasses={["BatteryIcon"]} iconName={SystemMonitorManager.instance.batIcon} />
-                <label cssClasses={["BatteryUsageLabel"]} label={SystemMonitorManager.instance.batPercent.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
+    public get SystemMonitor() {
+        return (
+            <box cssClasses={["SystemMonitor"]}>
+                <label cssClasses={["CpuUsage"]} label={this._metrics.as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
+                <label cssClasses={["MemoryUsage"]} label={this._metrics.as(m => `MEM: ${m.mem}%`)} widthChars={4} />
+                <box cssClasses={this.batteryCritical} tooltipText={this.batteryLifeLabel}>
+                    <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} />
+                    <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
+                </box>
             </box>
-        </box>
-    );
+        );
+    }
 }

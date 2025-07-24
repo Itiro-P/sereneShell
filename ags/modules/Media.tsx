@@ -24,7 +24,7 @@ type PlayerData = {
     playPause: () => void
 }
 
-class MprisManager {
+export default class MprisManager {
     private static _instance: MprisManager;
     private mpris: AstalMpris.Mpris;
     private _activePlayerData: Accessor<PlayerData>;
@@ -124,79 +124,75 @@ class MprisManager {
         }
     }
 
-    public get activePlayerData() {
-        return this._activePlayerData;
-    }
-}
-
-export default function Media() {
-    return (
-        <box>
-        <With value={MprisManager.instance.activePlayerData}>
-            {player => {
-                return (
-                    <menubutton
-                        alwaysShowArrow={false}
-                        cssClasses={["Media"]}
-                        sensitive={player.active}
-                        popover={
-                            <popover>
-                                <box cssClasses={["MprisPopover"]} overflow={Gtk.Overflow.HIDDEN}>
-                                    <box cssClasses={["MprisPlayer"]} orientation={Gtk.Orientation.VERTICAL}>
-                                        <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
-                                            <label cssClasses={["Title"]} label={player.title} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                            <label cssClasses={["Artist"]} label={player.artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                            <label cssClasses={["Album"]} label={player.album} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                        </box>
-                                        <box cssClasses={["LowerPart"]} orientation={Gtk.Orientation.VERTICAL}>
-                                            <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
-                                                <box cssClasses={["Previous"]} sensitive={player.active}
-                                                    $={
-                                                        (self) => {
-                                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                            const handler = click.connect("pressed", player.previous);
-                                                            self.add_controller(click);
-                                                            onCleanup(() =>{click.disconnect(handler)});
+    public get Media() {
+        return (
+            <box>
+            <With value={this._activePlayerData}>
+                {player => {
+                    return (
+                        <menubutton
+                            alwaysShowArrow={false}
+                            cssClasses={["Media"]}
+                            sensitive={player.active}
+                            popover={
+                                <popover>
+                                    <box cssClasses={["MprisPopover"]} overflow={Gtk.Overflow.HIDDEN}>
+                                        <box cssClasses={["MprisPlayer"]} orientation={Gtk.Orientation.VERTICAL}>
+                                            <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
+                                                <label cssClasses={["Title"]} label={player.title} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                                <label cssClasses={["Artist"]} label={player.artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                                <label cssClasses={["Album"]} label={player.album} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                            </box>
+                                            <box cssClasses={["LowerPart"]} orientation={Gtk.Orientation.VERTICAL}>
+                                                <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
+                                                    <box cssClasses={["Previous"]} sensitive={player.active}
+                                                        $={
+                                                            (self) => {
+                                                                const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+                                                                const handler = click.connect("pressed", player.previous);
+                                                                self.add_controller(click);
+                                                                onCleanup(() =>{click.disconnect(handler)});
+                                                            }
                                                         }
-                                                    }
-                                                >
-                                                    <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.previous} />
-                                                </box>
-                                                <box cssClasses={["PlayPause"]} sensitive={player.active}
-                                                    $={
-                                                        (self) => {
-                                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                            const handler = click.connect("pressed", player.playPause);
-                                                            self.add_controller(click);
-                                                            onCleanup(() =>{click.disconnect(handler)});
+                                                    >
+                                                        <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.previous} />
+                                                    </box>
+                                                    <box cssClasses={["PlayPause"]} sensitive={player.active}
+                                                        $={
+                                                            (self) => {
+                                                                const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+                                                                const handler = click.connect("pressed", player.playPause);
+                                                                self.add_controller(click);
+                                                                onCleanup(() =>{click.disconnect(handler)});
+                                                            }
                                                         }
-                                                    }
-                                                >
-                                                    <image iconSize={Gtk.IconSize.LARGE} iconName={player.statusIcon} />
-                                                </box>
-                                                <box cssClasses={["Next"]} sensitive={player.active}
-                                                    $={
-                                                        (self) => {
-                                                            const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                            const handler = click.connect("pressed", player.next);
-                                                            self.add_controller(click);
-                                                            onCleanup(() =>{click.disconnect(handler)});
+                                                    >
+                                                        <image iconSize={Gtk.IconSize.LARGE} iconName={player.statusIcon} />
+                                                    </box>
+                                                    <box cssClasses={["Next"]} sensitive={player.active}
+                                                        $={
+                                                            (self) => {
+                                                                const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+                                                                const handler = click.connect("pressed", player.next);
+                                                                self.add_controller(click);
+                                                                onCleanup(() =>{click.disconnect(handler)});
+                                                            }
                                                         }
-                                                    }
-                                                >
-                                                    <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.next} />
+                                                    >
+                                                        <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.next} />
+                                                    </box>
                                                 </box>
                                             </box>
                                         </box>
                                     </box>
-                                </box>
-                            </popover> as Gtk.Popover}
-                    >
-                        <label label={player.statusText} widthChars={12}/>
-                    </menubutton>
-                );
-            }}
-        </With>
-        </box>
-    );
+                                </popover> as Gtk.Popover}
+                        >
+                            <label label={player.statusText} widthChars={12}/>
+                        </menubutton>
+                    );
+                }}
+            </With>
+            </box>
+        );
+    }
 }

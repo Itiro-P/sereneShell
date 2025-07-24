@@ -1,9 +1,9 @@
 import { Gdk, Gtk } from "ags/gtk4";
 import { animationsEnabled, toggleAnimations } from "../services/Animations";
 import { onCleanup } from "ags";
-import { isDTCvisible, setIsDTCvisible } from "./DateTime";
+import DateTime from "./DateTime";
 import { setShouldCavaAppear, shouldCavaAppear } from "./Cava";
-import WallpaperSystem from "./Wallpapers";
+import WallpaperSelector from "./WallpaperSelector";
 
 function ToggleVisibleComponents() {
     return (
@@ -24,11 +24,11 @@ function ToggleVisibleComponents() {
                 cssClasses={["ToggleDateTimeCalendar", "Option"]}
                 $={self => {
                     const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                    const handler = click.connect('pressed', () => setIsDTCvisible(!isDTCvisible.get()));
+                    const handler = click.connect('pressed', () => DateTime.instance.toggleIsDTCvisible());
                     self.add_controller(click);
                     onCleanup(() => click.disconnect(handler));
                 }}
-                label={isDTCvisible.as(idv => idv ? "Ocultar Calendário, data e hora": "Mostrar Calendário, data e hora")}
+                label={DateTime.instance.isDTCvisible.as(idv => idv ? "Ocultar Calendário, data e hora": "Mostrar Calendário, data e hora")}
                 widthChars={30}
             />
             <label
@@ -50,7 +50,7 @@ function ControlCenterPopover() {
     return (
         <popover>
             <box cssClasses={["ControlCenterPopover"]}>
-                <WallpaperSystem />
+                {WallpaperSelector.instance.WallpaperSelector}
                 <ToggleVisibleComponents />
             </box>
         </popover>

@@ -1,8 +1,8 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
-import { DateTimeCalendar } from "../modules/DateTime";
+import DateTime from "../modules/DateTime";
 import app from "ags/gtk4/app";
 import { CavaOverlay } from "../modules/Cava";
-import { hasAnyClient } from "../services/Hyprland";
+import Hyprland from "../services/Hyprland";
 
 export default function Background({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
@@ -15,7 +15,7 @@ export default function Background({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT | BOTTOM}
             application={app}
-            visible={hasAnyClient}
+            visible={Hyprland.instance.hasAnyClient}
         >
             <overlay
                 $={
@@ -26,9 +26,7 @@ export default function Background({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
                             </box> as Gtk.Widget
                         );
                         self.add_overlay(
-                            <box halign={Gtk.Align.END} valign={Gtk.Align.START}>
-                                <DateTimeCalendar />
-                            </box> as Gtk.Widget
+                            <box halign={Gtk.Align.END} valign={Gtk.Align.START} children={DateTime.instance.DateTimeCalendar} /> as Gtk.Widget
                         );
                     }
                 }
