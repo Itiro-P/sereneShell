@@ -2,7 +2,6 @@ import { Gtk, Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import { focusedWorkspace, workspaces } from "../services/Hyprland";
 import { Accessor, createComputed, For, onCleanup } from "ags";
-import Adw from "gi://Adw?version=1";
 
 function Workspace({ workspace, isInPopover = false }: { workspace: AstalHyprland.Workspace, isInPopover: boolean }) {
     const baseClasses = isInPopover ? ["Workspace", "WorkspacePopoverItem"] : ["Workspace"];
@@ -45,9 +44,9 @@ function WorkspacePopover({ theRest }: { theRest: Accessor<AstalHyprland.Workspa
     return (
         <popover cssClasses={["WorkspacePopover"]}>
             <box cssClasses={["WorkspacePopoverContent"]}>
-                <Adw.WrapBox lineHomogeneous naturalLineLength={128} naturalLineLengthUnit={Adw.LengthUnit.PX} justify={Adw.JustifyMode.SPREAD}>
+                <Gtk.FlowBox maxChildrenPerLine={4}>
                     <For each={theRest} children={item => <Workspace workspace={item} isInPopover={true} />} />
-                </Adw.WrapBox>
+                </Gtk.FlowBox>
             </box>
         </popover>
     );
@@ -63,7 +62,7 @@ function MoreWorkspacesButton({ theRest }: { theRest: Accessor<AstalHyprland.Wor
 
 export default function Workspaces({ monitor }: { monitor: Gdk.Monitor }) {
     const monitorWorkspaces = workspaces.as(ws => {
-        const filtered = ws.filter((workspace) => workspace ? workspace.get_monitor().get_model() === monitor.get_model() : false);
+        const filtered = ws.filter((workspace) => workspace ? workspace?.get_monitor()?.get_model() === monitor.get_model() : false);
         return {
             first: filtered[0],
             second: filtered[1],

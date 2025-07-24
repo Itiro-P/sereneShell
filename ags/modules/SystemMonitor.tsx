@@ -1,93 +1,118 @@
 import AstalBattery from "gi://AstalBattery"
 import GTop from "gi://GTop?version=2.0";
-import { Gtk } from "ags/gtk4";
 import { formatTimeVerbose } from "../services/TimeFormatter";
-import { createBinding, createComputed, onCleanup } from "ags";
+import { Accessor, createBinding, createComputed } from "ags";
 import { createPoll } from "ags/time";
 
+type Metrics = {
+    cpu: number,
+    mem: number
+}
+
 const POLL_INTERVAL = 3000;
-const cpu = new GTop.glibtop_cpu();
-const mem = new GTop.glibtop_mem();
-const battery = AstalBattery.get_default();
-const batteryPercentage = createBinding(battery, "percentage");
-const isCharging = createBinding(battery, "charging");
-const isCritical = createComputed([batteryPercentage, isCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-const batteryLifeLabel = isCharging.as(c => c ? `Carregando: ${formatTimeVerbose(battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(battery.time_to_empty)} restante(s)`);
 
+class SystemMonitorManager {
+    private static _instance: SystemMonitorManager;
+    private battery: AstalBattery.Device;
+    private batteryPercentage: Accessor<number>;
+    private batteryCharging: Accessor<boolean>;
+    private batteryCritical: Accessor<string[]>;
+    private batteryLifeLabel: Accessor<string>;
+    private batteryIcon: Accessor<string>;
 
-const cpuData = {
-    prev: { user: 0, sys: 0, total: 0 },
-    diff: { user: 0, sys: 0, total: 0 }
-};
+    private cpuSource: GTop.glibtop_cpu;
+    private cpuData: { prev: { user: number, sys: number, total: number }, diff: { user: number, sys: number, total: number } };
+    private memSource: GTop.glibtop_mem;
+    private _metrics: Accessor<Metrics>;
 
-GTop.glibtop_get_cpu(cpu);
-cpuData.prev.user = cpu.user;
-cpuData.prev.sys = cpu.sys;
-cpuData.prev.total = cpu.total;
+    private constructor() {
+        this.battery = AstalBattery.get_default();
+        this.batteryIcon = createBinding(this.battery, "batteryIconName");
+        this.batteryPercentage = createBinding(this.battery, "percentage");
+        this.batteryCharging = createBinding(this.battery, "charging");
+        this.batteryCritical = createComputed([this.batteryPercentage, this.batteryCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
+        this.batteryLifeLabel = this.batteryCharging.as(c => c ? `Carregando: ${formatTimeVerbose(this.battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(this.battery.time_to_empty)} restante(s)`);
 
-const calculateMetrics = () => {
-    try {
-        const prevUser = cpuData.prev.user;
-        const prevSys = cpuData.prev.sys;
-        const prevTotal = cpuData.prev.total;
+        this.cpuSource = new GTop.glibtop_cpu();
+        this.memSource = new GTop.glibtop_mem();
 
-        GTop.glibtop_get_cpu(cpu);
-        GTop.glibtop_get_mem(mem);
+        this.cpuData = { prev: { user: 0, sys: 0, total: 0 }, diff: { user: 0, sys: 0, total: 0 } };
 
-        cpuData.diff.user = cpu.user - prevUser;
-        cpuData.diff.sys = cpu.sys - prevSys;
-        cpuData.diff.total = cpu.total - prevTotal;
+        this._metrics = createPoll({ cpu: 0, mem: 0 }, POLL_INTERVAL, () => {
+            try {
+                GTop.glibtop_get_cpu(this.cpuSource);
+                GTop.glibtop_get_mem(this.memSource);
 
-        cpuData.prev.user = cpu.user;
-        cpuData.prev.sys = cpu.sys;
-        cpuData.prev.total = cpu.total;
+                const cpu = this.cpuSource;
 
-        const cpuPercent = cpuData.diff.total > 0
-            ? Math.round(((cpuData.diff.user + cpuData.diff.sys) / cpuData.diff.total) * 100)
-            : 0;
-        const memPercent = mem.total > 0
-            ? Math.round((mem.user / mem.total) * 100)
-            : 0;
+                const prev = this.cpuData.prev;
 
-        return {
-            cpu: Math.max(0, Math.min(100, cpuPercent)),
-            mem: Math.max(0, Math.min(100, memPercent))
-        };
-    } catch (error) {
-        console.warn("Erro ao obter métricas do sistema:", error);
-        return { cpu: 0, mem: 0 };
+                this.cpuData.diff = {
+                    user: cpu.user - prev.user,
+                    sys: cpu.sys - prev.sys,
+                    total: cpu.total - prev.total
+                }
+
+                this.cpuData.prev = {
+                    user: cpu.user,
+                    sys: cpu.sys,
+                    total: cpu.total
+                }
+
+                const cpuDiff = this.cpuData.diff;
+
+                const cpuPercent = cpuDiff.total > 0 ? Math.round(((cpuDiff.user + cpuDiff.sys) / cpuDiff.total) * 100) : 0;
+                const memPercent = this.memSource.total > 0 ? Math.round((this.memSource.user / this.memSource.total) * 100) : 0;
+
+                return { cpu: Math.max(0, Math.min(100, cpuPercent)), mem: Math.max(0, Math.min(100, memPercent)) };
+            } catch (error) {
+                console.warn("Erro ao obter métricas do sistema:", error);
+                return { cpu: 0, mem: 0 };
+            }
+        });
     }
-};
 
-const metrics = createPoll({ cpu: 0, mem: 0 }, POLL_INTERVAL, calculateMetrics);
+    public static get instance() {
+        if(!this._instance) {
+            this._instance = new SystemMonitorManager;
+        }
+        return this._instance;
+    }
 
-function CpuUsage() {
-    return (
-        <label cssClasses={["CpuUsage"]} label={metrics.as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
-    );
+    public get metrics() {
+        return this._metrics;
+    }
+
+    public get batIcon() {
+        return this.batteryIcon;
+    }
+
+    public get batPercent() {
+        return this.batteryPercentage;
+    }
+
+    public get batCharging() {
+        return this.batteryCharging;
+    }
+
+    public get batCritical() {
+        return this.batteryCritical;
+    }
+
+    public get batLifeLabel() {
+        return this.batteryLifeLabel;
+    }
 }
-
-function MemoryUsage() {
-    return (
-        <label cssClasses={["MemoryUsage"]} label={metrics.as(m => `MEM: ${m.mem}%`)} widthChars={4} />
-    );
-}
-
-function Battery() {
-    return (
-        <box cssClasses={isCritical} tooltipText={batteryLifeLabel}>
-            <image cssClasses={["BatteryIcon"]} iconName={createBinding(battery, "batteryIconName")} />
-            <label cssClasses={["BatteryUsageLabel"]} label={batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
-        </box>
-    );
-};
 
 export default function SystemMonitor() {
     return (
         <box cssClasses={["SystemMonitor"]}>
-            <CpuUsage />
-            <MemoryUsage />
-            <Battery />
+            <label cssClasses={["CpuUsage"]} label={SystemMonitorManager.instance.metrics.as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
+            <label cssClasses={["MemoryUsage"]} label={SystemMonitorManager.instance.metrics.as(m => `MEM: ${m.mem}%`)} widthChars={4} />
+            <box cssClasses={SystemMonitorManager.instance.batCritical} tooltipText={SystemMonitorManager.instance.batLifeLabel}>
+                <image cssClasses={["BatteryIcon"]} iconName={SystemMonitorManager.instance.batIcon} />
+                <label cssClasses={["BatteryUsageLabel"]} label={SystemMonitorManager.instance.batPercent.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
+            </box>
         </box>
     );
 }

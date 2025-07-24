@@ -12,83 +12,127 @@ const PlayerButtonIcons = {
     previous: "media-skip-backward-symbolic"
 }
 
-function getPlayerStatus(status: AstalMpris.PlaybackStatus) {
-    switch(status) {
-        case AstalMpris.PlaybackStatus.PLAYING:
-            return 'Tocando';
-        case AstalMpris.PlaybackStatus.PAUSED:
-            return 'Pausado';
-        default:
-            return 'Nada tocando';
-    }
+type PlayerData = {
+    active: boolean,
+    title: Accessor<string> | string,
+    artist: Accessor<string> | string,
+    album: Accessor<string> | string,
+    statusIcon: Accessor<string> | string,
+    statusText: Accessor<string> | string,
+    next: () => void,
+    previous: () => void,
+    playPause: () => void
 }
 
-function getPlayerStatusIcon(status: PlayerButton) {
-    switch(status) {
-        case 'previous':
-            return PlayerButtonIcons.previous;
-        case 'playing':
-            return PlayerButtonIcons.playing;
-        case 'paused':
-            return PlayerButtonIcons.paused;
-        case 'stopped':
-            return PlayerButtonIcons.stopped;
-        case 'next':
-            return PlayerButtonIcons.next;
-        default:
-            return PlayerButtonIcons.stopped;
-    }
-}
+class MprisManager {
+    private static _instance: MprisManager;
+    private mpris: AstalMpris.Mpris;
+    private _activePlayerData: Accessor<PlayerData>;
 
-const mpris = AstalMpris.get_default();
+    private constructor() {
+        this.mpris = AstalMpris.get_default();
+        this._activePlayerData = createBinding(this.mpris, "players").as(
+            (players) => {
+                let playing: AstalMpris.Player | null = null;
+                let paused: AstalMpris.Player | null = null;
+                let final: AstalMpris.Player | null = null;
 
-const activePlayer = createBinding(mpris, "players").as(
-    (players) => {
-        for(const player of players) {
-            if(player.get_playback_status() === AstalMpris.PlaybackStatus.PLAYING) {
-                return player;
-            } else if(player.get_playback_status() === AstalMpris.PlaybackStatus.PAUSED) {
-                return player;
+                for (const player of players) {
+                    if (player.get_playback_status() === AstalMpris.PlaybackStatus.PLAYING) {
+                        playing = player;
+                        break;
+                    } else if (player.get_playback_status() === AstalMpris.PlaybackStatus.PAUSED) {
+                        paused = player;
+                    }
+                }
+
+                final = playing || paused;
+
+                if (final !== null) {
+                    const status = createBinding(final, 'playbackStatus');
+                    const canGoNext = createBinding(final, 'canGoNext');
+                    const canGoPrevious = createBinding(final, 'canGoPrevious');
+                    const canPause = createBinding(final, 'canPause');
+                    const canPlay = createBinding(final, 'canPlay');
+
+                    return {
+                        active: true,
+                        title: createBinding(final, 'title'),
+                        artist: createBinding(final, 'artist'),
+                        album: createBinding(final, 'album'),
+                        statusIcon: status.as(st => this.getPlayerStatusIcon(st === AstalMpris.PlaybackStatus.PLAYING ? 'paused' : 'playing')),
+                        statusText: status.as(st => this.getPlayerStatus(st)),
+                        next: () => {
+                            if (canGoNext.get()) final!.next();
+                        },
+                        previous: () => {
+                            if (canGoPrevious.get()) final!.previous();
+                        },
+                        playPause: () => {
+                            if (canPause.get() || canPlay.get()) final!.play_pause();
+                        }
+                    };
+                }
+
+                return {
+                    active: false,
+                    title: 'Nenhum player ativo',
+                    artist: '',
+                    album: '',
+                    statusIcon: PlayerButtonIcons.stopped,
+                    statusText: this.getPlayerStatus(AstalMpris.PlaybackStatus.STOPPED),
+                    next: () => { },
+                    previous: () => { },
+                    playPause: () => { }
+                };
             }
-        }
-        return null;
+        );
     }
-);
 
-const playerData = activePlayer.as(ap => {
-    if(ap !== null) {
-        const status = createBinding(ap!, 'playbackStatus');
-        const canControl = createBinding(ap!, 'canControl');
-        return {
-            active: true,
-            title: createBinding(ap!, 'title'),
-            artist: createBinding(ap!, 'artist'),
-            album: createBinding(ap!, 'album'),
-            statusIcon: status.as(st => getPlayerStatusIcon(st === AstalMpris.PlaybackStatus.PLAYING ? 'paused' : 'playing')),
-            statusText: status.as(st => getPlayerStatus(st)),
-            next: () => ap!.next(),
-            previous: () => ap!.previous(),
-            playPause: () => ap!.play_pause()
-        };
+    public static get instance() {
+        if(!MprisManager._instance) {
+            MprisManager._instance = new MprisManager;
+        }
+        return MprisManager._instance;
     }
-    return {
-        active: false,
-        title: '',
-        artist: '',
-        album: '',
-        statusIcon: PlayerButtonIcons.stopped,
-        statusText: getPlayerStatus(AstalMpris.PlaybackStatus.STOPPED),
-        next: () => {},
-        previous: () => {},
-        playPause: () => {}
-    };
-});
+
+    private getPlayerStatus(status: AstalMpris.PlaybackStatus) {
+        switch(status) {
+            case AstalMpris.PlaybackStatus.PLAYING:
+                return 'Tocando';
+            case AstalMpris.PlaybackStatus.PAUSED:
+                return 'Pausado';
+            default:
+                return 'Nada tocando';
+        }
+    }
+
+    private getPlayerStatusIcon(status: PlayerButton) {
+        switch(status) {
+            case 'previous':
+                return PlayerButtonIcons.previous;
+            case 'playing':
+                return PlayerButtonIcons.playing;
+            case 'paused':
+                return PlayerButtonIcons.paused;
+            case 'stopped':
+                return PlayerButtonIcons.stopped;
+            case 'next':
+                return PlayerButtonIcons.next;
+            default:
+                return PlayerButtonIcons.stopped;
+        }
+    }
+
+    public get activePlayerData() {
+        return this._activePlayerData;
+    }
+}
 
 export default function Media() {
-
     return (
         <box>
-        <With value={playerData}>
+        <With value={MprisManager.instance.activePlayerData}>
             {player => {
                 return (
                     <menubutton
@@ -110,7 +154,7 @@ export default function Media() {
                                                     $={
                                                         (self) => {
                                                             const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                            const handler = click.connect("pressed", () => player.previous());
+                                                            const handler = click.connect("pressed", player.previous);
                                                             self.add_controller(click);
                                                             onCleanup(() =>{click.disconnect(handler)});
                                                         }
@@ -122,7 +166,7 @@ export default function Media() {
                                                     $={
                                                         (self) => {
                                                             const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                            const handler = click.connect("pressed", () => player.playPause());
+                                                            const handler = click.connect("pressed", player.playPause);
                                                             self.add_controller(click);
                                                             onCleanup(() =>{click.disconnect(handler)});
                                                         }
@@ -134,7 +178,7 @@ export default function Media() {
                                                     $={
                                                         (self) => {
                                                             const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                            const handler = click.connect("pressed", () => player.next());
+                                                            const handler = click.connect("pressed", player.next);
                                                             self.add_controller(click);
                                                             onCleanup(() =>{click.disconnect(handler)});
                                                         }

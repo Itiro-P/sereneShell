@@ -9,9 +9,8 @@ const previewHeight = 216;
 const numberChilren = 4;
 
 function Wallpaper({ path, texture }: { path: string, texture: Gdk.Texture }) {
-    const filePath = path;
     const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-    const handler = click.connect('pressed', () => { Swww.Manager.instance.setWallpaper(filePath, { transitionType: Swww.TransitionType.RANDOM, transitionDurantion: 2 }) });
+    const handler = click.connect('pressed', () => { Swww.Manager.instance.setWallpaper(path, { transitionType: Swww.TransitionType.RANDOM, transitionDurantion: 2 }) });
     onCleanup(() => click.disconnect(handler));
 
     return (
