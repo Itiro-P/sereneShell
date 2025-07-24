@@ -24,8 +24,8 @@ type PlayerData = {
     playPause: () => void
 }
 
-export default class MprisManager {
-    private static _instance: MprisManager;
+export default class Media {
+    private static _instance: Media;
     private mpris: AstalMpris.Mpris;
     private _activePlayerData: Accessor<PlayerData>;
 
@@ -90,10 +90,10 @@ export default class MprisManager {
     }
 
     public static get instance() {
-        if(!MprisManager._instance) {
-            MprisManager._instance = new MprisManager;
+        if(!Media._instance) {
+            Media._instance = new Media;
         }
-        return MprisManager._instance;
+        return Media._instance;
     }
 
     private getPlayerStatus(status: AstalMpris.PlaybackStatus) {

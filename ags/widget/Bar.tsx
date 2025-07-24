@@ -2,7 +2,7 @@ import { Astal, Gtk, Gdk } from "ags/gtk4";
 import SystemMonitor from "../modules/SystemMonitor";
 import AudioControl from "../modules/AudioControl";
 import SystemTray from "../modules/SystemTray";
-import MprisManager from "../modules/Media";
+import Media from "../modules/Media";
 import Workspaces from "../modules/Workspaces";
 import Clients from "../modules/Clients";
 import app from "ags/gtk4/app";
@@ -29,14 +29,14 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                 </box>
                 <box halign={Gtk.Align.CENTER}>
                     {Clients.instance.Clients}
-                    {MprisManager.instance.Media}
+                    {Media.instance.Media}
                     {Workspaces.instance.Workspaces({ monitor: gdkmonitor })}
                 </box>
                 <box halign={Gtk.Align.END}>
                     {DateTime.instance.Time}
                     {AudioControl.instance.AudioControl}
                     {SystemMonitor.instance.SystemMonitor}
-                    <ControlCenter />
+                    {ControlCenter.instance.ControlCenter}
                 </box>
             </box>
         </window>

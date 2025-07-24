@@ -1,7 +1,7 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import DateTime from "../modules/DateTime";
 import app from "ags/gtk4/app";
-import { CavaOverlay } from "../modules/Cava";
+import Cava from "../modules/Cava";
 import Hyprland from "../services/Hyprland";
 
 export default function Background({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
@@ -22,7 +22,7 @@ export default function Background({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
                     (self) => {
                         self.set_child(
                             <box halign={Gtk.Align.FILL} valign={Gtk.Align.END} heightRequest={Math.floor(gdkmonitor.get_geometry().height * .25)}>
-                                <CavaOverlay />
+                                {Cava.instance.Cava(["CavaOverlay"])}
                             </box> as Gtk.Widget
                         );
                         self.add_overlay(
