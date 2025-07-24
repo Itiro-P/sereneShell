@@ -23,7 +23,7 @@ export default class WallpaperSelector {
 
     private Wallpaper({ path, texture }: { path: string, texture: Gdk.Texture }) {
         const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-        const handler = click.connect('pressed', () => { Swww.Manager.instance.setWallpaper(path, { transitionType: Swww.TransitionType.RANDOM, transitionDurantion: 2 }) });
+        const handler = click.connect('pressed', () => { Swww.Manager.instance.setWallpaper(path, { transitionType: Swww.TransitionType.GROW, transitionDurantion: 2 }) });
         onCleanup(() => click.disconnect(handler));
 
         return (

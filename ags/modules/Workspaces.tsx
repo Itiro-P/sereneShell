@@ -27,7 +27,7 @@ export default class Workspaces {
             <label
                 $={self => self.add_controller(click)}
                 cssClasses={Hyprland.instance.focusedWorkspace.as(focused => [...baseClasses, workspace.id === focused.id ? "Active" : "Inactive"])}
-                label={`${workspace.id}`} widthChars={1} maxWidthChars={1} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
+                label={`${workspace.id}`} widthChars={3} maxWidthChars={3} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
             />
         );
     }
