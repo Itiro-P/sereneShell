@@ -82,8 +82,14 @@ export default class SystemMonitor {
     public get SystemMonitor() {
         return (
             <box cssClasses={["SystemMonitor"]}>
-                <label cssClasses={["CpuUsage"]} label={this._metrics.as(m => `CPU: ${m.cpu}%`)} widthChars={4} />
-                <label cssClasses={["MemoryUsage"]} label={this._metrics.as(m => `MEM: ${m.mem}%`)} widthChars={4} />
+                <box cssClasses={["CpuUsage"]}>
+                    <label cssClasses={['Icon']} label={''} />
+                    <label cssClasses={['Label']} label={this._metrics.as(m => `${m.cpu}%`)} widthChars={4} />
+                </box>
+                <box cssClasses={["MemoryUsage"]}>
+                    <label cssClasses={['Icon']} label={'󰘚'} />
+                    <label cssClasses={['Label']} label={this._metrics.as(m => `${m.mem}%`)} widthChars={4} />
+                </box>
                 <box cssClasses={this.batteryCritical} tooltipText={this.batteryLifeLabel}>
                     <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} />
                     <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />

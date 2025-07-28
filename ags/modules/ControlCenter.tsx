@@ -2,8 +2,9 @@ import { Gdk, Gtk } from "ags/gtk4";
 import { animationsEnabled, toggleAnimations } from "../services/Animations";
 import { onCleanup } from "ags";
 import DateTime from "./DateTime";
-import Cava from "./Cava";
+import Cava, { CavaVisiblity } from "./Cava";
 import WallpaperSelector from "./WallpaperSelector";
+import Bluetooth from "./Bluetooth";
 
 export default class ControlCenter {
     private static _instance: ControlCenter;
@@ -26,6 +27,17 @@ export default class ControlCenter {
         onCleanup(() => click.disconnect(handler));
     }
 
+    private formatCavaVisiblityText(i: CavaVisiblity) {
+        switch(i) {
+            case CavaVisiblity.ALWAYS:
+                return 'Cava sempre ativo';
+            case CavaVisiblity.DISABLED:
+                return 'Cava desativado'
+            case CavaVisiblity.NO_CLIENTS:
+                return 'Cava condicional'
+        }
+    }
+
     private get ToggleVisibleComponents() {
         return (
             <box cssClasses={["ToggleVisibleComponents"]} orientation={Gtk.Orientation.VERTICAL}>
@@ -44,8 +56,8 @@ export default class ControlCenter {
                 />
                 <label
                     cssClasses={["ToggleCava", "Option"]}
-                    $={self => this.setupButton(self, () => Cava.instance.toggleShouldCavaAppear())}
-                    label={Cava.instance.shouldCavaAppear.as(sca => sca ? "Ocultar Cava" : "Mostrar Cava")}
+                    $={self => this.setupButton(self, () => Cava.instance.toggleVisibilityState())}
+                    label={Cava.instance.visibilityState.as(vs => this.formatCavaVisiblityText(vs))}
                     widthChars={30}
                 />
             </box>
@@ -56,8 +68,11 @@ export default class ControlCenter {
         return (
             <popover>
                 <box cssClasses={["ControlCenterPopover"]}>
-                    {WallpaperSelector.instance.WallpaperSelector}
-                    {this.ToggleVisibleComponents}
+                    {/* WallpaperSelector.instance.WallpaperSelector */}
+                    <box orientation={Gtk.Orientation.VERTICAL}>
+                        {Bluetooth.instance.BluetoothPanel}
+                        {this.ToggleVisibleComponents}
+                    </box>
                 </box>
             </popover>
         );
@@ -65,7 +80,9 @@ export default class ControlCenter {
 
     public get ControlCenter() {
         return (
-            <menubutton cssClasses={["ControlCenter"]} popover={this.ControlCenterPopover as Gtk.Popover} />
+            <menubutton cssClasses={["ControlCenter"]} popover={this.ControlCenterPopover as Gtk.Popover}>
+                <label cssClasses={['Label']} label={'󰣇'} />
+            </menubutton>
         );
     }
 }

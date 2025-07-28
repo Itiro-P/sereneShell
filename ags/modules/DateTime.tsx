@@ -11,6 +11,7 @@ export default class DateTime {
     private _time: Accessor<string>;
     private _date: Accessor<string>;
 
+    private _shouldDTCAppear: Accessor<boolean>;
     private _isDTCvisible: Accessor<boolean>;
     private _setIsDTCvisible: Setter<boolean>;
     private isMiniTimeVisible: Accessor<boolean>;
@@ -18,7 +19,8 @@ export default class DateTime {
 
     private constructor() {
         [this._isDTCvisible, this._setIsDTCvisible] = createState(true);
-        this.isMiniTimeVisible = createComputed([this._isDTCvisible, Hyprland.instance.hasAnyClient], (idv, hac) => !hac || !idv);
+        this.isMiniTimeVisible = createComputed([this._isDTCvisible, Hyprland.instance.hasNoClients], (idv, hac) => idv && !hac || !idv);
+        this._shouldDTCAppear = createComputed([this._isDTCvisible, Hyprland.instance.hasNoClients], (dv, hc) => dv && hc);
 
         this._date = createPoll("", 60000, () => GLib.DateTime.new_now_local().format(this.formatterDate)!);
         this._time = createPoll("", 60000, () => GLib.DateTime.new_now_local().format(this.formatterTime)!);
@@ -28,8 +30,8 @@ export default class DateTime {
         return this._isDTCvisible;
     }
 
-    public set setIsDTCvisible(value: boolean) {
-        if(value !== this._isDTCvisible.get()) this._setIsDTCvisible(value);
+    public get shouldDTCAppear() {
+        return this._shouldDTCAppear;
     }
 
     public toggleIsDTCvisible() {
@@ -45,13 +47,13 @@ export default class DateTime {
 
     public get Time() {
         return (
-            <label cssClasses={["Time"]} label={this._time} tooltipMarkup={this._date} visible={this.isMiniTimeVisible} />
+            <label cssClasses={["Time"]} label={this._time.as(t => ` ${t}`)} tooltipMarkup={this._date.as(d => `󰃭 ${d}`)} visible={this.isMiniTimeVisible} />
         );
     }
 
     public get DateTimeCalendar() {
         return (
-            <box cssClasses={["DateTimeCalendar"]} visible={this._isDTCvisible}>
+            <box cssClasses={["DateTimeCalendar"]}>
                 <Gtk.Calendar cssClasses={["Calendar"]} />
                 <box cssClasses={["DateTime"]} orientation={Gtk.Orientation.VERTICAL}>
                     <label cssClasses={["Time"]} label={this._time} />

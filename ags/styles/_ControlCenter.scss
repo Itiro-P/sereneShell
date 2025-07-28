@@ -1,14 +1,26 @@
 @use 'common/Colors';
 @use 'common/Transitions';
 @use 'common/Font';
+@use 'common/Layout';
 
 .ControlCenter {
+    @extend %widget;
+    .Label {
+        font-size: Font.$font-size-large;
+    }
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: Colors.$blue;
+        .Label {
+            color: Colors.$base;
+        }
+    }
+
     .ControlCenterPopover {
         padding: 5px;
         background-color: rgba(Colors.$surface0, 0.8);
 
         .Subtitle {
-            font-weight: bold;
             font-size: Font.$font-size-large;
             margin: 4px;
         }

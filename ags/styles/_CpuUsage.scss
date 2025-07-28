@@ -1,8 +1,12 @@
 @use 'common/Colors';
 @use 'common/Layout';
 @use 'common/Transitions';
+@use 'common/Font';
 
 .CpuUsage {
     @extend %widget;
-    @include Transitions.noneToInverse(Colors.$green, Colors.$base, Colors.$green);
+    @include Transitions.noneToInverseChild(Colors.$green, Colors.$base, Colors.$green);
+    .Icon {
+        font-size: Font.$font-size-large;
+    }
 }

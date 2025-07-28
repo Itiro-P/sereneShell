@@ -1,4 +1,4 @@
-import { Accessor, createBinding } from "ags";
+import { Accessor, createBinding, createComputed } from "ags";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
 export default class Hyprland {
@@ -8,7 +8,7 @@ export default class Hyprland {
     private _focusedWorkspace: Accessor<AstalHyprland.Workspace>;
     private _clients: Accessor<AstalHyprland.Client[]>;
     private _focusedClient: Accessor<AstalHyprland.Client>;
-    private _hasAnyClient: Accessor<boolean>;
+    private _hasNoClients: Accessor<boolean>;
 
     private constructor() {
         this.default = AstalHyprland.get_default();
@@ -16,7 +16,7 @@ export default class Hyprland {
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
         this._clients = createBinding(this.default, "clients");
         this._focusedClient = createBinding(this.default, "focusedClient");
-        this._hasAnyClient = this._focusedClient.as((fc) => !fc || fc.floating && fc.workspace.clients.length <= 1);
+        this._hasNoClients = this.focusedClient.as(fc => !fc);
     }
 
     public static get instance() {
@@ -42,7 +42,7 @@ export default class Hyprland {
         return this._focusedClient;
     }
 
-    public get hasAnyClient() {
-        return this._hasAnyClient;
+    public get hasNoClients() {
+        return this._hasNoClients;
     }
 }

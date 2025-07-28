@@ -110,7 +110,7 @@ export default class AudioControl {
         return (
             <box cssClasses={["AudioControl"]} $={self => self.add_controller(spawnPavucontrolClick)}>
                 {this.Endpoint({ endpoint: this.defaultSpeaker })}
-                <menubutton popover={this.Mixer() as Gtk.Popover} />
+                <menubutton popover={this.Mixer() as Gtk.Popover} child={<label label={''}></label> as Gtk.Widget} />
             </box>
         );
     }

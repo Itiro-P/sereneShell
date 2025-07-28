@@ -67,7 +67,7 @@ export default class Workspaces {
     private MoreWorkspacesButton({ theRest }: { theRest: Accessor<AstalHyprland.Workspace[]> }) {
         return (
             <menubutton cssClasses={["MoreWorkspacesButton"]} sensitive={theRest.as(tr => tr.length > 0)} popover={this.WorkspacePopover({ theRest: theRest }) as Gtk.Popover}>
-                <label label={'+'} />
+                <label label={'󰕏'} />
             </menubutton>
         );
     }

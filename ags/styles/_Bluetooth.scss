@@ -1,0 +1,25 @@
+@use 'common/Colors';
+@use 'common/Layout';
+@use 'common/Transitions';
+@use 'common/Font';
+
+.BluetoothPanel {
+    margin: 4px;
+    border-radius: 10px;
+    background-color: rgba(Colors.$surface1, 0.8);
+
+    .Devices {
+        margin: 2px;
+        border-radius: 10px;
+        background-color: rgba(Colors.$surface2, 0.8);
+        .Device {
+            margin: 2px;
+            .Icon {
+                margin: 2px;
+            }
+            .Info {
+                margin: 2px;
+            }
+        }
+    }
+}
