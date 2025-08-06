@@ -1,4 +1,5 @@
 import { Accessor, createBinding, createComputed } from "ags";
+import { Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
 export default class Hyprland {
@@ -7,8 +8,8 @@ export default class Hyprland {
     private _workspaces: Accessor<AstalHyprland.Workspace[]>;
     private _focusedWorkspace: Accessor<AstalHyprland.Workspace>;
     private _clients: Accessor<AstalHyprland.Client[]>;
+    private _monitors: Accessor<AstalHyprland.Monitor[]>;
     private _focusedClient: Accessor<AstalHyprland.Client>;
-    private _hasNoClients: Accessor<boolean>;
 
     private constructor() {
         this.default = AstalHyprland.get_default();
@@ -16,7 +17,7 @@ export default class Hyprland {
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
         this._clients = createBinding(this.default, "clients");
         this._focusedClient = createBinding(this.default, "focusedClient");
-        this._hasNoClients = this.focusedClient.as(fc => !fc);
+        this._monitors = createBinding(this.default, "monitors");
     }
 
     public static get instance() {
@@ -42,7 +43,14 @@ export default class Hyprland {
         return this._focusedClient;
     }
 
-    public get hasNoClients() {
-        return this._hasNoClients;
+    public getHyprlandMonitor(monitor: Gdk.Monitor) {
+        const hyprlandMonitors = this._monitors.get();
+        for(const hyprMonitor of hyprlandMonitors) {
+            if(hyprMonitor.get_model() === monitor.get_model()) {
+                return hyprMonitor;
+            }
+        }
+        console.warn('Usando fallback');
+        return hyprlandMonitors[0];
     }
 }

@@ -4,6 +4,7 @@ import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
 import { Accessor, createBinding, createComputed, createState, onCleanup, Setter } from "ags";
 import Hyprland from "../services/Hyprland";
+import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
 const CavaConfig = {
     autosens: true,
@@ -102,20 +103,8 @@ export default class Cava {
     private _visibilityState: Accessor<CavaVisiblity>;
     private _setVisibilityState: Setter<CavaVisiblity>;
 
-    private _shouldCavaAppear: Accessor<boolean>;
-
     private constructor() {
         [this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(CavaVisiblity.ALWAYS);
-        this._shouldCavaAppear = createComputed([this._visibilityState, Hyprland.instance.hasNoClients], (vs, hc) => {
-            switch(vs) {
-                case CavaVisiblity.DISABLED:
-                    return false;
-                case CavaVisiblity.ALWAYS:
-                    return true;
-                case CavaVisiblity.NO_CLIENTS:
-                    return hc;
-            }
-        });
 
         this.default = AstalCava.get_default();
         if (this.default) {
@@ -148,8 +137,19 @@ export default class Cava {
         return this._instance;
     }
 
-    public get shouldCavaAppear() {
-        return this._shouldCavaAppear;
+    public shouldCavaAppear(monitor: AstalHyprland.Monitor) {
+        return createComputed([this._visibilityState, createBinding(monitor, 'activeWorkspace'), Hyprland.instance.clients],
+            (vs, aw, cs) => {
+                switch(vs) {
+                    case CavaVisiblity.DISABLED:
+                        return false;
+                    case CavaVisiblity.ALWAYS:
+                        return true;
+                    case CavaVisiblity.NO_CLIENTS:
+                        return cs.findIndex(it => it.get_workspace() === aw) === -1;
+                }
+            }
+        );
     }
 
     public toggleVisibilityState() {

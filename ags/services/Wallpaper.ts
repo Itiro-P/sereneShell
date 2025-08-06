@@ -5,7 +5,7 @@ import GLib from "gi://GLib?version=2.0";
 import Gly from "gi://Gly?version=1";
 import GlyGtk4 from "gi://GlyGtk4?version=1";
 
-const wallpaperDir = `${GLib.get_home_dir()}/.config/ags/wallpapers`;
+const wallpaperDir = `${GLib.get_home_dir()}/.config/hypr/configs/wallpapers`;
 const MAX_CONCURRENT_LOADS = 4;
 
 export class WallpaperManager {

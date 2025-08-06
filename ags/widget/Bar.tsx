@@ -8,6 +8,7 @@ import Clients from "../modules/Clients";
 import app from "ags/gtk4/app";
 import ControlCenter from "../modules/ControlCenter";
 import DateTime from "../modules/DateTime";
+import Network from "../modules/Network";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;

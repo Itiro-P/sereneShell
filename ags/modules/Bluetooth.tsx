@@ -52,9 +52,15 @@ export default class Bluetooth {
             if(isConnected.get()) device.disconnect_device(() => {});
         });
 
+        const blockClick = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+        const blockHandler = blockClick.connect('pressed', () => {
+            device.set_blocked(!device.get_blocked());
+        });
+
         onCleanup(() => {
             revealerClick.disconnect(handlerRevealer);
             actionClick.disconnect(actionHandler);
+            blockClick.disconnect(blockHandler);
         });
 
         return (
@@ -70,7 +76,7 @@ export default class Bluetooth {
                 <revealer transitionDuration={250} transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN} revealChild={reveal}>
                     <box orientation={Gtk.Orientation.VERTICAL}>
                         <label label={state} $={self => self.add_controller(actionClick)} />
-                        <label label={isBlocked.as(ib => ib ? 'Desbloquear?' : 'Bloquear?')} />
+                        <label $={self => self.add_controller(blockClick)} label={isBlocked.as(ib => ib ? 'Desbloquear?' : 'Bloquear?')} />
                     </box>
                 </revealer>
             </box>

@@ -5,6 +5,7 @@ import DateTime from "./DateTime";
 import Cava, { CavaVisiblity } from "./Cava";
 import WallpaperSelector from "./WallpaperSelector";
 import Bluetooth from "./Bluetooth";
+import Network from "./Network";
 
 export default class ControlCenter {
     private static _instance: ControlCenter;
@@ -68,7 +69,7 @@ export default class ControlCenter {
         return (
             <popover>
                 <box cssClasses={["ControlCenterPopover"]}>
-                    {/* WallpaperSelector.instance.WallpaperSelector */}
+                    {/* WallpaperSelector.instance.WallpaperSelector  */}
                     <box orientation={Gtk.Orientation.VERTICAL}>
                         {Bluetooth.instance.BluetoothPanel}
                         {this.ToggleVisibleComponents}

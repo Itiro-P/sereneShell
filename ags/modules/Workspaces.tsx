@@ -44,7 +44,7 @@ export default class Workspaces {
             <label
                 $={(self) => self.add_controller(click)}
                 cssClasses={createComputed([Hyprland.instance.focusedWorkspace, workspace], (focused, ws) => ["Workspace", ws && ws.id === focused?.id ? "Active" : "Inactive"])}
-                sensitive={workspace.as(w => !(!w))}
+                sensitive={workspace.as(w => w !== null)}
                 label={workspace.as(w => `${w?.id ?? ' '}`)}
                 widthChars={1}
                 maxWidthChars={1}
