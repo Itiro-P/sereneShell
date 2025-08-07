@@ -27,10 +27,9 @@ export default class DateTime {
     }
 
     public shouldDTCAppear(monitor: AstalHyprland.Monitor) {
-        return createComputed([this._isDTCvisible, createBinding(monitor, 'activeWorkspace'), Hyprland.instance.clients],
-            (dv, aw, cs) => {
-                return cs.findIndex(it => it.get_workspace() === aw) === -1 && dv;
-            }
+        return createComputed(
+            [this._isDTCvisible, createBinding(monitor, 'activeWorkspace'), Hyprland.instance.clients],
+            (dv, aw, cs) => cs.findIndex(it => it.get_workspace() === aw) === -1 && dv
         );
     }
 

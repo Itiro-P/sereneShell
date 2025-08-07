@@ -1,4 +1,4 @@
-import { Accessor, createBinding, createComputed } from "ags";
+import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
@@ -43,10 +43,21 @@ export default class Hyprland {
         return this._focusedClient;
     }
 
+    public areMonitorsEqual(monitor: Gdk.Monitor, hyprMonitor: AstalHyprland.Monitor) {
+        if(hyprMonitor.get_model() === monitor.get_model()
+        && hyprMonitor.get_height() === monitor.get_geometry().height
+        && hyprMonitor.get_width() === monitor.get_geometry().width
+        && hyprMonitor.get_x() === monitor.get_geometry().x
+        && hyprMonitor.get_y() === monitor.get_geometry().y) {
+            return true;
+        }
+        return false;
+    }
+
     public getHyprlandMonitor(monitor: Gdk.Monitor) {
         const hyprlandMonitors = this._monitors.get();
         for(const hyprMonitor of hyprlandMonitors) {
-            if(hyprMonitor.get_model() === monitor.get_model()) {
+            if(this.areMonitorsEqual(monitor, hyprMonitor)) {
                 return hyprMonitor;
             }
         }

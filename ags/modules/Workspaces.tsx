@@ -74,7 +74,7 @@ export default class Workspaces {
 
     public Workspaces({ monitor }: { monitor: Gdk.Monitor }) {
         const monitorWorkspaces = Hyprland.instance.workspaces.as(ws => {
-            const filtered = ws.filter((workspace) => workspace ? workspace?.get_monitor()?.get_model() === monitor.get_model() : false);
+            const filtered = ws.filter((workspace) => workspace ? Hyprland.instance.areMonitorsEqual(monitor, workspace.get_monitor()) : false);
             return {
                 first: filtered[0],
                 second: filtered[1],
