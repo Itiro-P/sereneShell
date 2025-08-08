@@ -9,9 +9,11 @@ import app from "ags/gtk4/app";
 import ControlCenter from "../modules/ControlCenter";
 import DateTime from "../modules/DateTime";
 import Network from "../modules/Network";
+import Hyprland from "../services/Hyprland";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
+    const hyprMonitor = Hyprland.instance.getHyprlandMonitor(gdkmonitor);
 
     return (
         <window
@@ -31,7 +33,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                 <box halign={Gtk.Align.CENTER}>
                     {Clients.instance.Clients}
                     {Media.instance.Media}
-                    {Workspaces.instance.Workspaces({ monitor: gdkmonitor })}
+                    {Workspaces.instance.Workspaces({ monitor: hyprMonitor })}
                 </box>
                 <box halign={Gtk.Align.END}>
                     {DateTime.instance.Time}

@@ -50,7 +50,7 @@ export default class AudioControl {
                             }
                         >
                             <image cssClasses={["Icon"]} iconName={icon} />
-                            <label cssClasses={["Volume"]} label={volume} widthChars={3} maxWidthChars={3} />
+                            <label cssClasses={["Volume"]} label={volume} widthChars={4} />
                         </box>
                     );
                 }}

@@ -26,8 +26,8 @@ export default class Workspaces {
         return (
             <label
                 $={self => self.add_controller(click)}
-                cssClasses={Hyprland.instance.focusedWorkspace.as(focused => [...baseClasses, workspace.id === focused.id ? "Active" : "Inactive"])}
-                label={`${workspace.id}`} widthChars={3} maxWidthChars={3} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
+                cssClasses={Hyprland.instance.focusedWorkspace.as(focused => [...baseClasses, workspace.get_id() === focused.get_id() ? "Active" : "Inactive"])}
+                label={`${workspace.get_id()}`} widthChars={3} maxWidthChars={3} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
             />
         );
     }
@@ -36,16 +36,16 @@ export default class Workspaces {
         const click = new Gtk.GestureClick();
         const handler = click.connect("pressed", () => {
             const ws = workspace.get();
-            if (ws && ws.id !== Hyprland.instance.focusedWorkspace.get().id) ws.focus();
+            if (ws !== null && ws.get_id() !== Hyprland.instance.focusedWorkspace.get().get_id()) ws.focus();
         });
 
         onCleanup(() => { if (click) click.disconnect(handler) });
         return (
             <label
                 $={(self) => self.add_controller(click)}
-                cssClasses={createComputed([Hyprland.instance.focusedWorkspace, workspace], (focused, ws) => ["Workspace", ws && ws.id === focused?.id ? "Active" : "Inactive"])}
+                cssClasses={createComputed([Hyprland.instance.focusedWorkspace, workspace], (focused, ws) => ["Workspace", ws && ws.get_id() === focused?.get_id() ? "Active" : "Inactive"])}
                 sensitive={workspace.as(w => w !== null)}
-                label={workspace.as(w => `${w?.id ?? ' '}`)}
+                label={workspace.as(w => `${w?.get_id() ?? ' '}`)}
                 widthChars={1}
                 maxWidthChars={1}
                 halign={Gtk.Align.CENTER}
@@ -72,9 +72,9 @@ export default class Workspaces {
         );
     }
 
-    public Workspaces({ monitor }: { monitor: Gdk.Monitor }) {
+    public Workspaces({ monitor }: { monitor: AstalHyprland.Monitor }) {
         const monitorWorkspaces = Hyprland.instance.workspaces.as(ws => {
-            const filtered = ws.filter((workspace) => workspace ? Hyprland.instance.areMonitorsEqual(monitor, workspace.get_monitor()) : false);
+            const filtered = ws.filter((workspace) => workspace !== null ? workspace.get_monitor() === monitor : false);
             return {
                 first: filtered[0],
                 second: filtered[1],

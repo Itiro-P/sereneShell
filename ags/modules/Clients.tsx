@@ -23,7 +23,7 @@ export default class Clients {
 
         onCleanup(() => { if(handler_id) click.disconnect(handler_id) });
         return (
-            <label cssClasses={["ClientEntry"]} $={self => self.add_controller(click)} maxWidthChars={22} ellipsize={3} label={client.title} />
+            <label cssClasses={["ClientEntry"]} $={self => self.add_controller(click)} maxWidthChars={22} ellipsize={3} label={client.get_title()} />
         );
     }
 

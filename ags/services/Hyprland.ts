@@ -44,11 +44,12 @@ export default class Hyprland {
     }
 
     public areMonitorsEqual(monitor: Gdk.Monitor, hyprMonitor: AstalHyprland.Monitor) {
+        const geometry = monitor.get_geometry();
         if(hyprMonitor.get_model() === monitor.get_model()
-        && hyprMonitor.get_height() === monitor.get_geometry().height
-        && hyprMonitor.get_width() === monitor.get_geometry().width
-        && hyprMonitor.get_x() === monitor.get_geometry().x
-        && hyprMonitor.get_y() === monitor.get_geometry().y) {
+        && hyprMonitor.get_height() === geometry.height
+        && hyprMonitor.get_width() === geometry.width
+        && hyprMonitor.get_x() === geometry.x
+        && hyprMonitor.get_y() === geometry.y) {
             return true;
         }
         return false;
@@ -56,12 +57,6 @@ export default class Hyprland {
 
     public getHyprlandMonitor(monitor: Gdk.Monitor) {
         const hyprlandMonitors = this._monitors.get();
-        for(const hyprMonitor of hyprlandMonitors) {
-            if(this.areMonitorsEqual(monitor, hyprMonitor)) {
-                return hyprMonitor;
-            }
-        }
-        console.warn('Usando fallback');
-        return hyprlandMonitors[0];
+        return hyprlandMonitors.find(hyprMonitor => this.areMonitorsEqual(monitor, hyprMonitor)) || hyprlandMonitors[0];
     }
 }
