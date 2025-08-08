@@ -40,7 +40,7 @@ class CavaWidget extends Gtk.DrawingArea {
         });
         this.unsubAccessor = this.valuesAccessor.subscribe(() => this.queue_draw());
 
-        onCleanup(() => { this.unsubAccessor });
+        onCleanup(() => this.unsubAccessor);
     }
 
     override vfunc_snapshot(snapshot: Gtk.Snapshot): void {
