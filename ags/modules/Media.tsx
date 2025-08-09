@@ -24,12 +24,11 @@ type PlayerData = {
     playPause: () => void
 }
 
-export default class Media {
-    private static _instance: Media;
+class MediaClass {
     private mpris: AstalMpris.Mpris;
     private _activePlayerData: Accessor<PlayerData>;
 
-    private constructor() {
+    public constructor() {
         this.mpris = AstalMpris.get_default();
         this._activePlayerData = createBinding(this.mpris, "players").as(
             (players) => {
@@ -38,10 +37,11 @@ export default class Media {
                 let final: AstalMpris.Player | null = null;
 
                 for (const player of players) {
-                    if (player.get_playback_status() === AstalMpris.PlaybackStatus.PLAYING) {
+                    const status = player.get_playback_status();
+                    if (status === AstalMpris.PlaybackStatus.PLAYING) {
                         playing = player;
                         break;
-                    } else if (player.get_playback_status() === AstalMpris.PlaybackStatus.PAUSED) {
+                    } else if (status === AstalMpris.PlaybackStatus.PAUSED) {
                         paused = player;
                     }
                 }
@@ -87,13 +87,6 @@ export default class Media {
                 };
             }
         );
-    }
-
-    public static get instance() {
-        if(!Media._instance) {
-            Media._instance = new Media;
-        }
-        return Media._instance;
     }
 
     private getPlayerStatus(status: AstalMpris.PlaybackStatus) {
@@ -196,3 +189,7 @@ export default class Media {
         );
     }
 }
+
+const media = new MediaClass;
+
+export default media;

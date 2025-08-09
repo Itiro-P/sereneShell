@@ -3,14 +3,13 @@ import GLib from "gi://GLib?version=2.0";
 import { Gtk, Gdk } from "ags/gtk4";
 import { Accessor, createBinding, onCleanup, With } from "ags";
 
-export default class AudioControl {
-    private static _instance: AudioControl;
+class AudioControlClass {
     private default: Wp.Wp;
     private defaultSpeaker: Accessor<Wp.Endpoint>;
     private defaultMicrophone: Accessor<Wp.Endpoint>;
     private readonly step: number = 0.02;
 
-    private constructor() {
+    public constructor() {
         this.default = Wp.get_default()!;
         this.defaultSpeaker = createBinding(this.default, 'defaultSpeaker');
         this.defaultMicrophone = createBinding(this.default, 'defaultMicrophone');
@@ -114,11 +113,8 @@ export default class AudioControl {
             </box>
         );
     }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new AudioControl;
-        }
-        return this._instance;
-    }
 }
+
+const audioControl = new AudioControlClass;
+
+export default audioControl;

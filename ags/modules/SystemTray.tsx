@@ -2,12 +2,11 @@ import { Accessor, createBinding, For, onCleanup } from "ags";
 import { Gtk } from "ags/gtk4";
 import AstalTray from "gi://AstalTray?version=0.1";
 
-export default class SystemTray {
-    private static _instance: SystemTray;
+class SystemTrayClass {
     private default: AstalTray.Tray;
     private itemsBinding: Accessor<AstalTray.TrayItem[]>;
 
-    private constructor() {
+    public constructor() {
         this.default = AstalTray.get_default();
         this.itemsBinding = createBinding(this.default, "items");
     }
@@ -53,11 +52,8 @@ export default class SystemTray {
             </box>
         );
     }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new SystemTray;
-        }
-        return this._instance;
-    }
 }
+
+const systemTray = new SystemTrayClass;
+
+export default systemTray;

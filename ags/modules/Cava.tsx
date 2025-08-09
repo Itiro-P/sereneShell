@@ -3,12 +3,12 @@ import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
 import { Accessor, createBinding, createComputed, createState, onCleanup, Setter } from "ags";
-import Hyprland from "../services/Hyprland";
+import hyprlandService from "../services/Hyprland";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
 const CavaConfig = {
     autosens: true,
-    bars: 20,
+    bars: 25,
     framerate: 60,
     input: AstalCava.Input.PIPEWIRE,
     noiseReduction: 0.77,
@@ -40,7 +40,7 @@ class CavaWidget extends Gtk.DrawingArea {
         });
         this.unsubAccessor = this.valuesAccessor.subscribe(() => this.queue_draw());
 
-        onCleanup(() => this.unsubAccessor);
+        onCleanup(() => this.unsubAccessor());
     }
 
     override vfunc_snapshot(snapshot: Gtk.Snapshot): void {
@@ -95,15 +95,14 @@ class CavaWidget extends Gtk.DrawingArea {
 
 const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
-export default class Cava {
-    private static _instance: Cava;
+class CavaClass {
     private default: AstalCava.Cava | null;
     private _values: Accessor<number[]>;
 
     private _visibilityState: Accessor<CavaVisiblity>;
     private _setVisibilityState: Setter<CavaVisiblity>;
 
-    private constructor() {
+    public constructor() {
         [this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(CavaVisiblity.ALWAYS);
 
         this.default = AstalCava.get_default();
@@ -130,15 +129,8 @@ export default class Cava {
         }
     }
 
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new Cava;
-        }
-        return this._instance;
-    }
-
     public shouldCavaAppear(monitor: AstalHyprland.Monitor) {
-        return createComputed([this._visibilityState, createBinding(monitor, 'activeWorkspace'), Hyprland.instance.clients],
+        return createComputed([this._visibilityState, createBinding(monitor, 'activeWorkspace'), hyprlandService.clients],
             (vs, aw, cs) => {
                 switch(vs) {
                     case CavaVisiblity.DISABLED:
@@ -182,3 +174,7 @@ export default class Cava {
         );
     }
 }
+
+const cava = new CavaClass;
+
+export default cava;

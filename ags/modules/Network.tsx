@@ -2,23 +2,15 @@ import { Accessor, createBinding, createComputed, With } from "ags";
 import AstalNetwork from "gi://AstalNetwork?version=0.1";
 import NM from "gi://NM?version=1.0";
 
-export default class Network {
-    private static _instance: Network;
+class NetworkClass {
     private default: AstalNetwork.Network;
     private wifi: Accessor<AstalNetwork.Wifi>;
     private wired: Accessor<AstalNetwork.Wired>;
 
-    private constructor() {
+    public constructor() {
         this.default = AstalNetwork.get_default();
         this.wifi = createBinding(this.default, "wifi");
         this.wired = createBinding(this.default, "wired");
-    }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new Network;
-        }
-        return this._instance;
     }
 
     private formatState(state: NM.ActiveConnectionState) {
@@ -79,3 +71,7 @@ export default class Network {
         );
     }
 }
+
+const network = new NetworkClass;
+
+export default network;

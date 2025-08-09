@@ -1,24 +1,14 @@
 import { Gdk, Gtk } from "ags/gtk4";
-import { animationsEnabled, toggleAnimations } from "../services/Animations";
+import animationService from "../services/Animations";
 import { onCleanup } from "ags";
-import DateTime from "./DateTime";
-import Cava, { CavaVisiblity } from "./Cava";
-import WallpaperSelector from "./WallpaperSelector";
-import Bluetooth from "./Bluetooth";
+import dateTime from "./DateTime";
+import cava, { CavaVisiblity } from "./Cava";
+import bluetooth from "./Bluetooth";
 import Network from "./Network";
 
-export default class ControlCenter {
-    private static _instance: ControlCenter;
+class ControlCenterClass {
+    public constructor() {
 
-    private constructor() {
-
-    }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new ControlCenter;
-        }
-        return this._instance;
     }
 
     private setupButton(self: Gtk.Widget, callback: () => void) {
@@ -45,20 +35,20 @@ export default class ControlCenter {
                 <label cssClasses={["Subtitle"]} label={'Animações e componentes'} />
                 <label
                     cssClasses={["ToggleAnimations", "Option"]}
-                    $={self => this.setupButton(self, () => toggleAnimations())}
-                    label={animationsEnabled.as(ae => ae ? "Desativar animações" : "Ativar animações")}
+                    $={self => this.setupButton(self, () => animationService.toggleAnimations())}
+                    label={animationService.animationsEnabled.as(ae => ae ? "Desativar animações" : "Ativar animações")}
                     widthChars={30}
                 />
                 <label
                     cssClasses={["ToggleDateTimeCalendar", "Option"]}
-                    $={self => this.setupButton(self, () => DateTime.instance.toggleIsDTCvisible())}
-                    label={DateTime.instance.isDTCvisible.as(idv => idv ? "Ocultar Calendário, data e hora" : "Mostrar Calendário, data e hora")}
+                    $={self => this.setupButton(self, () => dateTime.toggleIsDTCvisible())}
+                    label={dateTime.isDTCvisible.as(idv => idv ? "Ocultar Calendário, data e hora" : "Mostrar Calendário, data e hora")}
                     widthChars={30}
                 />
                 <label
                     cssClasses={["ToggleCava", "Option"]}
-                    $={self => this.setupButton(self, () => Cava.instance.toggleVisibilityState())}
-                    label={Cava.instance.visibilityState.as(vs => this.formatCavaVisiblityText(vs))}
+                    $={self => this.setupButton(self, () => cava.toggleVisibilityState())}
+                    label={cava.visibilityState.as(vs => this.formatCavaVisiblityText(vs))}
                     widthChars={30}
                 />
             </box>
@@ -69,9 +59,8 @@ export default class ControlCenter {
         return (
             <popover>
                 <box cssClasses={["ControlCenterPopover"]}>
-                    {/* WallpaperSelector.instance.WallpaperSelector  */}
                     <box orientation={Gtk.Orientation.VERTICAL}>
-                        {Bluetooth.instance.BluetoothPanel}
+                        {bluetooth.BluetoothPanel}
                         {this.ToggleVisibleComponents}
                     </box>
                 </box>
@@ -87,3 +76,7 @@ export default class ControlCenter {
         );
     }
 }
+
+const controlCenter = new ControlCenterClass;
+
+export default controlCenter;

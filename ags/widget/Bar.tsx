@@ -1,19 +1,19 @@
 import { Astal, Gtk, Gdk } from "ags/gtk4";
-import SystemMonitor from "../modules/SystemMonitor";
-import AudioControl from "../modules/AudioControl";
-import SystemTray from "../modules/SystemTray";
-import Media from "../modules/Media";
-import Workspaces from "../modules/Workspaces";
-import Clients from "../modules/Clients";
+import systemMonitor from "../modules/SystemMonitor";
+import systemTray from "../modules/SystemTray";
+import media from "../modules/Media";
 import app from "ags/gtk4/app";
-import ControlCenter from "../modules/ControlCenter";
-import DateTime from "../modules/DateTime";
-import Network from "../modules/Network";
-import Hyprland from "../services/Hyprland";
+import dateTime from "../modules/DateTime";
+import network from "../modules/Network";
+import hyprlandService from "../services/Hyprland";
+import audioControl from "../modules/AudioControl";
+import controlCenter from "../modules/ControlCenter";
+import clients from "../modules/Clients";
+import workspaces from "../modules/Workspaces";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
-    const hyprMonitor = Hyprland.instance.getHyprlandMonitor(gdkmonitor);
+    const hyprMonitor = hyprlandService.getHyprlandMonitor(gdkmonitor);
 
     return (
         <window
@@ -28,18 +28,18 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
         >
             <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
                 <box halign={Gtk.Align.START}>
-                    {SystemTray.instance.SystemTray}
+                    {systemTray.SystemTray}
                 </box>
                 <box halign={Gtk.Align.CENTER}>
-                    {Clients.instance.Clients}
-                    {Media.instance.Media}
-                    {Workspaces.instance.Workspaces({ monitor: hyprMonitor })}
+                    {clients.Clients}
+                    {media.Media}
+                    {workspaces.Workspaces({ monitor: hyprMonitor })}
                 </box>
                 <box halign={Gtk.Align.END}>
-                    {DateTime.instance.Time}
-                    {AudioControl.instance.AudioControl}
-                    {SystemMonitor.instance.SystemMonitor}
-                    {ControlCenter.instance.ControlCenter}
+                    {dateTime.Time}
+                    {audioControl.AudioControl}
+                    {systemMonitor.SystemMonitor}
+                    {controlCenter.ControlCenter}
                 </box>
             </box>
         </window>

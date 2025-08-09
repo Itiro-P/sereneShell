@@ -1,19 +1,18 @@
 import { Accessor, createComputed, For, onCleanup } from "ags";
 import { Gtk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-import Hyprland from "../services/Hyprland";
+import hyprlandService from "../services/Hyprland";
 
-export default class Clients {
-    private static _instance: Clients;
+class ClientsClass {
     private filteredClients: Accessor<AstalHyprland.Client[]>;
     private activeClientTitle: Accessor<string>;
     private hasMultipleClients: Accessor<boolean>;
 
-    private constructor() {
-        this.filteredClients = createComputed([Hyprland.instance.clients, Hyprland.instance.focusedClient], (allClients, focused) => {
+    public constructor() {
+        this.filteredClients = createComputed([hyprlandService.clients, hyprlandService.focusedClient], (allClients, focused) => {
             return focused ? allClients.filter(client => client.address !== focused.address) : allClients;
         });
-        this.activeClientTitle = createComputed([this.filteredClients, Hyprland.instance.focusedClient], (clients, focused) => focused?.title || `${clients.length}`);
+        this.activeClientTitle = createComputed([this.filteredClients, hyprlandService.focusedClient], (clients, focused) => focused?.title || `${clients.length}`);
         this.hasMultipleClients = this.filteredClients.as(clients => clients.length > 0);
     }
 
@@ -37,13 +36,6 @@ export default class Clients {
         );
     }
 
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new Clients;
-        }
-        return this._instance;
-    }
-
     public get Clients() {
         return (
             <menubutton cssClasses={["Clients"]} sensitive={this.hasMultipleClients} popover={this.ClientsPopover() as Gtk.Popover}>
@@ -52,3 +44,7 @@ export default class Clients {
         );
     }
 }
+
+const clients = new ClientsClass;
+
+export default clients;

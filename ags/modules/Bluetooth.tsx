@@ -2,25 +2,16 @@ import { Accessor, createBinding, createComputed, createState, For, onCleanup, W
 import { Gdk, Gtk } from "ags/gtk4";
 import AstalBluetooth from "gi://AstalBluetooth?version=0.1";
 
-export default class Bluetooth {
-    private static _instance: Bluetooth;
+class BluetoothClass {
     private default: AstalBluetooth.Bluetooth;
     private mainAdapter: Accessor<AstalBluetooth.Adapter>;
-
     private devices: Accessor<AstalBluetooth.Device[]>;
 
-    private constructor() {
+    public constructor() {
         this.default = AstalBluetooth.get_default();
         this.mainAdapter = createBinding(this.default, 'adapter');
 
         this.devices = createBinding(this.default, 'devices');
-    }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new Bluetooth;
-        }
-        return this._instance;
     }
 
     private Device(device: AstalBluetooth.Device) {
@@ -138,3 +129,7 @@ export default class Bluetooth {
         );
     }
 }
+
+const bluetooth = new BluetoothClass;
+
+export default bluetooth;

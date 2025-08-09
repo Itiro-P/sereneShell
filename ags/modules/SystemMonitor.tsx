@@ -11,8 +11,7 @@ type Metrics = {
 
 const POLL_INTERVAL = 3000;
 
-export default class SystemMonitor {
-    private static _instance: SystemMonitor;
+class SystemMonitorClass {
     private battery: AstalBattery.Device;
     private batteryPercentage: Accessor<number>;
     private batteryCharging: Accessor<boolean>;
@@ -25,7 +24,7 @@ export default class SystemMonitor {
     private memSource: GTop.glibtop_mem;
     private _metrics: Accessor<Metrics>;
 
-    private constructor() {
+    public constructor() {
         this.battery = AstalBattery.get_default();
         this.batteryIcon = createBinding(this.battery, "batteryIconName");
         this.batteryPercentage = createBinding(this.battery, "percentage");
@@ -72,13 +71,6 @@ export default class SystemMonitor {
         });
     }
 
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new SystemMonitor;
-        }
-        return this._instance;
-    }
-
     public get SystemMonitor() {
         return (
             <box cssClasses={["SystemMonitor"]}>
@@ -98,3 +90,6 @@ export default class SystemMonitor {
         );
     }
 }
+
+const systemMonitor = new SystemMonitorClass;
+export default systemMonitor;

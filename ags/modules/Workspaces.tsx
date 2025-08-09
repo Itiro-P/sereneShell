@@ -1,32 +1,23 @@
 import { Gtk, Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-import Hyprland from "../services/Hyprland";
+import hyprlandService from "../services/Hyprland";
 import { Accessor, createComputed, For, onCleanup } from "ags";
 
-export default class Workspaces {
-    private static _instance: Workspaces;
+class WorkspacesClass {
+    public constructor() {
 
-    private constructor() {
-
-    }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new Workspaces;
-        }
-        return this._instance;
     }
 
     private Workspace({ workspace, isInPopover = false }: { workspace: AstalHyprland.Workspace, isInPopover: boolean }) {
         const baseClasses = isInPopover ? ["Workspace", "WorkspacePopoverItem"] : ["Workspace"];
         const click = new Gtk.GestureClick();
-        const handler_id = click.connect("pressed", () => { if(Hyprland.instance.focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() });
+        const handler_id = click.connect("pressed", () => { if(hyprlandService.focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() });
         onCleanup(() => { if (handler_id) click.disconnect(handler_id) });
 
         return (
             <label
                 $={self => self.add_controller(click)}
-                cssClasses={Hyprland.instance.focusedWorkspace.as(focused => [...baseClasses, workspace.get_id() === focused.get_id() ? "Active" : "Inactive"])}
+                cssClasses={hyprlandService.focusedWorkspace.as(focused => [...baseClasses, workspace.get_id() === focused.get_id() ? "Active" : "Inactive"])}
                 label={`${workspace.get_id()}`} widthChars={3} maxWidthChars={3} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
             />
         );
@@ -36,14 +27,14 @@ export default class Workspaces {
         const click = new Gtk.GestureClick();
         const handler = click.connect("pressed", () => {
             const ws = workspace.get();
-            if (ws !== null && ws.get_id() !== Hyprland.instance.focusedWorkspace.get().get_id()) ws.focus();
+            if (ws !== null && ws.get_id() !== hyprlandService.focusedWorkspace.get().get_id()) ws.focus();
         });
 
         onCleanup(() => { if (click) click.disconnect(handler) });
         return (
             <label
                 $={(self) => self.add_controller(click)}
-                cssClasses={createComputed([Hyprland.instance.focusedWorkspace, workspace], (focused, ws) => ["Workspace", ws && ws.get_id() === focused?.get_id() ? "Active" : "Inactive"])}
+                cssClasses={createComputed([hyprlandService.focusedWorkspace, workspace], (focused, ws) => ["Workspace", ws && ws.get_id() === focused?.get_id() ? "Active" : "Inactive"])}
                 sensitive={workspace.as(w => w !== null)}
                 label={workspace.as(w => `${w?.get_id() ?? ' '}`)}
                 widthChars={1}
@@ -73,7 +64,7 @@ export default class Workspaces {
     }
 
     public Workspaces({ monitor }: { monitor: AstalHyprland.Monitor }) {
-        const monitorWorkspaces = Hyprland.instance.workspaces.as(ws => {
+        const monitorWorkspaces = hyprlandService.workspaces.as(ws => {
             const filtered = ws.filter((workspace) => workspace !== null ? workspace.get_monitor() === monitor : false);
             return {
                 first: filtered[0],
@@ -93,3 +84,7 @@ export default class Workspaces {
         );
     }
 }
+
+const workspaces = new WorkspacesClass;
+
+export default workspaces;

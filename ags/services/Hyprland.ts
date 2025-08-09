@@ -2,8 +2,7 @@ import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
-export default class Hyprland {
-    private static _instance: Hyprland;
+export class Hyprland {
     private default: AstalHyprland.Hyprland;
     private _workspaces: Accessor<AstalHyprland.Workspace[]>;
     private _focusedWorkspace: Accessor<AstalHyprland.Workspace>;
@@ -11,20 +10,13 @@ export default class Hyprland {
     private _monitors: Accessor<AstalHyprland.Monitor[]>;
     private _focusedClient: Accessor<AstalHyprland.Client>;
 
-    private constructor() {
+    public constructor() {
         this.default = AstalHyprland.get_default();
         this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.id - b.id));
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
         this._clients = createBinding(this.default, "clients");
         this._focusedClient = createBinding(this.default, "focusedClient");
         this._monitors = createBinding(this.default, "monitors");
-    }
-
-    public static get instance() {
-        if(!this._instance) {
-            this._instance = new Hyprland;
-        }
-        return this._instance;
     }
 
     public get workspaces() {
@@ -60,3 +52,7 @@ export default class Hyprland {
         return hyprlandMonitors.find(hyprMonitor => this.areMonitorsEqual(monitor, hyprMonitor)) || hyprlandMonitors[0];
     }
 }
+
+const hyprlandService = new Hyprland;
+
+export default hyprlandService;

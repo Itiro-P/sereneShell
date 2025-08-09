@@ -1,11 +1,11 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
-import Hyprland from "../services/Hyprland";
-import DateTime from "../modules/DateTime";
+import hyprlandService from "../services/Hyprland";
+import dateTime from "../modules/DateTime";
 import app from "ags/gtk4/app";
 
 export default function DTC({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
-    const hyprMonitor = Hyprland.instance.getHyprlandMonitor(gdkmonitor);
+    const hyprMonitor = hyprlandService.getHyprlandMonitor(gdkmonitor);
 
     return (
         <window
@@ -13,10 +13,10 @@ export default function DTC({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             layer={Astal.Layer.BOTTOM}
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT}
-            visible={DateTime.instance.shouldDTCAppear(hyprMonitor)}
+            visible={dateTime.shouldDTCAppear(hyprMonitor)}
             application={app}
         >
-            <box halign={Gtk.Align.END} valign={Gtk.Align.START} children={DateTime.instance.DateTimeCalendar} />
+            <box halign={Gtk.Align.END} valign={Gtk.Align.START} children={dateTime.DateTimeCalendar} />
         </window>
     );
 }
