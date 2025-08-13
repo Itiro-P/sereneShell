@@ -94,9 +94,5 @@ export namespace Swww {
             exec(command);
             return true;
         }
-
-        public queryWallpaper(path: string, timeAsMilliseconds: number): boolean {
-            return false;
-        }
     }
 }

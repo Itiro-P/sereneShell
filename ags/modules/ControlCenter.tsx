@@ -3,7 +3,6 @@ import animationService from "../services/Animations";
 import { onCleanup } from "ags";
 import dateTime from "./DateTime";
 import cava, { CavaVisiblity } from "./Cava";
-import bluetooth from "./Bluetooth";
 import Network from "./Network";
 
 class ControlCenterClass {
@@ -60,7 +59,6 @@ class ControlCenterClass {
             <popover>
                 <box cssClasses={["ControlCenterPopover"]}>
                     <box orientation={Gtk.Orientation.VERTICAL}>
-                        {bluetooth.BluetoothPanel}
                         {this.ToggleVisibleComponents}
                     </box>
                 </box>

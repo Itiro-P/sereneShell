@@ -7,7 +7,6 @@ export class Hyprland {
     private _workspaces: Accessor<AstalHyprland.Workspace[]>;
     private _focusedWorkspace: Accessor<AstalHyprland.Workspace>;
     private _clients: Accessor<AstalHyprland.Client[]>;
-    private _monitors: Accessor<AstalHyprland.Monitor[]>;
     private _focusedClient: Accessor<AstalHyprland.Client>;
 
     public constructor() {
@@ -16,7 +15,6 @@ export class Hyprland {
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
         this._clients = createBinding(this.default, "clients");
         this._focusedClient = createBinding(this.default, "focusedClient");
-        this._monitors = createBinding(this.default, "monitors");
     }
 
     public get workspaces() {
@@ -48,7 +46,7 @@ export class Hyprland {
     }
 
     public getHyprlandMonitor(monitor: Gdk.Monitor) {
-        const hyprlandMonitors = this._monitors.get();
+        const hyprlandMonitors = this.default.get_monitors();
         return hyprlandMonitors.find(hyprMonitor => this.areMonitorsEqual(monitor, hyprMonitor)) || hyprlandMonitors[0];
     }
 }
