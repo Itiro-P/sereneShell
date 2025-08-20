@@ -1,0 +1,19 @@
+@use 'common/Colors';
+@use 'common/Transitions';
+@use 'common/Font';
+@use 'common/Layout';
+
+.SelectorIndicator {
+    margin: 4px;
+    background-color: rgba(Colors.$surface1, 0.8);
+    border-radius: 8px;
+    .Option {
+        padding: 2px;
+        margin: 2px;
+        border-radius: 10px;
+    }
+
+    .ToggleActive {
+        @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
+    }
+}

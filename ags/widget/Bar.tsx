@@ -31,7 +31,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                     {systemTray.SystemTray}
                 </box>
                 <box halign={Gtk.Align.CENTER}>
-                    {clients.Clients}
+                    {clients.ActiveClient}
                     {media.Media}
                     {workspaces.Workspaces({ monitor: hyprMonitor })}
                 </box>
@@ -39,7 +39,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                     {dateTime.Time}
                     {audioControl.AudioControl}
                     {systemMonitor.SystemMonitor}
-                    {controlCenter.ControlCenter}
+                    {controlCenter.ControlCenter(gdkmonitor)}
                 </box>
             </box>
         </window>

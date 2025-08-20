@@ -1,0 +1,93 @@
+import { Accessor, createState, onCleanup, Setter } from "ags";
+import { createPoll } from "ags/time";
+import Gio from "gi://Gio?version=2.0";
+import GLib from "gi://GLib?version=2.0";
+import { Swww } from "../utils/Swww";
+import { Gdk, Gtk } from "ags/gtk4";
+import { execAsync } from "ags/process";
+
+const path = `${GLib.get_home_dir()}/.config/hypr/configs/wallpapers`;
+const pollTime = 72000;
+const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+
+class WallpaperSelectorClass {
+    private images: Accessor<string[]>;
+    private setImages: Setter<string[]>;
+    private timerActive: Accessor<boolean>;
+    private setTimerActive: Setter<boolean>;
+
+    constructor() {
+        [this.images, this.setImages] = createState([] as string[]);
+        [this.timerActive, this.setTimerActive] = createState(true);
+        this.setImages(this.readImageFiles(path));
+    }
+
+    private isImageFile(filename: string) {
+        const extension = filename.toLowerCase().substring(filename.lastIndexOf('.'));
+        return imageExtensions.includes(extension) ? extension: null;
+    }
+
+    private readImageFiles(directoryPath: string) {
+        try {
+            const file = Gio.File.new_for_path(directoryPath);
+
+            if (!file.query_exists(null)) return [];
+
+            const enumerator = file.enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, null);
+
+            const images: string[] = [];
+            let fileInfo;
+
+            while ((fileInfo = enumerator.next_file(null)) !== null) {
+                if (fileInfo.get_file_type() === Gio.FileType.REGULAR) {
+                    const fileName = fileInfo.get_name();
+                    const ext = this.isImageFile(fileName);
+                    if(ext) images.push(fileName);
+                }
+            }
+
+            enumerator.close(null);
+            return images;
+        } catch (error) {
+            console.error('❌ Erro Gio ao ler diretório:', directoryPath, error);
+            return [];
+        }
+    }
+
+    public SelectorIndicator(gdkmonitor: Gdk.Monitor) {
+        const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
+        const handler = click.connect('pressed', () => this.setTimerActive(!this.timerActive.get()));
+        const poll = createPoll('', pollTime, (prev: string) => this.images.get()[Math.floor(Math.random()*this.images.get().length)]);
+        const unsub = poll.subscribe(() => {
+            if (this.timerActive.get()) {
+                const connector = gdkmonitor.get_connector();
+                if(connector) {
+                    Swww.manager.setWallpaper(`${path}/${poll.get()}`, { outputs: connector, transitionType: Swww.TransitionType.RANDOM });
+                } else {
+                    execAsync(`notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`);
+                }
+            }
+        });
+
+        onCleanup(() => { click.disconnect(handler); unsub() });
+        return (
+            <box
+                cssClasses={['SelectorIndicator']}
+                orientation={Gtk.Orientation.VERTICAL}
+            >
+                <label
+                    cssClasses={["Subtitle"]}
+                    label={'Seletor de Papéis de Parede'}
+                />
+                <label
+                    cssClasses={["Option", "ToggleActive"]}
+                    label={this.timerActive.as(ta => `Estado: ${ta ? 'Ativo': 'Desativado'}`)} $={self => self.add_controller(click) }
+                />
+            </box>
+        );
+    }
+}
+
+const wallpaperSelector = new WallpaperSelectorClass;
+
+export default wallpaperSelector;

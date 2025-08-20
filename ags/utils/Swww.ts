@@ -50,7 +50,7 @@ export namespace Swww {
         filter: Filter;
         transitionType: TransitionType;
         transitionPos: TransitionPos;
-        output: string;
+        outputs: string;
         transitionStep: number;
         transitionDurantion: number;
         transitionAngle: number;
@@ -59,22 +59,13 @@ export namespace Swww {
     }
 
 
-    export class Manager {
-        private static _instance: Manager;
-
-        private constructor() {
+    class Manager {
+        constructor() {
             const isSwwwRunning = exec("pgrep swww-daemon").length !== 0;
             // Swww não está rodando
             if(!isSwwwRunning) {
                 exec(["bash", "-c", "swww-daemon &"]);
             }
-        }
-
-        public static get instance() {
-            if(!Manager._instance) {
-                Manager._instance = new Manager;
-            }
-            return Manager._instance;
         }
 
         public setWallpaper(path: string, options?: Partial<ParserOptions>): boolean {
@@ -89,10 +80,11 @@ export namespace Swww {
                 if(options.transitionStep) command += ` --transition-step ${options.transitionStep}`;
                 if(options.transitionType) command += ` --transition-type ${options.transitionType}`;
                 if(options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
-                if(options.output) command += ` --output ${options.output}`;
+                if(options.outputs) command += ` --outputs ${options.outputs}`;
             }
             exec(command);
             return true;
         }
     }
+    export const manager = new Manager;
 }

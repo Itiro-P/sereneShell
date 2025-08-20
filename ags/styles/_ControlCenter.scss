@@ -26,6 +26,10 @@
         }
 
         .ToggleVisibleComponents {
+            margin: 4px;
+            background-color: rgba(Colors.$surface1, 0.8);
+            border-radius: 8px;
+
             .Option {
                 padding: 2px;
                 margin: 2px;

@@ -3,7 +3,7 @@ import animationService from "../services/Animations";
 import { onCleanup } from "ags";
 import dateTime from "./DateTime";
 import cava, { CavaVisiblity } from "./Cava";
-import Network from "./Network";
+import wallpaperSelector from "./WallpaperSelector";
 
 class ControlCenterClass {
     public constructor() {
@@ -54,21 +54,22 @@ class ControlCenterClass {
         );
     }
 
-    private get ControlCenterPopover() {
+    private ControlCenterPopover(gdkmonitor: Gdk.Monitor) {
         return (
             <popover>
                 <box cssClasses={["ControlCenterPopover"]}>
                     <box orientation={Gtk.Orientation.VERTICAL}>
                         {this.ToggleVisibleComponents}
+                        {wallpaperSelector.SelectorIndicator(gdkmonitor)}
                     </box>
                 </box>
             </popover>
         );
     }
 
-    public get ControlCenter() {
+    public ControlCenter(gdkmonitor: Gdk.Monitor) {
         return (
-            <menubutton cssClasses={["ControlCenter"]} popover={this.ControlCenterPopover as Gtk.Popover}>
+            <menubutton cssClasses={["ControlCenter"]} popover={this.ControlCenterPopover(gdkmonitor) as Gtk.Popover}>
                 <label cssClasses={['Label']} label={'󰣇'} />
             </menubutton>
         );

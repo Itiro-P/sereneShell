@@ -2,23 +2,8 @@
 @use 'common/Layout';
 @use 'common/Transitions';
 
-.Clients {
+.ActiveClient {
     @extend %widget;
-    transition: all 0.25s ease;
-    @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
-
-    .ClientsPopover {
-        background-color: rgba(Colors.$surface0, 0.8);
-        border-radius: 16px;
-        padding: 6px;
-
-        .ClientEntry {
-            background-color: rgba(Colors.$surface1, 0.8);
-            color: Colors.$text;
-            border-radius: 16px;
-            padding: 4px;
-            margin: 2px;
-            @include Transitions.inverse(Colors.$blue, Colors.$base);
-        }
-    }
+    font-weight: bold;
+    @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
 }
