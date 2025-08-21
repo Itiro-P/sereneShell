@@ -16,7 +16,7 @@ Aqui eu guardo minhas configurações pessoais para configuração rápida de um
 - Pipeware e Pavucontrol: Para controle de áudio;
 - Starship: Para customização do Bash;
 - Foot: Terminal;
-- Tema e itens Colloid com as cores Catppuccin Mocha;
+- Tema e itens Colloid (Gtk) e Darkly (Qt) com as cores Catppuccin Mocha;
 - Wlogout: Manejo de término de sessão;
 - Gerenciador de arquivos: Thunar;
 - Swww para papéis de parede;
