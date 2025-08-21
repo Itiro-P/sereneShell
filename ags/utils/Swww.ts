@@ -1,4 +1,5 @@
-import { exec } from "ags/process";
+import { exec, execAsync } from "ags/process";
+import GLib from "gi://GLib?version=2.0";
 
 export namespace Swww {
     export enum Resize {
@@ -61,11 +62,6 @@ export namespace Swww {
 
     class Manager {
         constructor() {
-            const isSwwwRunning = exec("pgrep swww-daemon").length !== 0;
-            // Swww não está rodando
-            if(!isSwwwRunning) {
-                exec(["bash", "-c", "swww-daemon &"]);
-            }
         }
 
         public setWallpaper(path: string, options?: Partial<ParserOptions>): boolean {
@@ -82,7 +78,7 @@ export namespace Swww {
                 if(options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
                 if(options.outputs) command += ` --outputs ${options.outputs}`;
             }
-            exec(command);
+            GLib.spawn_command_line_async(command);
             return true;
         }
     }
