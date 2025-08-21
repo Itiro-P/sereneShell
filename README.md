@@ -79,10 +79,12 @@ A distro que eu mais uso é o Archlinux, mas não uso nada que dependa diretamen
 
 ## Instalação
 
-Faça uma instalação limpa do arch + hyprland e baixe todas as dependências. Em distros baseadas em Arch com acesso ao AUR o seguinte comando pode ser usado com `yay`:
+Faça uma instalação limpa do Arch + hyprland e baixe todas as dependências. Em distros baseadas em Arch com acesso ao AUR o seguinte comando pode ser usado com `yay`:
 - `yay -Syu hypr-zoom hyprcap hyprshot hypridle hyprlight hyprlock hyprpop hyprsunset hyprwindow hyprpolkitagent aylurs-gtk-shell-git cpupower upower cava mako networkmanager-applet pavucontrol pipewire starship foot darkly-bin wlogout dolphin swww ttf-dejavu ttf-hack ttf-jetbrains-mono ttf-liberation ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-common ttf-roboto noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra adobe-source-code-pro-fonts adwaita-fonts zen-browser-bin nwg-look nwg-displays qt5ct qt6ct fuzzel`.
 
-Clone este repositório em sua $HOMR/.config. Isso normalmente é `/home/.config/`:
+Instale os temas Gtk Colloid em [https://github.com/vinceliuice/Colloid-gtk-theme];
+
+Clone este repositório em sua $HOME/.config. Isso normalmente é `/home/seuUser/.config/`:
  - `git clone https://github.com/Itiro-P/itiroDots.git`;
 
 Reinice o sitema. As configurações já devem ser aplicadas.
