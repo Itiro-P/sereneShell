@@ -84,3 +84,9 @@ Faça uma instalação limpa do arch + hyprland e baixe todas as dependências. 
 
 Clone este repositório em sua $HOMR/.config. Isso normalmente é `/home/.config/`:
  - `git clone https://github.com/Itiro-P/itiroDots.git`;
+
+Reinice o sitema. As configurações já devem ser aplicadas.
+
+## Troubleshooting
+
+Caso ocorra problemas, não hesite em  abrir uma 'issue' ou me contatar.
