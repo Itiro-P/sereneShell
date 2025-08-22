@@ -1,0 +1,23 @@
+pkgname=sereneShell_fonts_theming
+pkgver=1.0
+pkgrel=1
+pkgdesc='Serene Shell dependencies for fonts and theming'
+arch=(any)
+license=(None)
+depends=(
+    nwg-look
+    qt5ct
+    qt6ct
+    kvantum
+    kvantum-qt5
+    kvantum-theme-libadwaita-git
+    papirus-icon-theme
+    adw-gtk-theme
+    starship
+    playerctl
+    sddm-silent-theme
+    ttf-fira-code
+    ttf-hack
+    ttf-jetbrains-mono
+    woff2-font-awesome
+)

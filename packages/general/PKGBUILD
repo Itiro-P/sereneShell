@@ -1,0 +1,19 @@
+pkgname=sereneShell_general
+pkgver=1.0
+pkgrel=1
+pkgdesc='Serene Shell dependencies for general programs'
+arch=(any)
+license=(None)
+depends=(
+    thunar
+    zen-browser-bin
+    zed
+    btop
+    fastfetch
+    vesktop
+    foot
+    fuzzel
+    wlogout
+    nwg-displays
+    gitkraken
+)

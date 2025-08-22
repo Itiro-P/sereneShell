@@ -1,0 +1,15 @@
+pkgname=sereneShell_widgets
+pkgver=1.0
+pkgrel=1
+pkgdesc='Serene Shell dependencies for Widgets'
+arch=(any)
+license=(None)
+depends=(
+    aylurs-gtk-shell-git
+    cpupower
+    upower
+    cava
+    pavucontrol
+    network-manager-applet
+    wireplumber
+)

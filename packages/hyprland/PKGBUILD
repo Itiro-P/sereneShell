@@ -1,0 +1,30 @@
+pkgname=sereneShell_hyprland
+pkgver=1.0
+pkgrel=1
+pkgdesc='Serene Shell dependencies for Hyprland'
+arch=(any)
+license=(None)
+depends=(
+    hyprland
+    hypr-zoom
+    hyprcap
+    hyprcursor
+    hyprgraphics
+    hypridle
+    hyprland
+    hyprland-protocols
+    hyprland-qt-support
+    hyprland-qtutils
+    hyprlang
+    hyprlight
+    hyprlock
+    hyprpaper
+    hyprpicker
+    hyprpolkitagent
+    hyprpop
+    hyprshot
+    hyprsunset
+    hyprutils
+    hyprwayland-scanner
+    hyprwindow
+)
