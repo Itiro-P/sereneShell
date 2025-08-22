@@ -14,6 +14,8 @@ Clone este repositório:
 Instale as dependências:
   - Para distros baseadas em Archlinux. A pasta `packages` contém PKGBUILDS para todas as dependências.
     - Apenas dê `cd pacote` e use `makepkg -si` para instalá-las.
+ 
+ Mova os conteúdos da pasta .config para sua `$HOME/.config`. Que normalmente leva até `/home/seuUsuario/.config`;
 
 Reinice o sitema. As configurações já devem ser aplicadas.
 
