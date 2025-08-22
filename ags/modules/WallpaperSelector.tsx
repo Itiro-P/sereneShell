@@ -62,7 +62,7 @@ class WallpaperSelectorClass {
             if (this.timerActive.get()) {
                 const connector = gdkmonitor.get_connector();
                 if(connector) {
-                    Swww.manager.setWallpaper(`${path}/${poll.get()}`, { outputs: connector, transitionType: Swww.TransitionType.RANDOM });
+                    Swww.manager.setWallpaper(`${path}/${poll.get()}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
                 } else {
                     execAsync(`notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`);
                 }

@@ -62,6 +62,7 @@ export namespace Swww {
 
     class Manager {
         constructor() {
+            GLib.spawn_command_line_async('swww clear');
         }
 
         public setWallpaper(path: string, options?: Partial<ParserOptions>): boolean {
