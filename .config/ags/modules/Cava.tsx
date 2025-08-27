@@ -31,12 +31,8 @@ class CavaWidget extends Gtk.DrawingArea {
         this.set_hexpand(true);
         this.set_vexpand(true);
         this.valuesAccessor = v.as(v => {
-            const res: number[] = [];
             const height = this.get_allocated_height();
-            for(const i of v) {
-                res.push(height - height * Math.max(0, Math.min(1, i)));
-            }
-            return res;
+            return v.map(i => height - height * Math.min(1, i));
         });
         this.unsubAccessor = this.valuesAccessor.subscribe(() => this.queue_draw());
 
@@ -130,15 +126,15 @@ class CavaClass {
     }
 
     public shouldCavaAppear(monitor: AstalHyprland.Monitor) {
-        return createComputed([this._visibilityState, createBinding(monitor, 'activeWorkspace'), hyprlandService.clients],
-            (vs, aw, cs) => {
+        return createComputed([this._visibilityState],
+            (vs) => {
                 switch(vs) {
                     case CavaVisiblity.DISABLED:
                         return false;
                     case CavaVisiblity.ALWAYS:
                         return true;
                     case CavaVisiblity.NO_CLIENTS:
-                        return cs.findIndex(it => it.get_workspace() === aw) === -1;
+                        return hyprlandService.visibilityAccessor(monitor);
                 }
             }
         );

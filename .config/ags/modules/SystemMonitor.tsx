@@ -9,7 +9,7 @@ type Metrics = {
     mem: number
 }
 
-const POLL_INTERVAL = 3000;
+const pollTime = 3000;
 
 class SystemMonitorClass {
     private battery: AstalBattery.Device;
@@ -37,7 +37,7 @@ class SystemMonitorClass {
 
         this.cpuData = { prev: { user: 0, sys: 0, total: 0 }, diff: { user: 0, sys: 0, total: 0 } };
 
-        this._metrics = createPoll({ cpu: 0, mem: 0 }, POLL_INTERVAL, () => {
+        this._metrics = createPoll({ cpu: 0, mem: 0 }, pollTime, () => {
             try {
                 GTop.glibtop_get_cpu(this.cpuSource);
                 GTop.glibtop_get_mem(this.memSource);
@@ -63,7 +63,7 @@ class SystemMonitorClass {
                 const cpuPercent = cpuDiff.total > 0 ? Math.round(((cpuDiff.user + cpuDiff.sys) / cpuDiff.total) * 100) : 0;
                 const memPercent = this.memSource.total > 0 ? Math.round((this.memSource.user / this.memSource.total) * 100) : 0;
 
-                return { cpu: Math.max(0, Math.min(100, cpuPercent)), mem: Math.max(0, Math.min(100, memPercent)) };
+                return { cpu: Math.min(100, cpuPercent), mem: Math.min(100, memPercent) };
             } catch (error) {
                 console.warn("Erro ao obter métricas do sistema:", error);
                 return { cpu: 0, mem: 0 };
@@ -84,7 +84,7 @@ class SystemMonitorClass {
                 </box>
                 <box cssClasses={this.batteryCritical} tooltipText={this.batteryLifeLabel}>
                     <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} />
-                    <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.max(0, Math.min(100, p * 100))) ?? 0}%`)} />
+                    <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} />
                 </box>
             </box>
         );

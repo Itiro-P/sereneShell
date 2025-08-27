@@ -19,7 +19,7 @@ class AudioControlClass {
         let newVolume = edp.get_volume();
         if(dy < 0) newVolume += this.step;
         else newVolume -= this.step;
-        edp.set_volume(newVolume);
+        edp.set_volume(Math.min(newVolume, 1));
     }
 
     private Endpoint({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) {

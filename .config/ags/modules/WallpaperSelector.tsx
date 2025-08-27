@@ -7,7 +7,7 @@ import { Gdk, Gtk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 
 const path = `${GLib.get_home_dir()}/.config/hypr/configs/wallpapers`;
-const pollTime = 72000;
+const pollTime = 240000;
 const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
 
 class WallpaperSelectorClass {
@@ -15,10 +15,12 @@ class WallpaperSelectorClass {
     private setImages: Setter<string[]>;
     private timerActive: Accessor<boolean>;
     private setTimerActive: Setter<boolean>;
+    private polling: Accessor<boolean>;
 
     constructor() {
         [this.images, this.setImages] = createState([] as string[]);
         [this.timerActive, this.setTimerActive] = createState(true);
+        this.polling = createPoll(true, pollTime, (prev: boolean) => !prev);
         this.setImages(this.readImageFiles(path));
     }
 
@@ -57,12 +59,13 @@ class WallpaperSelectorClass {
     public SelectorIndicator(gdkmonitor: Gdk.Monitor) {
         const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
         const handler = click.connect('pressed', () => this.setTimerActive(!this.timerActive.get()));
-        const poll = createPoll('', pollTime, (prev: string) => this.images.get()[Math.floor(Math.random()*this.images.get().length)]);
-        const unsub = poll.subscribe(() => {
+        const unsub = this.polling.subscribe(() => {
             if (this.timerActive.get()) {
                 const connector = gdkmonitor.get_connector();
                 if(connector) {
-                    Swww.manager.setWallpaper(`${path}/${poll.get()}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
+                    const imgArray = this.images.get();
+                    const img = imgArray[Math.floor(Math.random() * imgArray.length)];
+                    Swww.manager.setWallpaper(`${path}/${img}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
                 } else {
                     execAsync(`notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`);
                 }

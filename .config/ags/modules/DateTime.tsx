@@ -5,6 +5,8 @@ import GLib from "gi://GLib?version=2.0";
 import { createPoll } from "ags/time";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
+const pollTime = 60000;
+
 class DateTimeClass {
     private formatterTime = "%H:%M";
     private formatterDate = "Hoje é: %A, %d de %B de %Y";
@@ -16,7 +18,7 @@ class DateTimeClass {
     public constructor() {
         [this._isDTCvisible, this._setIsDTCvisible] = createState(true);
 
-        this._dateTime = createPoll({ date: "", time: "" }, 60000, () => {
+        this._dateTime = createPoll({ date: "", time: "" }, pollTime, () => {
             const now = GLib.DateTime.new_now_local();
             return {
                 date: now.format(this.formatterDate)!,
@@ -31,8 +33,8 @@ class DateTimeClass {
 
     public shouldDTCAppear(monitor: AstalHyprland.Monitor) {
         return createComputed(
-            [this._isDTCvisible, createBinding(monitor, 'activeWorkspace'), hyprlandService.clients],
-            (dv, aw, cs) => cs.findIndex(it => it.get_workspace() === aw) === -1 && dv
+            [this._isDTCvisible, hyprlandService.visibilityAccessor(monitor)],
+            (isDTCvisible, visibility) => isDTCvisible && visibility
         );
     }
 
