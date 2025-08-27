@@ -17,4 +17,6 @@ depends=(
     nwg-displays
     nwg-dock-hyprland
     gitkraken
+    clapper
+    ristretto
 )
