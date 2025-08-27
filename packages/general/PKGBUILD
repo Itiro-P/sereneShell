@@ -15,5 +15,6 @@ depends=(
     fuzzel
     wlogout
     nwg-displays
+    nwg-dock-hyprland
     gitkraken
 )
