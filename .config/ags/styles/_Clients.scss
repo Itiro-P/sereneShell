@@ -1,9 +1,0 @@
-@use 'common/Colors';
-@use 'common/Layout';
-@use 'common/Transitions';
-
-.ActiveClient {
-    @extend %widget;
-    font-weight: bold;
-    @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
-}

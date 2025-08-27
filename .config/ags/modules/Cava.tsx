@@ -32,7 +32,7 @@ class CavaWidget extends Gtk.DrawingArea {
         this.set_vexpand(true);
         this.valuesAccessor = v.as(v => {
             const height = this.get_allocated_height();
-            return v.map(i => height - height * Math.min(1, i));
+            return v.map(i => height * (1 - i));
         });
         this.unsubAccessor = this.valuesAccessor.subscribe(() => this.queue_draw());
 
@@ -112,7 +112,7 @@ class CavaClass {
             this._values = createBinding(this.default, 'values').as((v) => {
                 try {
                     const sens = CavaConfig.sensitivity;
-                    return v.map((i) => i * sens);
+                    return v.map(i => i * sens);
                 } catch (error) {
                     console.warn("Erro no handler global do Cava:", error);
                     return [];
