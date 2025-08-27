@@ -18,5 +18,6 @@ depends=(
     nwg-dock-hyprland
     gitkraken
     clapper
+    gst-libav
     ristretto
 )
