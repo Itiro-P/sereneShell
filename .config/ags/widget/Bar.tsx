@@ -8,6 +8,7 @@ import hyprlandService from "../services/Hyprland";
 import audioControl from "../modules/AudioControl";
 import controlCenter from "../modules/ControlCenter";
 import workspaces from "../modules/Workspaces";
+import { onCleanup } from "ags";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
@@ -23,6 +24,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT}
             application={app}
+            $={(self) => onCleanup(() => self.destroy())}
         >
             <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
                 <box halign={Gtk.Align.START}>

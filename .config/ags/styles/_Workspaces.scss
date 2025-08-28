@@ -7,7 +7,7 @@
     background-color: rgba(Colors.$surface0, 0.8);
     border-radius: 18px;
 
-    .Workspace, .WorkspacePopoverItem, .MoreWorkspacesButton {
+    .Workspace, .MoreWorkspacesButton {
         @extend %component-circle;
         font-weight: bold;
         background-color: rgba(Colors.$crust, 0.8);
@@ -32,16 +32,12 @@
             background-color: rgba(Colors.$blue, 0.6);
             color: Colors.$crust;
         }
-
-        &:focus {
-            background-color: rgba(Colors.$blue, 0.4);
-        }
     }
 
     .WorkspacePopover {
         border-radius: 16px;
         padding: 6px;
-        background-color: rgba(Colors.$surface0, 0.95);
+        background-color: rgba(Colors.$surface0, 0.9);
         margin: 2px;
     }
 }

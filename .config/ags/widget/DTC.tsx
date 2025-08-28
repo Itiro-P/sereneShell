@@ -2,6 +2,7 @@ import { Astal, Gdk, Gtk } from "ags/gtk4"
 import hyprlandService from "../services/Hyprland";
 import dateTime from "../modules/DateTime";
 import app from "ags/gtk4/app";
+import { onCleanup } from "ags";
 
 export default function DTC({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
@@ -15,6 +16,7 @@ export default function DTC({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             anchor={TOP | RIGHT}
             visible={dateTime.shouldDTCAppear(hyprMonitor)}
             application={app}
+            $={(self) => onCleanup(() => self.destroy())}
         >
             <box halign={Gtk.Align.END} valign={Gtk.Align.START} children={dateTime.DateTimeCalendar} />
         </window>

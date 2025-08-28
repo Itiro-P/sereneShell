@@ -1,6 +1,6 @@
 import { Gtk } from "ags/gtk4";
 import hyprlandService from "../services/Hyprland";
-import { Accessor, createBinding, createComputed, createState, Setter } from "ags";
+import { Accessor, createComputed, createState, Setter } from "ags";
 import GLib from "gi://GLib?version=2.0";
 import { createPoll } from "ags/time";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";

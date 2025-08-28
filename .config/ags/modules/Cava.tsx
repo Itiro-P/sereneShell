@@ -126,15 +126,15 @@ class CavaClass {
     }
 
     public shouldCavaAppear(monitor: AstalHyprland.Monitor) {
-        return createComputed([this._visibilityState],
-            (vs) => {
+        return createComputed([this._visibilityState, hyprlandService.visibilityAccessor(monitor)],
+            (vs, va) => {
                 switch(vs) {
                     case CavaVisiblity.DISABLED:
                         return false;
                     case CavaVisiblity.ALWAYS:
                         return true;
                     case CavaVisiblity.NO_CLIENTS:
-                        return hyprlandService.visibilityAccessor(monitor);
+                        return va;
                 }
             }
         );

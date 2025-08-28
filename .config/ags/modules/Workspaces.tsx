@@ -1,7 +1,7 @@
-import { Gtk, Gdk } from "ags/gtk4";
+import { Gtk } from "ags/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import hyprlandService from "../services/Hyprland";
-import { Accessor, createComputed, For, onCleanup } from "ags";
+import { Accessor, createBinding, createComputed, For, onCleanup } from "ags";
 
 class WorkspacesClass {
     private readonly maxWorkspaces: number = 5;
@@ -10,7 +10,6 @@ class WorkspacesClass {
     }
 
     private Workspace({ workspace, isInPopover = false }: { workspace: AstalHyprland.Workspace, isInPopover: boolean }) {
-        const baseClasses = isInPopover ? ["Workspace", "WorkspacePopoverItem"] : ["Workspace"];
         const click = new Gtk.GestureClick();
         const handler_id = click.connect("pressed", () => { if(hyprlandService.focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() });
         onCleanup(() => { if (handler_id) click.disconnect(handler_id) });
@@ -18,26 +17,24 @@ class WorkspacesClass {
         return (
             <label
                 $={self => self.add_controller(click)}
-                cssClasses={hyprlandService.focusedWorkspace.as(focused => [...baseClasses, workspace.get_id() === focused.get_id() ? "Active" : "Inactive"])}
+                cssClasses={hyprlandService.focusedWorkspace.as(focused => ["Workspace", workspace.get_id() === focused.get_id() ? "Active" : "Inactive"])}
                 label={`${workspace.get_id()}`} widthChars={3} maxWidthChars={3} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
             />
         );
     }
 
-    private MainWorkspace({ workspace }: { workspace: Accessor<AstalHyprland.Workspace> }) {
+    private MainWorkspace(workspace: AstalHyprland.Workspace) {
         const click = new Gtk.GestureClick();
         const handler = click.connect("pressed", () => {
-            const ws = workspace.get();
-            if (ws !== null && ws.get_id() !== hyprlandService.focusedWorkspace.get().get_id()) ws.focus();
+            if (workspace.get_id() !== hyprlandService.focusedWorkspace.get().get_id()) workspace.focus();
         });
 
         onCleanup(() => { if (click) click.disconnect(handler) });
         return (
             <label
                 $={(self) => self.add_controller(click)}
-                cssClasses={createComputed([hyprlandService.focusedWorkspace, workspace], (focused, ws) => ["Workspace", ws && ws.get_id() === focused?.get_id() ? "Active" : "Inactive"])}
-                sensitive={workspace.as(w => w !== null)}
-                label={workspace.as(w => `${w?.get_id() ?? ' '}`)}
+                cssClasses={createComputed([hyprlandService.focusedWorkspace, createBinding(workspace, "id")], (focused, id) => ["Workspace", id === focused?.get_id() ? "Active" : "Inactive"])}
+                label={workspace.get_id().toString()}
                 widthChars={1}
                 maxWidthChars={1}
                 halign={Gtk.Align.CENTER}
@@ -66,20 +63,18 @@ class WorkspacesClass {
 
     public Workspaces({ monitor }: { monitor: AstalHyprland.Monitor }) {
         const monitorWorkspaces = hyprlandService.workspaces.as(ws => {
-            const filtered = ws.filter((workspace) => workspace !== null ? workspace.get_monitor() === monitor : false);
+            const filtered = ws.filter((workspace) => workspace.get_monitor() === monitor);
             return {
-                first: filtered[0],
-                second: filtered[1],
-                third: filtered[2],
-                theRest: filtered.slice(3)
+                main: filtered.slice(0, this.maxWorkspaces),
+                theRest: filtered.slice(this.maxWorkspaces)
             };
         });
 
         return (
             <box cssClasses={["Workspaces"]}>
-                {this.MainWorkspace({ workspace: monitorWorkspaces.as(({ first }) => first) })}
-                {this.MainWorkspace({ workspace: monitorWorkspaces.as(({ second }) => second) })}
-                {this.MainWorkspace({ workspace: monitorWorkspaces.as(({ third }) => third) })}
+                <box>
+                    <For each={monitorWorkspaces.as(mw => mw.main)} children={(w: AstalHyprland.Workspace) => this.MainWorkspace(w)} />
+                </box>
                 {this.MoreWorkspacesButton({ theRest: monitorWorkspaces.as(({ theRest }) => theRest) })}
             </box>
         );
