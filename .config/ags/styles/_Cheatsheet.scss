@@ -1,0 +1,59 @@
+@use 'common/Layout';
+@use 'common/Colors';
+@use 'common/Font';
+@use 'common/Transitions';
+
+.Cheatsheet {
+    padding: 10px;
+    border: 2px solid Colors.$blue;
+    border-radius: 20px;
+    background-color: rgba(Colors.$base, 0.8);
+
+    .Title {
+        font-weight: bolder;
+        font-size: Font.$font-size-large * 4;
+    }
+
+    .Subtitle {
+        font-weight: bold;
+        font-size: Font.$font-size-large * 2;
+    }
+
+    .Section {
+        margin: 4px;
+        padding: 4px;
+    }
+
+    .Entry {
+        margin: 3px;
+        border-radius: 6px;
+        .Bind, .Action {
+            padding: 2px;
+        }
+
+        .Bind {
+            transition: all 0.2s ease;
+            font-weight: bold;
+            color: Colors.$blue;
+            background-color: Colors.$surface0;
+        }
+
+        .Action {
+            transition: all 0.2s ease;
+            color: Colors.$surface0;
+            background-color: Colors.$blue;
+        }
+
+        &:hover {
+            .Bind {
+                color: Colors.$surface0;
+                background-color: Colors.$blue;
+            }
+
+            .Action {
+                color: Colors.$blue;
+                background-color: Colors.$surface0;
+            }
+        }
+    }
+}
