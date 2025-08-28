@@ -20,7 +20,7 @@
         button {
             margin: 2px;
             border-radius: 100%;
-            @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
+            @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
         }
 
         grid {
@@ -28,6 +28,22 @@
             border-radius: 8px;
             margin: 4px;
             background-color: rgba(Colors.$surface1, 0.7);
+
+            label.other-month {
+                opacity: 0.5;
+                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$rosewater);
+            }
+
+            label.day-number {
+                border-radius: 100%;
+                margin: 1px;
+                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$mauve);
+            }
+
+            label.today {
+                color: Colors.$base;
+                background-color: Colors.$lavender;
+            }
         }
     }
 
