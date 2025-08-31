@@ -10,23 +10,24 @@
 
 
     .Calendar {
-        * { color: Colors.$text; }
+        * {
+            all: unset;
+            color: Colors.$text;
+        }
+
+        button, label.day-number, label.other-month, label.today {
+            border-radius: 50%;
+        }
+
         header {
-            padding: 4px;
-            border-radius: 6px;
             background-color: rgba(Colors.$surface0, 0.8);
         }
 
         button {
-            margin: 2px;
-            border-radius: 100%;
             @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
         }
 
         grid {
-            padding: 6px;
-            border-radius: 8px;
-            margin: 4px;
             background-color: rgba(Colors.$surface1, 0.7);
 
             label.other-month {
@@ -35,8 +36,6 @@
             }
 
             label.day-number {
-                border-radius: 100%;
-                margin: 1px;
                 @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$mauve);
             }
 

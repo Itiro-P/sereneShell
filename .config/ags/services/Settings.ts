@@ -1,17 +1,16 @@
 import GLib from "gi://GLib?version=2.0";
-import { CavaVisiblity } from "../utils/CavaEnum";
 import { readFile, writeFile } from "ags/file";
 import { Accessor, createState, Setter } from "ags";
 
 interface Options {
     animationsEnabled: boolean;
-    cavaVisible: CavaVisiblity;
+    cavaVisible: boolean;
     wallpaperSelectorActive: boolean;
 }
 
 const optionsFallback: Options = {
     animationsEnabled: true,
-    cavaVisible: CavaVisiblity.ALWAYS,
+    cavaVisible: true,
     wallpaperSelectorActive: true
 }
 
@@ -20,8 +19,8 @@ const path = GLib.get_home_dir() + '/.config/ags/options/options.json';
 class SettingsClass {
     private _animationsEnabled: Accessor<boolean>;
     private _setAnimationsEnabled: Setter<boolean>;
-    private _cavaVisible: Accessor<CavaVisiblity>;
-    private _setCavaVisible: Setter<CavaVisiblity>;
+    private _cavaVisible: Accessor<boolean>;
+    private _setCavaVisible: Setter<boolean>;
     private _wallpaperSelectorActive: Accessor<boolean>;
     private _setWallpaperSelectorActive: Setter<boolean>;
 
@@ -30,7 +29,7 @@ class SettingsClass {
         try {
             const parsed = JSON.parse(fileStr) as Options;
             [this._animationsEnabled, this._setAnimationsEnabled] = createState(parsed.animationsEnabled);
-            [this._cavaVisible, this._setCavaVisible] = createState(parsed.cavaVisible as CavaVisiblity);
+            [this._cavaVisible, this._setCavaVisible] = createState(parsed.cavaVisible);
             [this._wallpaperSelectorActive, this._setWallpaperSelectorActive] = createState(parsed.wallpaperSelectorActive);
 
         } catch(err) {
@@ -48,22 +47,6 @@ class SettingsClass {
             wallpaperSelectorActive: this._wallpaperSelectorActive.get()
         }
         writeFile(path, JSON.stringify(options, null, 2));
-    }
-
-    public toggleCavaVisibilityState() {
-        switch(this._cavaVisible.get()) {
-            case CavaVisiblity.ALWAYS:
-                this._setCavaVisible(CavaVisiblity.NO_CLIENTS);
-                break;
-            case CavaVisiblity.NO_CLIENTS:
-                this._setCavaVisible(CavaVisiblity.DISABLED);
-                break;
-            case CavaVisiblity.DISABLED:
-                this._setCavaVisible(CavaVisiblity.ALWAYS);
-                break;
-            default:
-                this._setCavaVisible(CavaVisiblity.DISABLED);
-        }
     }
 
     public get animationsEnabled() {
@@ -86,7 +69,7 @@ class SettingsClass {
         if(this._animationsEnabled.get() !== newState) this._setAnimationsEnabled(newState);
     }
 
-    public set setCavaVisible(newState: CavaVisiblity) {
+    public set setCavaVisible(newState: boolean) {
         if(this._cavaVisible.get() !== newState) this._setCavaVisible(newState);
     }
 }

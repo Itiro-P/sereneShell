@@ -6,7 +6,6 @@ import GObject from 'gi://GObject';
 import { Accessor, createBinding, createComputed, createState, onCleanup, Setter } from "ags";
 import hyprlandService from "../services/Hyprland";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
-import { CavaVisiblity } from "../utils/CavaEnum";
 
 const CavaConfig = {
     autosens: true,
@@ -92,13 +91,12 @@ class CavaClass {
     private _values: Accessor<number[]>;
     private static widgetCount: number = 0;
 
-    private _visibilityState: Accessor<CavaVisiblity>;
-    private _setVisibilityState: Setter<CavaVisiblity>;
+    private _visibilityState: Accessor<boolean>;
+    private _setVisibilityState: Setter<boolean>;
     private unsub: () => void;
 
     public constructor() {
-        //[this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(CavaVisiblity.ALWAYS);
-        [this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(settingsService.cavaVisible.get());
+        [this._visibilityState, this._setVisibilityState] = createState(settingsService.cavaVisible.get());
 
         this.unsub = settingsService.cavaVisible.subscribe(() => this._setVisibilityState(settingsService.cavaVisible.get()));
 
@@ -124,21 +122,6 @@ class CavaClass {
             console.error("Não foi possível inicializar o Cava");
             this._values = createState<number[]>([])[0];
         }
-    }
-
-    public shouldCavaAppear(monitor: AstalHyprland.Monitor) {
-        return createComputed([this._visibilityState, hyprlandService.visibilityAccessor(monitor)],
-            (vs, va) => {
-                switch(vs) {
-                    case CavaVisiblity.DISABLED:
-                        return false;
-                    case CavaVisiblity.ALWAYS:
-                        return true;
-                    case CavaVisiblity.NO_CLIENTS:
-                        return va;
-                }
-            }
-        );
     }
 
     public get visibilityState() {

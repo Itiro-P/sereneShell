@@ -1,6 +1,5 @@
 import { Gdk, Gtk } from "ags/gtk4";
 import { onCleanup } from "ags";
-import { CavaVisiblity } from "../utils/CavaEnum";
 import settingsService from "../services/Settings";
 import wallpaperSelector from "./WallpaperSelector";
 
@@ -15,15 +14,9 @@ class ControlCenterClass {
         onCleanup(() => click.disconnect(handler));
     }
 
-    private formatCavaVisiblityText(i: CavaVisiblity) {
-        switch(i) {
-            case CavaVisiblity.ALWAYS:
-                return 'Cava sempre ativo';
-            case CavaVisiblity.DISABLED:
-                return 'Cava desativado'
-            case CavaVisiblity.NO_CLIENTS:
-                return 'Cava condicional'
-        }
+    private formatCavaVisiblityText(i: boolean) {
+        if(i) return 'Cava sempre ativo';
+        return 'Cava desativado';
     }
 
     private get ToggleVisibleComponents() {
@@ -39,7 +32,7 @@ class ControlCenterClass {
                 />
                 <label
                     cssClasses={["ToggleCava", "Option"]}
-                    $={self => this.setupButton(self, () => settingsService.toggleCavaVisibilityState())}
+                    $={self => this.setupButton(self, () => settingsService.setCavaVisible = !settingsService.cavaVisible.get())}
                     label={settingsService.cavaVisible.as(vs => this.formatCavaVisiblityText(vs))}
                     widthChars={30}
                 />

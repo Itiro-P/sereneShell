@@ -1,12 +1,10 @@
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app";
 import cava from "../modules/Cava";
-import hyprlandService from "../services/Hyprland";
 import { onCleanup } from "ags";
 
 export default function CavaOverlay({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
-    const hyprMonitor = hyprlandService.getHyprlandMonitor(gdkmonitor);
 
     return (
         <window
@@ -14,7 +12,7 @@ export default function CavaOverlay({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
             layer={Astal.Layer.BOTTOM}
             gdkmonitor={gdkmonitor}
             anchor={RIGHT | LEFT | BOTTOM}
-            visible={cava.shouldCavaAppear(hyprMonitor)}
+            visible={cava.visibilityState}
             application={app}
             $={(self) => onCleanup(() => self.destroy())}
         >
