@@ -4,8 +4,6 @@ import app from "ags/gtk4/app";
 import { createBinding, For, This } from "ags";
 import CavaOverlay from "./widget/CavaOverlay";
 import DTC from "./widget/DTC";
-import { Gtk } from "ags/gtk4";
-import GObject from "gi://GObject?version=2.0";
 import Cheatsheet from "./widget/Cheatsheet";
 
 function main() {

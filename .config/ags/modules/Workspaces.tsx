@@ -4,7 +4,7 @@ import hyprlandService from "../services/Hyprland";
 import { Accessor, createBinding, createComputed, For, onCleanup } from "ags";
 
 class WorkspacesClass {
-    private readonly maxWorkspaces: number = 5;
+    private readonly maxWorkspaces: number = 10;
     public constructor() {
 
     }

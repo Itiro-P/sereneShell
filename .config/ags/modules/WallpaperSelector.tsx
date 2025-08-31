@@ -6,20 +6,20 @@ import { Swww } from "../utils/Swww";
 import { Gdk, Gtk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 
-const path = `${GLib.get_home_dir()}/.config/hypr/configs/wallpapers`;
+const path = `${GLib.get_home_dir()}/.config/ags/wallpapers`;
 const pollTime = 240000;
 const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
 
 class WallpaperSelectorClass {
     private images: Accessor<string[]>;
     private setImages: Setter<string[]>;
-    private timerActive: Accessor<boolean>;
-    private setTimerActive: Setter<boolean>;
+    private _timerActive: Accessor<boolean>;
+    private _setTimerActive: Setter<boolean>;
     private polling: Accessor<boolean>;
 
     constructor() {
         [this.images, this.setImages] = createState([] as string[]);
-        [this.timerActive, this.setTimerActive] = createState(true);
+        [this._timerActive, this._setTimerActive] = createState(true);
         this.polling = createPoll(true, pollTime, (prev: boolean) => !prev);
         this.setImages(this.readImageFiles(path));
     }
@@ -56,11 +56,19 @@ class WallpaperSelectorClass {
         }
     }
 
+    public get timerActive() {
+        return this._timerActive;
+    }
+
+    public set setTimerActive(newState: boolean) {
+        if (this._timerActive.get() !== newState) this._setTimerActive(newState);
+    }
+
     public SelectorIndicator(gdkmonitor: Gdk.Monitor) {
         const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-        const handler = click.connect('pressed', () => this.setTimerActive(!this.timerActive.get()));
+        const handler = click.connect('pressed', () => this._setTimerActive(!this._timerActive.get()));
         const unsub = this.polling.subscribe(() => {
-            if (this.timerActive.get()) {
+            if (this._timerActive.get()) {
                 const connector = gdkmonitor.get_connector();
                 if(connector) {
                     const imgArray = this.images.get();
@@ -84,7 +92,7 @@ class WallpaperSelectorClass {
                 />
                 <label
                     cssClasses={["Option", "ToggleActive"]}
-                    label={this.timerActive.as(ta => `Estado: ${ta ? 'Ativo': 'Desativado'}`)} $={self => self.add_controller(click) }
+                    label={this._timerActive.as(ta => `Estado: ${ta ? 'Ativo': 'Desativado'}`)} $={self => self.add_controller(click) }
                 />
             </box>
         );

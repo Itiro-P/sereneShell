@@ -12,7 +12,7 @@ depends=(
     fastfetch
     vesktop
     kitty
-    anyrun-git
+    fuzzel
     wlogout
     nwg-displays
     nwg-dock-hyprland

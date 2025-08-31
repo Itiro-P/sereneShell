@@ -24,8 +24,8 @@ class Animations {
         this._setAnimationsEnabled(this.animationState);
     }
 
-    public toggleAnimations() {
-        const newState = !this.animationState;
+    public toggleAnimations(val ?: boolean) {
+        const newState = val || !this.animationState;
 
         try {
             exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);

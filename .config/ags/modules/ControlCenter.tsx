@@ -4,10 +4,12 @@ import { onCleanup } from "ags";
 import dateTime from "./DateTime";
 import cava, { CavaVisiblity } from "./Cava";
 import wallpaperSelector from "./WallpaperSelector";
+import GLib from "gi://GLib?version=2.0";
+import { readFile, writeFile } from "ags/file";
+import settingsService from "../services/Settings";
 
 class ControlCenterClass {
     public constructor() {
-
     }
 
     private setupButton(self: Gtk.Widget, callback: () => void) {
@@ -29,6 +31,7 @@ class ControlCenterClass {
     }
 
     private get ToggleVisibleComponents() {
+        onCleanup(() => settingsService.saveOptions());
         return (
             <box cssClasses={["ToggleVisibleComponents"]} orientation={Gtk.Orientation.VERTICAL}>
                 <label cssClasses={["Subtitle"]} label={'Animações e componentes'} />

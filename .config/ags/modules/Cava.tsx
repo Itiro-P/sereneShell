@@ -160,6 +160,11 @@ class CavaClass {
         return this._visibilityState;
     }
 
+    public set setVisibilityState(newState: CavaVisiblity) {
+        if (this._visibilityState.get() !== newState) this._setVisibilityState(newState);
+    }
+
+
 
 
     public Cava(cssClasses: string[]) {

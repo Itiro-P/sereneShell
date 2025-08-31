@@ -31,6 +31,10 @@ class DateTimeClass {
         return this._isDTCvisible;
     }
 
+    public set setIsDTCvisible(newState: boolean) {
+        this._setIsDTCvisible(newState);
+    }
+
     public shouldDTCAppear(monitor: AstalHyprland.Monitor) {
         return createComputed(
             [this._isDTCvisible, hyprlandService.visibilityAccessor(monitor)],
