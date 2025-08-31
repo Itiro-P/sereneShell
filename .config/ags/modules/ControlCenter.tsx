@@ -1,12 +1,8 @@
 import { Gdk, Gtk } from "ags/gtk4";
-import animationService from "../services/Animations";
 import { onCleanup } from "ags";
-import dateTime from "./DateTime";
-import cava, { CavaVisiblity } from "./Cava";
-import wallpaperSelector from "./WallpaperSelector";
-import GLib from "gi://GLib?version=2.0";
-import { readFile, writeFile } from "ags/file";
+import { CavaVisiblity } from "../utils/CavaEnum";
 import settingsService from "../services/Settings";
+import wallpaperSelector from "./WallpaperSelector";
 
 class ControlCenterClass {
     public constructor() {
@@ -37,20 +33,14 @@ class ControlCenterClass {
                 <label cssClasses={["Subtitle"]} label={'Animações e componentes'} />
                 <label
                     cssClasses={["ToggleAnimations", "Option"]}
-                    $={self => this.setupButton(self, () => animationService.toggleAnimations())}
-                    label={animationService.animationsEnabled.as(ae => ae ? "Desativar animações" : "Ativar animações")}
-                    widthChars={30}
-                />
-                <label
-                    cssClasses={["ToggleDateTimeCalendar", "Option"]}
-                    $={self => this.setupButton(self, () => dateTime.toggleIsDTCvisible())}
-                    label={dateTime.isDTCvisible.as(idv => idv ? "Ocultar Calendário, data e hora" : "Mostrar Calendário, data e hora")}
+                    $={self => this.setupButton(self, () => settingsService.setAnimationsEnabled = !settingsService.animationsEnabled.get())}
+                    label={settingsService.animationsEnabled.as(ae => ae ? "Desativar animações" : "Ativar animações")}
                     widthChars={30}
                 />
                 <label
                     cssClasses={["ToggleCava", "Option"]}
-                    $={self => this.setupButton(self, () => cava.toggleVisibilityState())}
-                    label={cava.visibilityState.as(vs => this.formatCavaVisiblityText(vs))}
+                    $={self => this.setupButton(self, () => settingsService.toggleCavaVisibilityState())}
+                    label={settingsService.cavaVisible.as(vs => this.formatCavaVisiblityText(vs))}
                     widthChars={30}
                 />
             </box>

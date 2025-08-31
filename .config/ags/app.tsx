@@ -3,7 +3,6 @@ import Bar from "./widget/Bar";
 import app from "ags/gtk4/app";
 import { createBinding, For, This } from "ags";
 import CavaOverlay from "./widget/CavaOverlay";
-import DTC from "./widget/DTC";
 import Cheatsheet from "./widget/Cheatsheet";
 
 function main() {
@@ -14,7 +13,6 @@ function main() {
                 <This this={app}>
                     <Bar gdkmonitor={monitor} />
                     <CavaOverlay gdkmonitor={monitor} />
-                    <DTC gdkmonitor={monitor} />
                     <Cheatsheet gdkmonitor={monitor} />
                 </This>
             )}

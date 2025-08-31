@@ -38,9 +38,6 @@
             .ToggleAnimations {
                 @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
             }
-            .ToggleDateTimeCalendar {
-                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$peach);
-            }
             .ToggleCava {
                 @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$lavender);
             }

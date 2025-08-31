@@ -4,13 +4,13 @@
 @use 'common/Transitions';
 
 .DateTimeCalendar {
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    padding: 5px;
-    background-color: rgba(Colors.$crust, 0.6);
+    @extend %widget;
+    font-weight: bold;
+    @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+
 
     .Calendar {
+        * { color: Colors.$text; }
         header {
             padding: 4px;
             border-radius: 6px;
@@ -46,20 +46,4 @@
             }
         }
     }
-
-    .DateTime {
-        margin: 5px;
-        .Time {
-            font-size: Font.$font-size-large * 8;
-            font-weight: bold;
-        }
-        .Date {
-            font-size: Font.$font-size-normal * 2;
-        }
-    }
-}
-
-.Time {
-    @extend %widget;
-    font-weight: bold;
 }

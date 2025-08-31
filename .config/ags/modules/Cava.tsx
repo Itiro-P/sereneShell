@@ -1,10 +1,12 @@
-import { Gdk, Gtk } from "ags/gtk4";
+import settingsService from "../services/Settings";
+import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
 import { Accessor, createBinding, createComputed, createState, onCleanup, Setter } from "ags";
 import hyprlandService from "../services/Hyprland";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import { CavaVisiblity } from "../utils/CavaEnum";
 
 const CavaConfig = {
     autosens: true,
@@ -15,12 +17,6 @@ const CavaConfig = {
     sensitivity: 0.75,
     stereo: false,
 };
-
-export enum CavaVisiblity {
-    ALWAYS,
-    NO_CLIENTS,
-    DISABLED
-}
 
 class CavaWidget extends Gtk.DrawingArea {
     private valuesAccessor: Accessor<number[]>;
@@ -94,12 +90,17 @@ const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 class CavaClass {
     private default: AstalCava.Cava | null;
     private _values: Accessor<number[]>;
+    private static widgetCount: number = 0;
 
     private _visibilityState: Accessor<CavaVisiblity>;
     private _setVisibilityState: Setter<CavaVisiblity>;
+    private unsub: () => void;
 
     public constructor() {
-        [this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(CavaVisiblity.ALWAYS);
+        //[this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(CavaVisiblity.ALWAYS);
+        [this._visibilityState, this._setVisibilityState] = createState<CavaVisiblity>(settingsService.cavaVisible.get());
+
+        this.unsub = settingsService.cavaVisible.subscribe(() => this._setVisibilityState(settingsService.cavaVisible.get()));
 
         this.default = AstalCava.get_default();
         if (this.default) {
@@ -140,36 +141,23 @@ class CavaClass {
         );
     }
 
-    public toggleVisibilityState() {
-        switch(this._visibilityState.get()) {
-            case CavaVisiblity.ALWAYS:
-                this._setVisibilityState(CavaVisiblity.NO_CLIENTS);
-                break;
-            case CavaVisiblity.NO_CLIENTS:
-                this._setVisibilityState(CavaVisiblity.DISABLED);
-                break;
-            case CavaVisiblity.DISABLED:
-                this._setVisibilityState(CavaVisiblity.ALWAYS);
-                break;
-            default:
-                this._setVisibilityState(CavaVisiblity.DISABLED);
-        }
-    }
-
     public get visibilityState() {
         return this._visibilityState;
     }
 
-    public set setVisibilityState(newState: CavaVisiblity) {
-        if (this._visibilityState.get() !== newState) this._setVisibilityState(newState);
-    }
-
-
-
-
     public Cava(cssClasses: string[]) {
         return (
-            <box cssClasses={[...cssClasses, "Cava"]} overflow={Gtk.Overflow.HIDDEN}>
+            <box
+                cssClasses={[...cssClasses, "Cava"]}
+                overflow={Gtk.Overflow.HIDDEN}
+                $={() => CavaClass.widgetCount += 1}
+                onDestroy={
+                    () => {
+                        CavaClass.widgetCount -= 1
+                        if (CavaClass.widgetCount <= 0) this.unsub();
+                    }
+                }
+            >
                 {new _cava(this._values)}
             </box>
         );

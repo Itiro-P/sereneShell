@@ -1,9 +1,7 @@
 import { Gtk } from "ags/gtk4";
-import hyprlandService from "../services/Hyprland";
-import { Accessor, createComputed, createState, Setter } from "ags";
+import { Accessor } from "ags";
 import GLib from "gi://GLib?version=2.0";
 import { createPoll } from "ags/time";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
 
 const pollTime = 60000;
 
@@ -11,13 +9,8 @@ class DateTimeClass {
     private formatterTime = "%H:%M";
     private formatterDate = "Hoje é: %A, %d de %B de %Y";
     private _dateTime: Accessor<{ date: string, time: string }>;
-    private _isDTCvisible: Accessor<boolean>;
-    private _setIsDTCvisible: Setter<boolean>;
-
 
     public constructor() {
-        [this._isDTCvisible, this._setIsDTCvisible] = createState(true);
-
         this._dateTime = createPoll({ date: "", time: "" }, pollTime, () => {
             const now = GLib.DateTime.new_now_local();
             return {
@@ -27,40 +20,19 @@ class DateTimeClass {
         });
     }
 
-    public get isDTCvisible() {
-        return this._isDTCvisible;
-    }
-
-    public set setIsDTCvisible(newState: boolean) {
-        this._setIsDTCvisible(newState);
-    }
-
-    public shouldDTCAppear(monitor: AstalHyprland.Monitor) {
-        return createComputed(
-            [this._isDTCvisible, hyprlandService.visibilityAccessor(monitor)],
-            (isDTCvisible, visibility) => isDTCvisible && visibility
-        );
-    }
-
-    public toggleIsDTCvisible() {
-        this._setIsDTCvisible(!this._isDTCvisible.get());
-    }
-
-    public get Time() {
+    private get DateTimePopover() {
         return (
-            <label cssClasses={["Time"]} label={this._dateTime.as(t => ` ${t.time}`)} tooltipMarkup={this._dateTime.as(d => `󰃭 ${d.date}`)} />
-        );
-    }
-
-    public get DateTimeCalendar() {
-        return (
-            <box cssClasses={["DateTimeCalendar"]}>
+            <Gtk.Popover>
                 <Gtk.Calendar cssClasses={["Calendar"]} />
-                <box cssClasses={["DateTime"]} orientation={Gtk.Orientation.VERTICAL}>
-                    <label cssClasses={["Time"]} label={this._dateTime.as(t => t.time)} />
-                    <label cssClasses={["Date"]} label={this._dateTime.as(d => d.date)} />
-                </box>
-            </box>
+            </Gtk.Popover>
+        );
+    }
+
+    public get DateTime() {
+        return (
+            <menubutton cssClasses={["DateTimeCalendar"]} popover={this.DateTimePopover as Gtk.Popover}>
+                <label cssClasses={["Time"]} label={this._dateTime.as(t => ` ${t.time}`)} tooltipMarkup={this._dateTime.as(d => `󰃭 ${d.date}`)} />
+            </menubutton>
         );
     }
 }

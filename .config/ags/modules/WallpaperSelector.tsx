@@ -5,8 +5,9 @@ import GLib from "gi://GLib?version=2.0";
 import { Swww } from "../utils/Swww";
 import { Gdk, Gtk } from "ags/gtk4";
 import { execAsync } from "ags/process";
+import settingsService from "../services/Settings";
 
-const path = `${GLib.get_home_dir()}/.config/ags/wallpapers`;
+const path = GLib.get_home_dir() + '/.config/ags/wallpapers';
 const pollTime = 240000;
 const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
 
@@ -16,11 +17,15 @@ class WallpaperSelectorClass {
     private _timerActive: Accessor<boolean>;
     private _setTimerActive: Setter<boolean>;
     private polling: Accessor<boolean>;
+    private static widgetCount: number = 0;
+    private unsub: () => void;
 
     constructor() {
         [this.images, this.setImages] = createState([] as string[]);
-        [this._timerActive, this._setTimerActive] = createState(true);
+        [this._timerActive, this._setTimerActive] = createState(settingsService.wallpaperSelectorActive.get());
         this.polling = createPoll(true, pollTime, (prev: boolean) => !prev);
+
+        this.unsub = settingsService.wallpaperSelectorActive.subscribe(() => this._setTimerActive(settingsService.wallpaperSelectorActive.get()));
         this.setImages(this.readImageFiles(path));
     }
 
@@ -60,10 +65,6 @@ class WallpaperSelectorClass {
         return this._timerActive;
     }
 
-    public set setTimerActive(newState: boolean) {
-        if (this._timerActive.get() !== newState) this._setTimerActive(newState);
-    }
-
     public SelectorIndicator(gdkmonitor: Gdk.Monitor) {
         const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
         const handler = click.connect('pressed', () => this._setTimerActive(!this._timerActive.get()));
@@ -79,12 +80,19 @@ class WallpaperSelectorClass {
                 }
             }
         });
-
-        onCleanup(() => { click.disconnect(handler); unsub() });
         return (
             <box
                 cssClasses={['SelectorIndicator']}
                 orientation={Gtk.Orientation.VERTICAL}
+                $={() => WallpaperSelectorClass.widgetCount += 1}
+                onDestroy={
+                    () => {
+                        WallpaperSelectorClass.widgetCount -= 1
+                        if (WallpaperSelectorClass.widgetCount <= 0) this.unsub();
+                        click.disconnect(handler);
+                        unsub();
+                    }
+                }
             >
                 <label
                     cssClasses={["Subtitle"]}
