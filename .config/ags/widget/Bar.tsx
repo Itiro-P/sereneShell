@@ -4,15 +4,15 @@ import systemTray from "../modules/SystemTray";
 import media from "../modules/Media";
 import app from "ags/gtk4/app";
 import dateTime from "../modules/DateTime";
-import hyprlandService from "../services/Hyprland";
 import audioControl from "../modules/AudioControl";
 import controlCenter from "../modules/ControlCenter";
 import workspaces from "../modules/Workspaces";
 import { onCleanup } from "ags";
+import compositorManager from "../services/CompositorManager";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
-    const hyprMonitor = hyprlandService.getHyprlandMonitor(gdkmonitor);
+    const compMonitor = compositorManager.getCompositorMonitor(gdkmonitor);
 
     return (
         <window
@@ -32,7 +32,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                 </box>
                 <box halign={Gtk.Align.CENTER}>
                     {media.Media}
-                    {workspaces.Workspaces({ monitor: hyprMonitor })}
+                    {workspaces.Workspaces({ monitor: compMonitor })}
                 </box>
                 <box halign={Gtk.Align.END}>
                     {dateTime.DateTime}

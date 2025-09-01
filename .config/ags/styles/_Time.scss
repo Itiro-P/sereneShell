@@ -15,8 +15,8 @@
             color: Colors.$text;
         }
 
-        button, label.day-number, label.other-month, label.today {
-            border-radius: 50%;
+        label.day-number, label.other-month, label.today {
+            border-radius: 10%;
         }
 
         header {
@@ -24,6 +24,7 @@
         }
 
         button {
+            border-radius: 50%;
             @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
         }
 

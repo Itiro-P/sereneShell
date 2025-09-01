@@ -3,9 +3,7 @@ import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
-import { Accessor, createBinding, createComputed, createState, onCleanup, Setter } from "ags";
-import hyprlandService from "../services/Hyprland";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import { Accessor, createBinding, createState, onCleanup, Setter } from "ags";
 
 const CavaConfig = {
     autosens: true,
