@@ -46,8 +46,8 @@ class Hyprland implements ICompositor {
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        const hyprlandMonitors = this.default.get_monitors();
-        return hyprlandMonitors.find(hyprMonitor => this.areMonitorsEqual(monitor, hyprMonitor)) || hyprlandMonitors[0];
+        const compMonitors = this.default.get_monitors();
+        return compMonitors.find(compMonitor => this.areMonitorsEqual(monitor, compMonitor))!;
     }
 }
 
@@ -83,8 +83,8 @@ class Niri implements ICompositor {
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        const hyprlandMonitors = this.default.get_monitors();
-        return hyprlandMonitors.find(hyprMonitor => this.areMonitorsEqual(monitor, hyprMonitor)) || hyprlandMonitors[0];
+        const compMonitors = this.default.get_monitors();
+        return compMonitors.find(compMonitor => this.areMonitorsEqual(monitor, compMonitor))!;
     }
 }
 
@@ -116,7 +116,7 @@ class CompositorManagerClass {
     }
 
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
-        return this.service.areMonitorsEqual
+        return this.service.areMonitorsEqual(monitor, compMonitor);
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {

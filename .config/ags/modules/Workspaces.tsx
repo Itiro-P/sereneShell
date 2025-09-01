@@ -1,7 +1,6 @@
 import { Gtk } from "ags/gtk4";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import compositorManager, { CompositorMonitor, CompositorWorkspace } from "../services/CompositorManager";
-import { Accessor, createBinding, createComputed, For, onCleanup } from "ags";
+import { Accessor, For } from "ags";
 
 class WorkspacesClass {
     private readonly maxWorkspaces: number = 10;
@@ -9,36 +8,14 @@ class WorkspacesClass {
 
     }
 
-    private Workspace({ workspace, isInPopover = false }: { workspace: CompositorWorkspace, isInPopover: boolean }) {
-        const click = new Gtk.GestureClick();
-        const handler_id = click.connect("pressed", () => { if(compositorManager.focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() });
-        onCleanup(() => { if (handler_id) click.disconnect(handler_id) });
-
+    private Workspace({ workspace }: { workspace: CompositorWorkspace }) {
         return (
-            <label
-                $={self => self.add_controller(click)}
+            <button
                 cssClasses={compositorManager.focusedWorkspace.as(focused => ["Workspace", workspace.get_id() === focused.get_id() ? "Active" : "Inactive"])}
-                label={`${workspace.get_id()}`} widthChars={3} maxWidthChars={3} halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}
-            />
-        );
-    }
-
-    private MainWorkspace(workspace: CompositorWorkspace) {
-        const click = new Gtk.GestureClick();
-        const handler = click.connect("pressed", () => {
-            if (workspace.get_id() !== compositorManager.focusedWorkspace.get().get_id()) workspace.focus();
-        });
-
-        onCleanup(() => { if (click) click.disconnect(handler) });
-        return (
-            <label
-                $={(self) => self.add_controller(click)}
-                cssClasses={createComputed([compositorManager.focusedWorkspace, createBinding(workspace, "id")], (focused, id) => ["Workspace", id === focused?.get_id() ? "Active" : "Inactive"])}
-                label={workspace.get_id().toString()}
-                widthChars={1}
-                maxWidthChars={1}
+                onClicked={() => { if(compositorManager.focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() }}
                 halign={Gtk.Align.CENTER}
                 valign={Gtk.Align.CENTER}
+                label={workspace.get_id().toString()}
             />
         );
     }
@@ -47,7 +24,7 @@ class WorkspacesClass {
         return (
             <popover cssClasses={["WorkspacePopover"]}>
                 <Gtk.FlowBox maxChildrenPerLine={4}>
-                    <For each={theRest} children={item => this.Workspace({ workspace: item, isInPopover: true })} />
+                    <For each={theRest} children={item => this.Workspace({ workspace: item })} />
                 </Gtk.FlowBox>
             </popover>
         );
@@ -55,7 +32,11 @@ class WorkspacesClass {
 
     private MoreWorkspacesButton({ theRest }: { theRest: Accessor<CompositorWorkspace[]> }) {
         return (
-            <menubutton cssClasses={["MoreWorkspacesButton"]} sensitive={theRest.as(tr => tr.length > 0)} popover={this.WorkspacePopover({ theRest: theRest }) as Gtk.Popover}>
+            <menubutton
+                cssClasses={["MoreWorkspacesButton"]}
+                sensitive={theRest.as(tr => tr.length > 0)}
+                popover={this.WorkspacePopover({ theRest: theRest }) as Gtk.Popover}
+            >
                 <label label={'󰕏'} />
             </menubutton>
         );
@@ -73,7 +54,7 @@ class WorkspacesClass {
         return (
             <box cssClasses={["Workspaces"]}>
                 <box>
-                    <For each={monitorWorkspaces.as(mw => mw.main)} children={(w: CompositorWorkspace) => this.MainWorkspace(w)} />
+                    <For each={monitorWorkspaces.as(mw => mw.main)} children={(w: CompositorWorkspace) => this.Workspace({ workspace: w })} />
                 </box>
                 {this.MoreWorkspacesButton({ theRest: monitorWorkspaces.as(({ theRest }) => theRest) })}
             </box>

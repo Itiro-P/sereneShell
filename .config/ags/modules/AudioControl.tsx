@@ -29,28 +29,21 @@ class AudioControlClass {
                 {edp => {
                     const icon = createBinding(edp, 'volumeIcon');
                     const volume = createBinding(edp, 'volume').as(a => `${Math.round(a * 100)}%`);
-                    const leftClick = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                    const leftHandler = leftClick.connect('pressed', () => edp.set_mute(!edp.get_mute()));
 
                     const scroll = new Gtk.EventControllerScroll({ flags: Gtk.EventControllerScrollFlags.VERTICAL });
                     const scrollHandler = scroll.connect('scroll', (controler: Gtk.EventControllerScroll, dx: number, dy: number) => this.handleScroll(edp, dy));
 
-                    onCleanup(() => {
-                        leftClick.disconnect(leftHandler);
-                        scroll.disconnect(scrollHandler);
-                    });
+                    onCleanup(() => scroll.disconnect(scrollHandler));
                     return (
-                        <box cssClasses={["Endpoint"]}
-                            $={
-                                (self) => {
-                                    self.add_controller(leftClick);
-                                    self.add_controller(scroll);
-                                }
-                            }
+                        <button cssClasses={["Endpoint"]}
+                            $={(self) => self.add_controller(scroll)}
+                            onClicked={() => edp.set_mute(!edp.get_mute())}
                         >
-                            <image cssClasses={["Icon"]} iconName={icon} />
-                            <label cssClasses={["Volume"]} label={volume} widthChars={4} />
-                        </box>
+                            <box>
+                                <image cssClasses={["Icon"]} iconName={icon} />
+                                <label cssClasses={["Volume"]} label={volume} widthChars={4} />
+                            </box>
+                        </button>
                     );
                 }}
             </With>
@@ -65,20 +58,15 @@ class AudioControlClass {
                     {edp => {
                         const icon = createBinding(edp, 'volumeIcon');
                         const volume = createBinding(edp, 'volume');
-                        const toggleMuteClick = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                        const toggleMuteHandler = toggleMuteClick.connect('pressed', () => edp.set_mute(!edp.get_mute()));
 
                         const scroll = new Gtk.EventControllerScroll({ flags: Gtk.EventControllerScrollFlags.VERTICAL });
                         const scrollHandler = scroll.connect('scroll', (controler: Gtk.EventControllerScroll, dx: number, dy: number) => this.handleScroll(edp, dy));
 
-                        onCleanup(() => {
-                            toggleMuteClick.disconnect(toggleMuteHandler);
-                            scroll.disconnect(scrollHandler);
-                        });
+                        onCleanup(() => scroll.disconnect(scrollHandler));
 
                         return (
                             <box cssClasses={["MixerEntry"]}>
-                                <image cssClasses={["Icon"]} iconName={icon} $={self => self.add_controller(toggleMuteClick)} />
+                                <button cssClasses={["Icon"]} iconName={icon} onClicked={() => edp.set_mute(!edp.get_mute())} />
                                 <slider cssClasses={["Slider"]} $={self => self.add_controller(scroll)} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} />
                             </box>
                         );

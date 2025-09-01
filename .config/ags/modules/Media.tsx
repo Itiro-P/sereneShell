@@ -138,42 +138,21 @@ class MediaClass {
                                             </box>
                                             <box cssClasses={["LowerPart"]} orientation={Gtk.Orientation.VERTICAL}>
                                                 <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
-                                                    <box cssClasses={["Previous"]} sensitive={player.active}
-                                                        $={
-                                                            (self) => {
-                                                                const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                                const handler = click.connect("pressed", player.previous);
-                                                                self.add_controller(click);
-                                                                onCleanup(() =>{click.disconnect(handler)});
-                                                            }
-                                                        }
-                                                    >
-                                                        <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.previous} />
-                                                    </box>
-                                                    <box cssClasses={["PlayPause"]} sensitive={player.active}
-                                                        $={
-                                                            (self) => {
-                                                                const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                                const handler = click.connect("pressed", player.playPause);
-                                                                self.add_controller(click);
-                                                                onCleanup(() =>{click.disconnect(handler)});
-                                                            }
-                                                        }
-                                                    >
-                                                        <image iconSize={Gtk.IconSize.LARGE} iconName={player.statusIcon} />
-                                                    </box>
-                                                    <box cssClasses={["Next"]} sensitive={player.active}
-                                                        $={
-                                                            (self) => {
-                                                                const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-                                                                const handler = click.connect("pressed", player.next);
-                                                                self.add_controller(click);
-                                                                onCleanup(() =>{click.disconnect(handler)});
-                                                            }
-                                                        }
-                                                    >
-                                                        <image iconSize={Gtk.IconSize.LARGE} iconName={PlayerButtonIcons.next} />
-                                                    </box>
+                                                    <button
+                                                        cssClasses={["Previous"]}
+                                                        iconName={PlayerButtonIcons.previous}
+                                                        onClicked={player.previous}
+                                                    />
+                                                    <button
+                                                        cssClasses={["PlayPause"]}
+                                                        iconName={player.statusIcon}
+                                                        onClicked={player.playPause}
+                                                    />
+                                                    <button
+                                                        cssClasses={["Next"]}
+                                                        iconName={PlayerButtonIcons.next}
+                                                        onClicked={player.next}
+                                                    />
                                                 </box>
                                             </box>
                                         </box>

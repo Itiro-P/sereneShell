@@ -66,8 +66,6 @@ class WallpaperSelectorClass {
     }
 
     public SelectorIndicator(gdkmonitor: Gdk.Monitor) {
-        const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY });
-        const handler = click.connect('pressed', () => this._setTimerActive(!this._timerActive.get()));
         const unsub = this.polling.subscribe(() => {
             if (this._timerActive.get()) {
                 const connector = gdkmonitor.get_connector();
@@ -89,7 +87,6 @@ class WallpaperSelectorClass {
                     () => {
                         WallpaperSelectorClass.widgetCount -= 1
                         if (WallpaperSelectorClass.widgetCount <= 0) this.unsub();
-                        click.disconnect(handler);
                         unsub();
                     }
                 }
@@ -98,9 +95,10 @@ class WallpaperSelectorClass {
                     cssClasses={["Subtitle"]}
                     label={'Seletor de Papéis de Parede'}
                 />
-                <label
+                <button
                     cssClasses={["Option", "ToggleActive"]}
-                    label={this._timerActive.as(ta => `Estado: ${ta ? 'Ativo': 'Desativado'}`)} $={self => self.add_controller(click) }
+                    label={this._timerActive.as(ta => `Estado: ${ta ? 'Ativo': 'Desativado'}`)}
+                    onClicked={() => this._setTimerActive(!this._timerActive.get())}
                 />
             </box>
         );

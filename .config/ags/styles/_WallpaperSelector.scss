@@ -14,6 +14,6 @@
     }
 
     .ToggleActive {
-        @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
+        @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
     }
 }

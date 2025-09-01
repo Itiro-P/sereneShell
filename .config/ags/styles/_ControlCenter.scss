@@ -35,30 +35,13 @@
                 margin: 2px;
                 border-radius: 10px;
             }
-            .ToggleAnimations {
-                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
-            }
-            .ToggleCava {
-                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$lavender);
-            }
-        }
-        .WallpaperSystem {
-            margin: 0px 4px;
-            .Wallpapers {
-                background-color: rgba(Colors.$surface1, 0.8);
-                border-radius: 10px;
-                padding: 10px;
 
-                .Wallpaper {
-                    opacity: 0.8;
-                    border: 2px solid Colors.$lavender;
-                    border-radius: 10px;
-                    transition: all 0.3s ease;
-                    &:hover {
-                        opacity: 1;
-                        border-color: Colors.$blue;
-                    }
-                }
+            .ToggleAnimations {
+                @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+            }
+
+            .ToggleCava {
+                @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$lavender);
             }
         }
     }
