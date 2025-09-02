@@ -10,10 +10,15 @@
     .Option {
         padding: 2px;
         margin: 2px;
-        border-radius: 10px;
-    }
-
-    .ToggleActive {
-        @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+        switch {
+            padding: 2px;
+            margin: 2px;
+            background-color: Colors.$base;
+            image, slider {
+                background-color: Colors.$blue;
+                min-width: 20px;
+                min-height: 5px;
+            }
+        }
     }
 }

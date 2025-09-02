@@ -1,9 +1,7 @@
 @use 'common/Colors';
 @use 'common/Font';
 @use 'Time';
-@use 'MemoryUsage';
-@use 'Battery';
-@use 'CpuUsage';
+@use 'SystemMonitor';
 @use 'AudioControl';
 @use 'Workspaces';
 @use 'TrayItem';

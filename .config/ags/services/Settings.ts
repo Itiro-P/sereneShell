@@ -66,7 +66,7 @@ class SettingsClass {
     }
 
     public set setAnimationsEnabled(newState: boolean) {
-        if(this._animationsEnabled.get() !== newState) this._setAnimationsEnabled(newState);
+        if (this._animationsEnabled.get() !== newState) this._setAnimationsEnabled(newState);
     }
 
     public set setCavaVisible(newState: boolean) {

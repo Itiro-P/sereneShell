@@ -1,12 +1,18 @@
 import AstalBattery from "gi://AstalBattery"
 import GTop from "gi://GTop?version=2.0";
 import { formatTimeVerbose } from "../services/TimeFormatter";
-import { Accessor, createBinding, createComputed } from "ags";
+import { Accessor, createBinding, createComputed, createState, onCleanup } from "ags";
 import { createPoll } from "ags/time";
+import { Gtk } from "ags/gtk4";
 
 type Metrics = {
     cpu: number,
     mem: number
+}
+
+type IndicatorWidgets = {
+    icon: Gtk.Widget,
+    label: Gtk.Widget
 }
 
 const pollTime = 3000;
@@ -71,21 +77,58 @@ class SystemMonitorClass {
         });
     }
 
+    private indicator(widgets: IndicatorWidgets, cssClasses?: string[] | Accessor<string[]>) {
+        const [hoveredChild, setHoveredChild]= createState(widgets.icon);
+        const hover = new Gtk.EventControllerMotion;
+        const onEnter = hover.connect('enter', () => setHoveredChild(widgets.label));
+        const onLeave = hover.connect('leave', () => setHoveredChild(widgets.icon));
+
+        onCleanup(() => {
+            hover.disconnect(onEnter);
+            hover.disconnect(onLeave);
+        });
+
+        return (
+            <box $={self => self.add_controller(hover)}>
+                <stack
+                    cssClasses={cssClasses}
+                    visibleChild={hoveredChild}
+                    transitionType={Gtk.StackTransitionType.CROSSFADE}
+                    transitionDuration={200}
+                >
+                    {widgets.icon}
+                    {widgets.label}
+                </stack>
+            </box>
+        );
+    }
+
     public get SystemMonitor() {
         return (
             <box cssClasses={["SystemMonitor"]}>
-                <box cssClasses={["CpuUsage"]}>
-                    <label cssClasses={['Icon']} label={''} />
-                    <label cssClasses={['Label']} label={this._metrics.as(m => `${m.cpu}%`)} widthChars={4} />
-                </box>
-                <box cssClasses={["MemoryUsage"]}>
-                    <label cssClasses={['Icon']} label={'󰘚'} />
-                    <label cssClasses={['Label']} label={this._metrics.as(m => `${m.mem}%`)} widthChars={4} />
-                </box>
-                <box cssClasses={this.batteryCritical} tooltipText={this.batteryLifeLabel}>
-                    <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} />
-                    <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} />
-                </box>
+                {this.indicator(
+                    {
+                        icon: <label cssClasses={['Icon']} label={''} /> as Gtk.Widget,
+                        label: <label cssClasses={['Label']} label={this._metrics.as(m => `${m.cpu}%`)} widthChars={4} />  as Gtk.Widget
+                    },
+                    ["CpuUsage"]
+                )}
+
+                {this.indicator(
+                    {
+                        icon: <label cssClasses={['Icon']} label={'󰘚'} />  as Gtk.Widget,
+                        label: <label cssClasses={['Label']} label={this._metrics.as(m => `${m.mem}%`)} widthChars={4} />  as Gtk.Widget
+                    },
+                    ["MemoryUsage"]
+                )}
+
+                {this.indicator(
+                    {
+                        icon: <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} /> as Gtk.Widget,
+                        label: <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} widthChars={4} />  as Gtk.Widget
+                    },
+                    this.batteryCritical
+                )}
             </box>
         );
     }

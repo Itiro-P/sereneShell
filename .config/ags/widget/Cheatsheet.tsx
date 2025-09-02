@@ -18,9 +18,19 @@ export default function Cheatsheet({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
             name='Cheatsheet'
             layer={Astal.Layer.OVERLAY}
             gdkmonitor={gdkmonitor}
+            keymode={Astal.Keymode.ON_DEMAND}
             application={app}
             $={(self) => onCleanup(() => self.destroy())}
         >
+            <Gtk.EventControllerKey onKeyPressed={({ widget }, keyval: number) => {
+                switch(keyval) {
+                    case Gdk.KEY_Escape:
+                        widget.hide();
+                        break;
+                    default:
+
+                }}}
+            />
             <box cssClasses={['Cheatsheet']} orientation={Gtk.Orientation.VERTICAL}>
                 <label cssClasses={['Title']} label={'Cheatsheet'} />
                 <box cssClasses={['Half']} homogeneous>

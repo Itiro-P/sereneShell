@@ -15,17 +15,12 @@ class WallpaperSelectorClass {
     private images: Accessor<string[]>;
     private setImages: Setter<string[]>;
     private _timerActive: Accessor<boolean>;
-    private _setTimerActive: Setter<boolean>;
     private polling: Accessor<boolean>;
-    private static widgetCount: number = 0;
-    private unsub: () => void;
 
     constructor() {
         [this.images, this.setImages] = createState([] as string[]);
-        [this._timerActive, this._setTimerActive] = createState(settingsService.wallpaperSelectorActive.get());
+        this._timerActive = settingsService.wallpaperSelectorActive;
         this.polling = createPoll(true, pollTime, (prev: boolean) => !prev);
-
-        this.unsub = settingsService.wallpaperSelectorActive.subscribe(() => this._setTimerActive(settingsService.wallpaperSelectorActive.get()));
         this.setImages(this.readImageFiles(path));
     }
 
@@ -78,28 +73,17 @@ class WallpaperSelectorClass {
                 }
             }
         });
+        onCleanup(() => unsub());
         return (
-            <box
-                cssClasses={['SelectorIndicator']}
-                orientation={Gtk.Orientation.VERTICAL}
-                $={() => WallpaperSelectorClass.widgetCount += 1}
-                onDestroy={
-                    () => {
-                        WallpaperSelectorClass.widgetCount -= 1
-                        if (WallpaperSelectorClass.widgetCount <= 0) this.unsub();
-                        unsub();
-                    }
-                }
-            >
+            <box cssClasses={['SelectorIndicator']} orientation={Gtk.Orientation.VERTICAL}>
                 <label
                     cssClasses={["Subtitle"]}
                     label={'Seletor de Papéis de Parede'}
                 />
-                <button
-                    cssClasses={["Option", "ToggleActive"]}
-                    label={this._timerActive.as(ta => `Estado: ${ta ? 'Ativo': 'Desativado'}`)}
-                    onClicked={() => this._setTimerActive(!this._timerActive.get())}
-                />
+                <box cssClasses={["ToggleActive", "Option"]}>
+                    <label label={"Seletor Ativo? "} halign={Gtk.Align.START} />
+                    <Gtk.Switch active={this._timerActive} onStateSet={(src, val) => settingsService.setWallpaperSelectorActive = val} />
+                </box>
             </box>
         );
     }

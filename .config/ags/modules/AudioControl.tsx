@@ -22,7 +22,7 @@ class AudioControlClass {
         edp.set_volume(Math.min(newVolume, 1));
     }
 
-    private Endpoint({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) {
+    private Endpoint(endpoint: Accessor<Wp.Endpoint>) {
         return (
             <box>
             <With value={endpoint}>
@@ -51,7 +51,7 @@ class AudioControlClass {
         );
     }
 
-    private MixerEntry({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) {
+    private MixerEntry(endpoint: Accessor<Wp.Endpoint>) {
         return (
             <box>
                 <With value={endpoint}>
@@ -76,13 +76,13 @@ class AudioControlClass {
         );
     }
 
-    private Mixer() {
+    private get Mixer() {
         return (
             <popover cssClasses={["Mixer"]}>
                 <box orientation={Gtk.Orientation.VERTICAL}>
                     <label cssClasses={["Label"]} label={"Mixer"} />
-                    {this.MixerEntry({ endpoint: this.defaultSpeaker })}
-                    {this.MixerEntry({ endpoint: this.defaultMicrophone })}
+                    {this.MixerEntry(this.defaultSpeaker)}
+                    {this.MixerEntry(this.defaultMicrophone)}
                 </box>
             </popover>
         );
@@ -96,8 +96,8 @@ class AudioControlClass {
 
         return (
             <box cssClasses={["AudioControl"]} $={self => self.add_controller(spawnPavucontrolClick)}>
-                {this.Endpoint({ endpoint: this.defaultSpeaker })}
-                <menubutton popover={this.Mixer() as Gtk.Popover} child={<label label={''}></label> as Gtk.Widget} />
+                {this.Endpoint(this.defaultSpeaker)}
+                <menubutton popover={this.Mixer as Gtk.Popover} child={<label label={''}></label> as Gtk.Widget} />
             </box>
         );
     }

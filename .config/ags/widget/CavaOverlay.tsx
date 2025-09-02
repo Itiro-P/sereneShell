@@ -8,7 +8,7 @@ export default function CavaOverlay({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
 
     return (
         <window
-            namespace='CavaOverlay'
+            name='CavaOverlay'
             layer={Astal.Layer.BOTTOM}
             gdkmonitor={gdkmonitor}
             anchor={RIGHT | LEFT | BOTTOM}

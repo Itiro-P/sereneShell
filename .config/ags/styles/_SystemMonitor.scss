@@ -1,10 +1,27 @@
 @use 'common/Colors';
 @use 'common/Layout';
 @use 'common/Transitions';
+@use 'common/Font';
+
+.SystemMonitor {
+    * {
+        margin: 0px 2px;
+        font-weight: bold
+    }
+}
+
+.MemoryUsage {
+    @extend %component-circle;
+    @include Transitions.noneToInverseChild(Colors.$peach, Colors.$base, Colors.$peach);
+}
+
+.CpuUsage {
+    @extend %component-circle;
+    @include Transitions.noneToInverseChild(Colors.$green, Colors.$base, Colors.$green);
+}
+
 .Battery {
-    @extend %widget;
-    border-radius: 20px;
-    transition: all 0.25s ease-in-out;
+    @extend %component-circle;
 }
 
 .BatteryNormal {
