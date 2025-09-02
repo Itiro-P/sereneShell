@@ -92,11 +92,11 @@ class MediaClass {
     private getPlayerStatus(status: AstalMpris.PlaybackStatus) {
         switch(status) {
             case AstalMpris.PlaybackStatus.PLAYING:
-                return 'Tocando';
+                return 'Playing';
             case AstalMpris.PlaybackStatus.PAUSED:
-                return 'Pausado';
+                return 'Paused';
             default:
-                return 'Nada tocando';
+                return 'Nothing Playing';
         }
     }
 

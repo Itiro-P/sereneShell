@@ -6,6 +6,7 @@ arch=(any)
 license=(None)
 depends=(
     thunar
+    swayosd
     zen-browser-bin
     zed
     btop

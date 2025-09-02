@@ -2,6 +2,7 @@ import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 import { exec } from "ags/process";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import settingsService from "./Settings";
 // import AstalNiri from "gi://AstalNiri?version=0.1"
 
 export type CompositorMonitor = AstalHyprland.Monitor;
@@ -12,6 +13,8 @@ interface ICompositor {
     getFocusedWorkspace: () => Accessor<CompositorWorkspace>;
     areMonitorsEqual: (monitor: Gdk.Monitor, compMonitor: CompositorMonitor) => boolean;
     getCompositorMonitor: (monitor: Gdk.Monitor) => CompositorMonitor;
+    getAnimationState: () => boolean;
+    toggleAnimations: (val?: boolean) => void;
 }
 
 class Hyprland implements ICompositor {
@@ -23,6 +26,9 @@ class Hyprland implements ICompositor {
         this.default = AstalHyprland.get_default();
         this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.id - b.id));
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
+
+        // Aplicar configurações de animação.
+        this.toggleAnimations(settingsService.animationsEnabled.get());
     }
 
     public getWorkspaces() {
@@ -48,6 +54,25 @@ class Hyprland implements ICompositor {
     public getCompositorMonitor(monitor: Gdk.Monitor) {
         const compMonitors = this.default.get_monitors();
         return compMonitors.find(compMonitor => this.areMonitorsEqual(monitor, compMonitor))!;
+    }
+
+    public getAnimationState() {
+        try {
+            return JSON.parse(exec("hyprctl getoption animations:enabled -j")) === 1;
+        } catch (error) {
+            console.warn("Erro ao verificar estado das animações:", error);
+            return false;
+        }
+    }
+
+    public toggleAnimations(val?: boolean) {
+        const newState = val ?? !this.getAnimationState();
+        try {
+            exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);
+            exec(`hyprctl keyword decoration:shadow:enabled ${newState ? 1 : 0}`);
+        } catch (error) {
+            console.error("Erro ao alterar animações:", error);
+        }
     }
 }
 
@@ -86,6 +111,25 @@ class Niri implements ICompositor {
         const compMonitors = this.default.get_monitors();
         return compMonitors.find(compMonitor => this.areMonitorsEqual(monitor, compMonitor))!;
     }
+
+    public getAnimationState() {
+        try {
+            return JSON.parse(exec("hyprctl getoption animations:enabled -j")) === 1;
+        } catch (error) {
+            console.warn("Erro ao verificar estado das animações:", error);
+            return false;
+        }
+    }
+
+    public toggleAnimations(val?: boolean) {
+        const newState = val ?? !this.getAnimationState();
+        try {
+            exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);
+            exec(`hyprctl keyword decoration:shadow:enabled ${newState ? 1 : 0}`);
+        } catch (error) {
+            console.error("Erro ao alterar animações:", error);
+        }
+    }
 }
 
 class CompositorManagerClass {
@@ -121,6 +165,14 @@ class CompositorManagerClass {
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
         return this.service.getCompositorMonitor(monitor);
+    }
+
+    public get animationState() {
+        return this.service.getAnimationState();
+    }
+
+    public toggleAnimations(val?: boolean) {
+        this.service.toggleAnimations(val);
     }
 }
 

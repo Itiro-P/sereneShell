@@ -7,7 +7,7 @@ const pollTime = 60000;
 
 class DateTimeClass {
     private formatterTime = "%H:%M";
-    private formatterDate = "Hoje é: %A, %d de %B de %Y";
+    private formatterDate = "Today is: %A, %d de %B de %Y";
     private _dateTime: Accessor<{ date: string, time: string }>;
 
     public constructor() {

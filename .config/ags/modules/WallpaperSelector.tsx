@@ -78,10 +78,10 @@ class WallpaperSelectorClass {
             <box cssClasses={['SelectorIndicator']} orientation={Gtk.Orientation.VERTICAL}>
                 <label
                     cssClasses={["Subtitle"]}
-                    label={'Seletor de Papéis de Parede'}
+                    label={'Wallpaper Selector'}
                 />
                 <box cssClasses={["ToggleActive", "Option"]}>
-                    <label label={"Seletor Ativo? "} halign={Gtk.Align.START} />
+                    <label label={"Active "} halign={Gtk.Align.START} />
                     <Gtk.Switch active={this._timerActive} onStateSet={(src, val) => settingsService.setWallpaperSelectorActive = val} />
                 </box>
             </box>

@@ -2,36 +2,31 @@ import { Gdk, Gtk } from "ags/gtk4";
 import { onCleanup } from "ags";
 import settingsService from "../services/Settings";
 import wallpaperSelector from "./WallpaperSelector";
-import animationService from "../services/Animations";
+import compositorManager from "../services/CompositorManager";
 
 class ControlCenterClass {
     public constructor() {
-    }
-
-    private formatCavaVisiblityText(i: boolean) {
-        if(i) return 'Cava sempre ativo';
-        return 'Cava desativado';
     }
 
     private get ToggleVisibleComponents() {
         onCleanup(() => settingsService.saveOptions());
         return (
             <box cssClasses={["ToggleVisibleComponents"]} orientation={Gtk.Orientation.VERTICAL}>
-                <label cssClasses={["Subtitle"]} label={'Animações e componentes'} />
+                <label cssClasses={["Subtitle"]} label={'Animations & Components'} />
                 <box cssClasses={["ToggleAnimations", "Option"]}>
-                    <label label={"Animações ativas? "} halign={Gtk.Align.START} />
+                    <label label={"Animations "} halign={Gtk.Align.START} />
                     <Gtk.Switch
                         active={settingsService.animationsEnabled}
                         onStateSet={
                             (src, val) => {
                                 settingsService.setAnimationsEnabled = val;
-                                animationService.toggleAnimations(val);
+                                compositorManager.toggleAnimations(val);
                             }
                         }
                     />
                 </box>
                 <box cssClasses={["ToggleCava", "Option"]}>
-                    <label label={"Cava ativo? "} halign={Gtk.Align.START} />
+                    <label label={"Cava "} halign={Gtk.Align.START} />
                     <Gtk.Switch active={settingsService.cavaVisible} onStateSet={(src, val) => settingsService.setCavaVisible = val} />
                 </box>
             </box>

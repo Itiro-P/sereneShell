@@ -36,7 +36,7 @@ class SystemMonitorClass {
         this.batteryPercentage = createBinding(this.battery, "percentage");
         this.batteryCharging = createBinding(this.battery, "charging");
         this.batteryCritical = createComputed([this.batteryPercentage, this.batteryCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-        this.batteryLifeLabel = this.batteryCharging.as(c => c ? `Carregando: ${formatTimeVerbose(this.battery.time_to_full)} restante(s)` : `Descarregando: ${formatTimeVerbose(this.battery.time_to_empty)} restante(s)`);
+        this.batteryLifeLabel = this.batteryCharging.as(c => c ? `Charging: ${formatTimeVerbose(this.battery.time_to_full)} left` : `Discharging: ${formatTimeVerbose(this.battery.time_to_empty)} left`);
 
         this.cpuSource = new GTop.glibtop_cpu();
         this.memSource = new GTop.glibtop_mem();
@@ -71,7 +71,7 @@ class SystemMonitorClass {
 
                 return { cpu: Math.min(100, cpuPercent), mem: Math.min(100, memPercent) };
             } catch (error) {
-                console.warn("Erro ao obter métricas do sistema:", error);
+                console.warn("Error when obtaining system metrics:", error);
                 return { cpu: 0, mem: 0 };
             }
         });
