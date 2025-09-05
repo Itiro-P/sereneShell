@@ -5,7 +5,7 @@ pkgdesc='Serene Shell dependencies for general programs'
 arch=(any)
 license=(None)
 depends=(
-    thunar
+    nautilus
     swayosd
     xfce-polkit
     zen-browser-bin

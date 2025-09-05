@@ -1,12 +1,12 @@
 import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 import { exec } from "ags/process";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import AstalHyprland from "gi://AstalHyprland";
+import AstalNiri from "gi://AstalNiri";
 import settingsService from "./Settings";
-// import AstalNiri from "gi://AstalNiri?version=0.1"
 
-export type CompositorMonitor = AstalHyprland.Monitor;
-export type CompositorWorkspace = AstalHyprland.Workspace;
+export type CompositorMonitor = AstalHyprland.Monitor | AstalNiri.Output;
+export type CompositorWorkspace = AstalHyprland.Workspace | AstalNiri.Workspace;
 
 interface ICompositor {
     getWorkspaces: () => Accessor<CompositorWorkspace[]>;
@@ -41,11 +41,10 @@ class Hyprland implements ICompositor {
 
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
         const geometry = monitor.get_geometry();
-        if(compMonitor.get_model() === monitor.get_model()
-        && compMonitor.get_height() === geometry.height
-        && compMonitor.get_width() === geometry.width
-        && compMonitor.get_x() === geometry.x
-        && compMonitor.get_y() === geometry.y) {
+        const hyprMonitor = compMonitor as AstalHyprland.Monitor;
+        if(hyprMonitor.get_model() === monitor.get_model()
+        && hyprMonitor.get_x() === geometry.x
+        && hyprMonitor.get_y() === geometry.y) {
             return true;
         }
         return false;
@@ -77,12 +76,12 @@ class Hyprland implements ICompositor {
 }
 
 class Niri implements ICompositor {
-    private default: AstalHyprland.Hyprland;
-    private _workspaces: Accessor<AstalHyprland.Workspace[]>;
-    private _focusedWorkspace: Accessor<AstalHyprland.Workspace>;
+    private default: AstalNiri.Niri;
+    private _workspaces: Accessor<AstalNiri.Workspace[]>;
+    private _focusedWorkspace: Accessor<AstalNiri.Workspace>;
 
     public constructor() {
-        this.default = AstalHyprland.get_default();
+        this.default = AstalNiri.get_default();
         this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.id - b.id));
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
     }
@@ -97,24 +96,23 @@ class Niri implements ICompositor {
 
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
         const geometry = monitor.get_geometry();
-        if(compMonitor.get_model() === monitor.get_model()
-        && compMonitor.get_height() === geometry.height
-        && compMonitor.get_width() === geometry.width
-        && compMonitor.get_x() === geometry.x
-        && compMonitor.get_y() === geometry.y) {
+        const niriOutput = compMonitor as AstalNiri.Output;
+        const phySize = niriOutput.get_physical_size();
+        if(niriOutput.get_model() === monitor.get_model()
+        && phySize?.x === geometry.x && phySize.y === geometry.y) {
             return true;
         }
         return false;
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        const compMonitors = this.default.get_monitors();
+        const compMonitors = this.default.get_outputs();
         return compMonitors.find(compMonitor => this.areMonitorsEqual(monitor, compMonitor))!;
     }
 
     public getAnimationState() {
         try {
-            return JSON.parse(exec("hyprctl getoption animations:enabled -j")) === 1;
+            return JSON.parse(exec("niri-msg get-option animations-enabled -j")) === 1;
         } catch (error) {
             console.warn("Erro ao verificar estado das animações:", error);
             return false;
@@ -124,8 +122,7 @@ class Niri implements ICompositor {
     public toggleAnimations(val?: boolean) {
         const newState = val ?? !this.getAnimationState();
         try {
-            exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);
-            exec(`hyprctl keyword decoration:shadow:enabled ${newState ? 1 : 0}`);
+            exec('niri-msg set-option animations-enabled ' + newState);
         } catch (error) {
             console.error("Erro ao alterar animações:", error);
         }
