@@ -8,6 +8,7 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "agent": {
+    "dock": "right",
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-sonnet-4"

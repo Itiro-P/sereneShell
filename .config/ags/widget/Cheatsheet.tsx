@@ -44,7 +44,7 @@ export default function Cheatsheet({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
                             <Entry bind="SUPER + J" action="Toggle Dwindle" />
                             <Entry bind="SUPER + " action="Move focus to the client at above" />
                             <Entry bind="SUPER + " action="Move focus to the client at below" />
-                            <Entry bind="SUPER + " action="Move focus to the clienFixar clientet at left" />
+                            <Entry bind="SUPER + " action="Move focus to the client at left" />
                             <Entry bind="SUPER + " action="Move focus to the client at right" />
                         </box>
                     </box>
@@ -65,10 +65,10 @@ export default function Cheatsheet({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
                         <label cssClasses={["Subtitle"]} label={"Default Programs"} />
                         <box orientation={Gtk.Orientation.VERTICAL}>
                             <Entry bind="SUPER + Enter" action="Terminal" />
-                            <Entry bind="SUPER + R" action="Launcher" />
+                            <Entry bind="SUPER + T" action="Launcher" />
                             <Entry bind="SUPER + E" action="Open File Manager" />
                             <Entry bind="SUPER + D" action="Toggle Dock" />
-                            <Entry bind="SUPER + C" action="Toggle Cheatsheet" />
+                            <Entry bind="SUPER + H" action="Toggle Cheatsheet" />
                             <Entry bind="SUPER + ESC" action="Toggle Wlogout" />
                         </box>
                     </box>

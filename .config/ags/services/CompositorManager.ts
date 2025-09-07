@@ -2,11 +2,12 @@ import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 import { exec } from "ags/process";
 import AstalHyprland from "gi://AstalHyprland";
-import AstalNiri from "gi://AstalNiri";
+import AstalNiri from "gi://AstalNiri?version=0.1";
 import settingsService from "./Settings";
 
 export type CompositorMonitor = AstalHyprland.Monitor | AstalNiri.Output;
 export type CompositorWorkspace = AstalHyprland.Workspace | AstalNiri.Workspace;
+export type CompositorClient = AstalHyprland.Client | AstalNiri.Window;
 
 interface ICompositor {
     getWorkspaces: () => Accessor<CompositorWorkspace[]>;
@@ -82,7 +83,7 @@ class Niri implements ICompositor {
 
     public constructor() {
         this.default = AstalNiri.get_default();
-        this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.id - b.id));
+        this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.get_id() - b.get_id()));
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
     }
 
@@ -97,9 +98,10 @@ class Niri implements ICompositor {
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
         const geometry = monitor.get_geometry();
         const niriOutput = compMonitor as AstalNiri.Output;
-        const phySize = niriOutput.get_physical_size();
+        const logical = niriOutput.get_logical();
         if(niriOutput.get_model() === monitor.get_model()
-        && phySize?.x === geometry.x && phySize.y === geometry.y) {
+        && logical?.get_x() === geometry.x
+        && logical?.get_y() === geometry.y) {
             return true;
         }
         return false;
@@ -112,7 +114,8 @@ class Niri implements ICompositor {
 
     public getAnimationState() {
         try {
-            return JSON.parse(exec("niri-msg get-option animations-enabled -j")) === 1;
+            // return JSON.parse(exec("niri-msg get-option animations-enabled -j")) === 1;
+            return false;
         } catch (error) {
             console.warn("Erro ao verificar estado das animações:", error);
             return false;
@@ -122,7 +125,7 @@ class Niri implements ICompositor {
     public toggleAnimations(val?: boolean) {
         const newState = val ?? !this.getAnimationState();
         try {
-            exec('niri-msg set-option animations-enabled ' + newState);
+            //exec('niri-msg set-option animations-enabled ' + newState);
         } catch (error) {
             console.error("Erro ao alterar animações:", error);
         }
@@ -130,46 +133,46 @@ class Niri implements ICompositor {
 }
 
 class CompositorManagerClass {
-    private service: ICompositor;
+    private compositor: ICompositor;
 
     public constructor() {
         const compositor = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
         switch(compositor) {
             case "Hyprland":
-                this.service = new Hyprland;
+            console.log("usando Hyprland")
+                this.compositor = new Hyprland;
                 break;
             case "Niri":
-                this.service = new Niri;
+                console.log("usando Niri");
+                this.compositor = new Niri;
                 break;
             default:
-                console.error("Compositor não identificado. Fallback para Hyprland");
-                this.service = new Hyprland;
-                break;
+                throw new Error("Compositor não suportado.");
         }
     }
 
     public get workspaces() {
-        return this.service.getWorkspaces();
+        return this.compositor.getWorkspaces();
     }
 
     public get focusedWorkspace() {
-        return this.service.getFocusedWorkspace();
+        return this.compositor.getFocusedWorkspace();
     }
 
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
-        return this.service.areMonitorsEqual(monitor, compMonitor);
+        return this.compositor.areMonitorsEqual(monitor, compMonitor);
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        return this.service.getCompositorMonitor(monitor);
+        return this.compositor.getCompositorMonitor(monitor);
     }
 
     public get animationState() {
-        return this.service.getAnimationState();
+        return this.compositor.getAnimationState();
     }
 
     public toggleAnimations(val?: boolean) {
-        this.service.toggleAnimations(val);
+        this.compositor.toggleAnimations(val);
     }
 }
 

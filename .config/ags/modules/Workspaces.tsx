@@ -1,6 +1,8 @@
 import { Gtk } from "ags/gtk4";
 import compositorManager, { CompositorMonitor, CompositorWorkspace } from "../services/CompositorManager";
 import { Accessor, For } from "ags";
+import AstalHyprland from "gi://AstalHyprland";
+import AstalNiri from "gi://AstalNiri";
 
 class WorkspacesClass {
     private readonly maxWorkspaces: number = 10;
@@ -44,7 +46,9 @@ class WorkspacesClass {
 
     public Workspaces({ monitor }: { monitor: CompositorMonitor }) {
         const monitorWorkspaces = compositorManager.workspaces.as(ws => {
-            const filtered = ws.filter((workspace) => workspace.get_monitor() === monitor);
+            const filtered = monitor instanceof AstalHyprland.Monitor ?
+                ws.filter((workspace) => (workspace as AstalHyprland.Workspace).get_monitor() === monitor) :
+                ws.filter((workspace) => (workspace as AstalNiri.Workspace).get_output() === monitor.get_model());
             return {
                 main: filtered.slice(0, this.maxWorkspaces),
                 theRest: filtered.slice(this.maxWorkspaces)
