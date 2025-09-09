@@ -1,0 +1,265 @@
+configuration {
+    font: "monospace 14";
+    show-icons: true;
+    icon-theme: "Papirus";
+    drun-display-format: "{name}";
+    window-format: "{w} {c} {t}";
+    matching: "fuzzy";
+    sidebar-mode: true;
+    hover-select: false;
+}
+
+* {
+    /* Catppuccin Mocha Colors */
+    rosewater: #f5e0dc;
+    flamingo: #f2cdcd;
+    pink: #f5c2e7;
+    mauve: #cba6f7;
+    red: #f38ba8;
+    maroon: #eba0ac;
+    peach: #fab387;
+    yellow: #f9e2af;
+    green: #a6e3a1;
+    teal: #94e2d5;
+    sky: #89dceb;
+    sapphire: #74c7ec;
+    blue: #89b4fa;
+    lavender: #b4befe;
+    text: #cdd6f4;
+    subtext1: #bac2de;
+    subtext0: #a6adc8;
+    overlay2: #9399b2;
+    overlay1: #7f849c;
+    overlay0: #6c7086;
+    surface2: #585b70;
+    surface1: #45475a;
+    surface0: #313244;
+    base: #1e1e2e;
+    mantle: #181825;
+    crust: #11111b;
+
+    /* Theme Variables */
+    background-color: transparent;
+    background: @base;
+    foreground: @text;
+    lightbg: @mantle;
+    lightfg: @text;
+    border-color: @overlay0;
+    separatorcolor: @overlay0;
+
+    /* State Colors */
+    normal-background: transparent;
+    normal-foreground: @foreground;
+    urgent-background: transparent;
+    urgent-foreground: @red;
+    active-background: transparent;
+    active-foreground: @blue;
+
+    selected-normal-background: @surface1;
+    selected-normal-foreground: @text;
+    selected-urgent-background: @red;
+    selected-urgent-foreground: @base;
+    selected-active-background: @blue;
+    selected-active-foreground: @base;
+
+    alternate-normal-background: transparent;
+    alternate-normal-foreground: @foreground;
+    alternate-urgent-background: transparent;
+    alternate-urgent-foreground: @red;
+    alternate-active-background: transparent;
+    alternate-active-foreground: @blue;
+}
+
+window {
+    location: north;
+    y-offset: calc(50% - 176px);
+    width: 480;
+    border-radius: 24px;
+    background-color: @background;
+    border: 2px;
+    border-color: @border-color;
+    padding: 0;
+}
+
+mainbox {
+    padding: 12px;
+    border: 0;
+    background-color: transparent;
+}
+
+inputbar {
+    border: 2px;
+    border-color: @border-color;
+    border-radius: 16px;
+    background-color: @surface0;
+    padding: 8px 16px;
+    spacing: 8px;
+    text-color: @foreground;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    spacing: 0;
+    text-color: @blue;
+    background-color: transparent;
+}
+
+entry {
+    text-color: @foreground;
+    background-color: transparent;
+    cursor: text;
+    spacing: 0;
+    placeholder-color: @overlay1;
+    placeholder: "Type to filter";
+}
+
+message {
+    margin: 12px 0 0;
+    border-radius: 16px;
+    background-color: @surface0;
+    border: 2px;
+    border-color: @border-color;
+    padding: 0;
+}
+
+textbox {
+    padding: 8px 24px;
+    text-color: @foreground;
+    background-color: transparent;
+}
+
+listview {
+    background-color: transparent;
+    margin: 12px 0 0;
+    lines: 8;
+    columns: 1;
+    fixed-height: false;
+    padding: 0;
+    spacing: 4px;
+    scrollbar: false;
+    border: 0;
+}
+
+element {
+    padding: 8px 16px;
+    spacing: 8px;
+    border-radius: 16px;
+    background-color: transparent;
+    text-color: @normal-foreground;
+    cursor: pointer;
+    border: 0;
+}
+
+element normal.normal {
+    background-color: @normal-background;
+    text-color: @normal-foreground;
+}
+
+element normal.urgent {
+    background-color: @urgent-background;
+    text-color: @urgent-foreground;
+}
+
+element normal.active {
+    background-color: @active-background;
+    text-color: @active-foreground;
+}
+
+element selected.normal {
+    background-color: @selected-normal-background;
+    text-color: @selected-normal-foreground;
+}
+
+element selected.urgent {
+    background-color: @selected-urgent-background;
+    text-color: @selected-urgent-foreground;
+}
+
+element selected.active {
+    background-color: @selected-active-background;
+    text-color: @selected-active-foreground;
+}
+
+element alternate.normal {
+    background-color: @alternate-normal-background;
+    text-color: @alternate-normal-foreground;
+}
+
+element alternate.urgent {
+    background-color: @alternate-urgent-background;
+    text-color: @alternate-urgent-foreground;
+}
+
+element alternate.active {
+    background-color: @alternate-active-background;
+    text-color: @alternate-active-foreground;
+}
+
+element-icon {
+    size: 1em;
+    vertical-align: 0.5;
+    background-color: transparent;
+    text-color: inherit;
+    cursor: inherit;
+}
+
+element-text {
+    text-color: inherit;
+    background-color: transparent;
+    cursor: inherit;
+    highlight: inherit;
+}
+
+scrollbar {
+    width: 4px;
+    padding: 0;
+    handle-width: 8px;
+    border: 0;
+    handle-color: @overlay0;
+    background-color: @surface0;
+}
+
+sidebar {
+    border-color: @separatorcolor;
+    border: 2px dash 0px 0px;
+}
+
+button {
+    cursor: pointer;
+    spacing: 0;
+    text-color: @normal-foreground;
+    background-color: transparent;
+}
+
+button selected {
+    background-color: @selected-normal-background;
+    text-color: @selected-normal-foreground;
+}
+
+num-filtered-rows {
+    expand: false;
+    text-color: @overlay1;
+}
+
+num-rows {
+    expand: false;
+    text-color: @overlay1;
+}
+
+textbox-num-sep {
+    expand: false;
+    str: "/";
+    text-color: @overlay1;
+}
+
+case-indicator {
+    spacing: 0;
+    text-color: @normal-foreground;
+}
+
+textbox-prompt-colon {
+    margin: 0px 0.3000em 0.0000em 0.0000em;
+    expand: false;
+    str: ":";
+    text-color: inherit;
+}

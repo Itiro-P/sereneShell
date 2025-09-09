@@ -14,7 +14,7 @@ depends=(
     fastfetch
     vesktop
     kitty
-    fuzzel
+    rofi
     wlogout
     nwg-displays
     nwg-dock-hyprland

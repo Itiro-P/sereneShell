@@ -2,16 +2,17 @@ import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 import { exec } from "ags/process";
 import AstalHyprland from "gi://AstalHyprland";
-import AstalNiri from "gi://AstalNiri?version=0.1";
 import settingsService from "./Settings";
 
-export type CompositorMonitor = AstalHyprland.Monitor | AstalNiri.Output;
-export type CompositorWorkspace = AstalHyprland.Workspace | AstalNiri.Workspace;
-export type CompositorClient = AstalHyprland.Client | AstalNiri.Window;
+export type CompositorMonitor = AstalHyprland.Monitor;
+export type CompositorWorkspace = AstalHyprland.Workspace;
+export type CompositorClient = AstalHyprland.Client;
 
 interface ICompositor {
     getWorkspaces: () => Accessor<CompositorWorkspace[]>;
     getFocusedWorkspace: () => Accessor<CompositorWorkspace>;
+    getClients: () => Accessor<CompositorClient[]>;
+    getFocusedClient: () => Accessor<CompositorClient>;
     areMonitorsEqual: (monitor: Gdk.Monitor, compMonitor: CompositorMonitor) => boolean;
     getCompositorMonitor: (monitor: Gdk.Monitor) => CompositorMonitor;
     getAnimationState: () => boolean;
@@ -22,11 +23,15 @@ class Hyprland implements ICompositor {
     private default: AstalHyprland.Hyprland;
     private _workspaces: Accessor<AstalHyprland.Workspace[]>;
     private _focusedWorkspace: Accessor<AstalHyprland.Workspace>;
+    private _clients: Accessor<AstalHyprland.Client[]>;
+    private _focusedClient: Accessor<AstalHyprland.Client>;
 
     public constructor() {
         this.default = AstalHyprland.get_default();
         this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.id - b.id));
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
+        this._clients = createBinding(this.default, "clients");
+        this._focusedClient = createBinding(this.default, "focusedClient");
 
         // Aplicar configurações de animação.
         this.toggleAnimations(settingsService.animationsEnabled.get());
@@ -38,6 +43,14 @@ class Hyprland implements ICompositor {
 
     public getFocusedWorkspace() {
         return this._focusedWorkspace;
+    }
+
+    public getClients() {
+        return this._clients;
+    }
+
+    public getFocusedClient() {
+        return this._focusedClient;
     }
 
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
@@ -76,62 +89,6 @@ class Hyprland implements ICompositor {
     }
 }
 
-class Niri implements ICompositor {
-    private default: AstalNiri.Niri;
-    private _workspaces: Accessor<AstalNiri.Workspace[]>;
-    private _focusedWorkspace: Accessor<AstalNiri.Workspace>;
-
-    public constructor() {
-        this.default = AstalNiri.get_default();
-        this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.get_id() - b.get_id()));
-        this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
-    }
-
-    public getWorkspaces() {
-        return this._workspaces;
-    }
-
-    public getFocusedWorkspace() {
-        return this._focusedWorkspace;
-    }
-
-    public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {
-        const geometry = monitor.get_geometry();
-        const niriOutput = compMonitor as AstalNiri.Output;
-        const logical = niriOutput.get_logical();
-        if(niriOutput.get_model() === monitor.get_model()
-        && logical?.get_x() === geometry.x
-        && logical?.get_y() === geometry.y) {
-            return true;
-        }
-        return false;
-    }
-
-    public getCompositorMonitor(monitor: Gdk.Monitor) {
-        const compMonitors = this.default.get_outputs();
-        return compMonitors.find(compMonitor => this.areMonitorsEqual(monitor, compMonitor))!;
-    }
-
-    public getAnimationState() {
-        try {
-            // return JSON.parse(exec("niri-msg get-option animations-enabled -j")) === 1;
-            return false;
-        } catch (error) {
-            console.warn("Erro ao verificar estado das animações:", error);
-            return false;
-        }
-    }
-
-    public toggleAnimations(val?: boolean) {
-        const newState = val ?? !this.getAnimationState();
-        try {
-            //exec('niri-msg set-option animations-enabled ' + newState);
-        } catch (error) {
-            console.error("Erro ao alterar animações:", error);
-        }
-    }
-}
-
 class CompositorManagerClass {
     private compositor: ICompositor;
 
@@ -139,12 +96,8 @@ class CompositorManagerClass {
         const compositor = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
         switch(compositor) {
             case "Hyprland":
-            console.log("usando Hyprland")
+                console.log("usando Hyprland");
                 this.compositor = new Hyprland;
-                break;
-            case "Niri":
-                console.log("usando Niri");
-                this.compositor = new Niri;
                 break;
             default:
                 throw new Error("Compositor não suportado.");
@@ -157,6 +110,14 @@ class CompositorManagerClass {
 
     public get focusedWorkspace() {
         return this.compositor.getFocusedWorkspace();
+    }
+
+    public get clients() {
+        return this.compositor.getClients();
+    }
+
+    public get focusedClient() {
+        return this.compositor.getFocusedClient();
     }
 
     public areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: CompositorMonitor) {

@@ -8,7 +8,6 @@ environment {
     XDG_SESSION_DESKTOP "Hyprland"
     MOZ_ENABLE_WAYLAND "1"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
-    SERENE_SHELL_DEV "0"
 }
 
 input {
@@ -183,7 +182,7 @@ binds {
     Mod+T { spawn-sh "killall fuzzel || fuzzel"; }
     Mod+L { spawn "swaylock" "-f"; }
     Mod+Escape { spawn-sh "killall wlogout || wlogout"; }
-    Mod+H { spawn "astal" "-t" "Cheatsheet"; }
+    Mod+H { spawn "ags" "toggle" "Cheatsheet"; }
     Mod+E { spawn "nautilus"; }
     Mod+Space { spawn "niri" "msg" "action" "switch-layout" "next"; }
 
