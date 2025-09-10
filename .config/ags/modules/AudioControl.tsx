@@ -30,20 +30,16 @@ class AudioControlClass {
                     const icon = createBinding(edp, 'volumeIcon');
                     const volume = createBinding(edp, 'volume').as(a => `${Math.round(a * 100)}%`);
 
-                    const scroll = new Gtk.EventControllerScroll({ flags: Gtk.EventControllerScrollFlags.VERTICAL });
-                    const scrollHandler = scroll.connect('scroll', (controler: Gtk.EventControllerScroll, dx: number, dy: number) => this.handleScroll(edp, dy));
-
-                    onCleanup(() => scroll.disconnect(scrollHandler));
                     return (
-                        <button cssClasses={["Endpoint"]}
-                            $={(self) => self.add_controller(scroll)}
-                            onClicked={() => edp.set_mute(!edp.get_mute())}
-                        >
-                            <box>
-                                <image cssClasses={["Icon"]} iconName={icon} />
-                                <label cssClasses={["Volume"]} label={volume} widthChars={4} />
-                            </box>
-                        </button>
+                        <box>
+                            <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
+                            <button cssClasses={["Endpoint"]} onClicked={() => edp.set_mute(!edp.get_mute())}>
+                                <box>
+                                    <image cssClasses={["Icon"]} iconName={icon} />
+                                    <label cssClasses={["Volume"]} label={volume} widthChars={4} />
+                                </box>
+                            </button>
+                        </box>
                     );
                 }}
             </With>
@@ -59,15 +55,13 @@ class AudioControlClass {
                         const icon = createBinding(edp, 'volumeIcon');
                         const volume = createBinding(edp, 'volume');
 
-                        const scroll = new Gtk.EventControllerScroll({ flags: Gtk.EventControllerScrollFlags.VERTICAL });
-                        const scrollHandler = scroll.connect('scroll', (controler: Gtk.EventControllerScroll, dx: number, dy: number) => this.handleScroll(edp, dy));
-
-                        onCleanup(() => scroll.disconnect(scrollHandler));
-
                         return (
                             <box cssClasses={["MixerEntry"]}>
                                 <button cssClasses={["Icon"]} iconName={icon} onClicked={() => edp.set_mute(!edp.get_mute())} />
-                                <slider cssClasses={["Slider"]} $={self => self.add_controller(scroll)} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} />
+                                <box>
+                                    <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
+                                    <slider cssClasses={["Slider"]} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} />
+                                </box>
                             </box>
                         );
                     }}
@@ -89,13 +83,9 @@ class AudioControlClass {
     }
 
     public get AudioControl() {
-        const spawnPavucontrolClick = new Gtk.GestureClick({ button: Gdk.BUTTON_SECONDARY });
-        const spawnPavucontrolHandler = spawnPavucontrolClick.connect('pressed', () => GLib.spawn_command_line_async('pavucontrol'));
-
-        onCleanup(() => spawnPavucontrolClick.disconnect(spawnPavucontrolHandler));
-
         return (
-            <box cssClasses={["AudioControl"]} $={self => self.add_controller(spawnPavucontrolClick)}>
+            <box cssClasses={["AudioControl"]}>
+                <Gtk.GestureClick button={Gdk.BUTTON_SECONDARY} onPressed={() => GLib.spawn_command_line_async('pavucontrol')} />
                 {this.Endpoint(this.defaultSpeaker)}
                 <menubutton popover={this.Mixer as Gtk.Popover} child={<label label={''}></label> as Gtk.Widget} />
             </box>

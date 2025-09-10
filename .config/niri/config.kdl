@@ -179,7 +179,7 @@ window-rule {
 
 binds {
     Mod+Return { spawn "kitty"; }
-    Mod+T { spawn-sh "killall fuzzel || fuzzel"; }
+    Mod+T { spawn-sh "killall rofi || rofi -show drun"; }
     Mod+L { spawn "swaylock" "-f"; }
     Mod+Escape { spawn-sh "killall wlogout || wlogout"; }
     Mod+H { spawn "ags" "toggle" "Cheatsheet"; }

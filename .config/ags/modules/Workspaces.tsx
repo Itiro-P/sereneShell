@@ -1,12 +1,10 @@
 import { Gtk } from "ags/gtk4";
 import compositorManager, { CompositorClient, CompositorMonitor, CompositorWorkspace } from "../services/CompositorManager";
 import { Accessor, For } from "ags";
-import AstalHyprland from "gi://AstalHyprland";
 
 class WorkspacesClass {
     private readonly maxWorkspaces: number = 10;
     public constructor() {
-
     }
 
     private WorkspaceClient({ client }: { client: CompositorClient }) {

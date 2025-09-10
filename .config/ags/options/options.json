@@ -1,5 +1,5 @@
 {
-  "animationsEnabled": false,
-  "cavaVisible": false,
-  "wallpaperSelectorActive": false
+  "animationsEnabled": true,
+  "cavaVisible": true,
+  "wallpaperSelectorActive": true
 }

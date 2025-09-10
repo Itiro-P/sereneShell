@@ -1,4 +1,3 @@
-timeout 60 'brightnessctl -s && brightnessctl s 1%' resume 'brightnessctl -r'
-timeout 120 'loginctl lock-session'
-timeout 240 'systemctl suspend'
+timeout 60 'loginctl lock-session'
+timeout 120 'systemctl suspend'
 before-sleep 'swaylock -f'

@@ -95,6 +95,7 @@ class CompositorManagerClass {
     public constructor() {
         const compositor = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
         switch(compositor) {
+            case "hyprland":
             case "Hyprland":
                 console.log("usando Hyprland");
                 this.compositor = new Hyprland;

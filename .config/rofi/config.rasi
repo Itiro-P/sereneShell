@@ -4,7 +4,6 @@ configuration {
     icon-theme: "Papirus";
     drun-display-format: "{name}";
     window-format: "{w} {c} {t}";
-    matching: "fuzzy";
     sidebar-mode: true;
     hover-select: false;
 }
