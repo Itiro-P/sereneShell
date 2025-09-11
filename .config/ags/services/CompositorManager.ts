@@ -28,7 +28,7 @@ class Hyprland implements ICompositor {
 
     public constructor() {
         this.default = AstalHyprland.get_default();
-        this._workspaces = createBinding(this.default, "workspaces").as((workspaces) => workspaces.sort((a, b) => a.id - b.id));
+        this._workspaces = createBinding(this.default, "workspaces")((workspaces) => workspaces.sort((a, b) => a.id - b.id));
         this._focusedWorkspace = createBinding(this.default, "focusedWorkspace");
         this._clients = createBinding(this.default, "clients");
         this._focusedClient = createBinding(this.default, "focusedClient");

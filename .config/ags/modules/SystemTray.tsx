@@ -15,13 +15,9 @@ class SystemTrayClass {
         btn.menuModel = item.menuModel;
         btn.insert_action_group("dbusmenu", item.actionGroup);
 
-        const agId = item.connect("notify::action-group", () => {
-            btn.insert_action_group("dbusmenu", item.actionGroup);
-        });
+        const agId = item.connect("notify::action-group", () => btn.insert_action_group("dbusmenu", item.actionGroup));
 
-        const mmId = item.connect("notify::menu-model", () => {
-            btn.set_menu_model(item.menuModel);
-        });
+        const mmId = item.connect("notify::menu-model", () => btn.set_menu_model(item.menuModel));
 
         onCleanup(() => {
             item.disconnect(agId);
@@ -29,7 +25,7 @@ class SystemTrayClass {
         });
     };
 
-    private TrayItem({ item }: { item: AstalTray.TrayItem }) {
+    private TrayItem(item: AstalTray.TrayItem) {
         return (
             <menubutton
                 cssClasses={["TrayItem"]}
@@ -46,7 +42,7 @@ class SystemTrayClass {
     public get SystemTray() {
         return (
             <box cssClasses={["SystemTray"]}>
-                <For each={this.itemsBinding} children={(item) => this.TrayItem({ item })} />
+                <For each={this.itemsBinding} children={item => this.TrayItem(item)} />
             </box>
         );
     }

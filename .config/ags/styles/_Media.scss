@@ -11,68 +11,37 @@
 
     .MprisPopover {
         background-color: rgba(Colors.$mantle, 0.8);
-        .MprisPlayer {
-            padding: 16px;
-            .Metadata {
-                margin-left: 12px;
-                .Title {
-                    font-size: Font.$font-size-large;
-                    color: Colors.$text;
-                }
-
-                .Artist {
-                    font-size: Font.$font-size-normal;
-                    color: rgba(Colors.$text, 0.7);
-                }
-
-                .Album {
-                    font-size: Font.$font-size-small;
-                    color: rgba(Colors.$text, 0.5);
-                    font-style: italic;
-                }
+        padding: 16px;
+        .Metadata {
+            margin-left: 12px;
+            .Title {
+                font-size: Font.$font-size-large;
+                color: Colors.$text;
             }
-            .LowerPart {
-                margin-top: 12px;
-                padding: 12px;
 
-                .PlayerSlider {
-                    padding: 4px;
-                    background-color: rgba(Colors.$base, 0.6);
-                    border: none;
-                    border-radius: 14px;
+            .Artist {
+                font-size: Font.$font-size-normal;
+                color: rgba(Colors.$text, 0.7);
+            }
 
-                    margin: 5px;
-                    .Slider {
-                        min-width: 160px;
-                        & highlight {
-                            background: Colors.$sapphire;
-                        }
-                    }
-
-                    .TimeLabel {
-                        color: Colors.$text;
-                        margin-left: 10px;
-                        font-size: Font.$font-size-small;
-                        opacity: 0.8;
-                        min-width: 40px;
-                    }
-                }
-
-                .Controllers {
-                    .Previous, .PlayPause, .Next {
-                        margin: 4px;
-                        border: none;
-                        border-radius: 8px;
-                        image {
-                            margin: 12px;
-                        }
-                        @include Transitions.inverseChild(Colors.$base, Colors.$blue);
-                    }
-                }
+            .Album {
+                font-size: Font.$font-size-small;
+                color: rgba(Colors.$text, 0.5);
+                font-style: italic;
             }
         }
-        .Cava, .Cava > * {
-            color: rgba(Colors.$blue, 0.5);
+        .Controllers {
+            margin-top: 12px;
+            padding: 12px;
+            .Previous, .PlayPause, .Next {
+                margin: 4px;
+                border: none;
+                border-radius: 8px;
+                image {
+                    margin: 12px;
+                }
+                @include Transitions.inverseChild(Colors.$base, Colors.$blue);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ export default function CavaOverlay({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
             anchor={RIGHT | LEFT | BOTTOM}
             visible={cava.visibilityState}
             application={app}
-            $={(self) => onCleanup(() => self.destroy())}
+            $={self => onCleanup(() => self.destroy())}
         >
             <box halign={Gtk.Align.FILL} valign={Gtk.Align.END} heightRequest={Math.floor(gdkmonitor.get_geometry().height * .25)}>
                 {cava.Cava(["CavaOverlay"])}

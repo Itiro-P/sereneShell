@@ -20,7 +20,7 @@ export default function Cheatsheet({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
             gdkmonitor={gdkmonitor}
             keymode={Astal.Keymode.ON_DEMAND}
             application={app}
-            $={(self) => onCleanup(() => self.destroy())}
+            $={self => onCleanup(() => self.destroy())}
         >
             <Gtk.EventControllerKey onKeyPressed={({ widget }, keyval: number) => {
                 switch(keyval) {

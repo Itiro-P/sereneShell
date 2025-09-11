@@ -28,7 +28,7 @@ class AudioControlClass {
             <With value={endpoint}>
                 {edp => {
                     const icon = createBinding(edp, 'volumeIcon');
-                    const volume = createBinding(edp, 'volume').as(a => `${Math.round(a * 100)}%`);
+                    const volume = createBinding(edp, 'volume')(a => `${Math.round(a * 100)}%`);
 
                     return (
                         <box>

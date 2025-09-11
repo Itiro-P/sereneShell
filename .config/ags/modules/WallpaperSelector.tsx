@@ -7,9 +7,17 @@ import { Gdk, Gtk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 import settingsService from "../services/Settings";
 
-const path = GLib.get_home_dir() + '/.config/ags/wallpapers';
+const path = GLib.get_home_dir() + "/.config/ags/wallpapers";
 const pollTime = 240000;
-const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+const imageExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".bmp",
+    ".webp",
+    ".svg",
+];
 
 class WallpaperSelectorClass {
     private images: Accessor<string[]>;
@@ -25,8 +33,10 @@ class WallpaperSelectorClass {
     }
 
     private isImageFile(filename: string) {
-        const extension = filename.toLowerCase().substring(filename.lastIndexOf('.'));
-        return imageExtensions.includes(extension) ? extension: null;
+        const extension = filename
+            .toLowerCase()
+            .substring(filename.lastIndexOf("."));
+        return imageExtensions.includes(extension) ? extension : null;
     }
 
     private readImageFiles(directoryPath: string) {
@@ -35,7 +45,11 @@ class WallpaperSelectorClass {
 
             if (!file.query_exists(null)) return [];
 
-            const enumerator = file.enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, null);
+            const enumerator = file.enumerate_children(
+                "standard::name,standard::type",
+                Gio.FileQueryInfoFlags.NONE,
+                null,
+            );
 
             const images: string[] = [];
             let fileInfo;
@@ -44,14 +58,18 @@ class WallpaperSelectorClass {
                 if (fileInfo.get_file_type() === Gio.FileType.REGULAR) {
                     const fileName = fileInfo.get_name();
                     const ext = this.isImageFile(fileName);
-                    if(ext) images.push(fileName);
+                    if (ext) images.push(fileName);
                 }
             }
 
             enumerator.close(null);
             return images;
         } catch (error) {
-            console.error('❌ Erro Gio ao ler diretório:', directoryPath, error);
+            console.error(
+                "❌ Erro Gio ao ler diretório:",
+                directoryPath,
+                error,
+            );
             return [];
         }
     }
@@ -64,31 +82,36 @@ class WallpaperSelectorClass {
         const unsub = this.polling.subscribe(() => {
             if (this._timerActive.get()) {
                 const connector = gdkmonitor.get_connector();
-                if(connector) {
+                if (connector) {
                     const imgArray = this.images.get();
-                    const img = imgArray[Math.floor(Math.random() * imgArray.length)];
-                    Swww.manager.setWallpaper(`${path}/${img}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
+                    const img =
+                        imgArray[Math.floor(Math.random() * imgArray.length)];
+                    Swww.manager.setWallpaper(`${path}/${img}`, {
+                        outputs: connector,
+                        transitionType: Swww.TransitionType.GROW,
+                    });
                 } else {
-                    execAsync(`notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`);
+                    execAsync(
+                        `notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`,
+                    );
                 }
             }
         });
         onCleanup(() => unsub());
         return (
-            <box cssClasses={['SelectorIndicator']} orientation={Gtk.Orientation.VERTICAL}>
-                <label
-                    cssClasses={["Subtitle"]}
-                    label={'Wallpaper Selector'}
+            <box cssClasses={["ToggleActive", "Option"]}>
+                <label label={"Wallpaper Selector "} halign={Gtk.Align.START} />
+                <Gtk.Switch
+                    active={this._timerActive}
+                    onStateSet={(src, val) =>
+                        (settingsService.setWallpaperSelectorActive = val)
+                    }
                 />
-                <box cssClasses={["ToggleActive", "Option"]}>
-                    <label label={"Active "} halign={Gtk.Align.START} />
-                    <Gtk.Switch active={this._timerActive} onStateSet={(src, val) => settingsService.setWallpaperSelectorActive = val} />
-                </box>
             </box>
         );
     }
 }
 
-const wallpaperSelector = new WallpaperSelectorClass;
+const wallpaperSelector = new WallpaperSelectorClass();
 
 export default wallpaperSelector;

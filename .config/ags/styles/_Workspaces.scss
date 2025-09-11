@@ -30,7 +30,7 @@
 
         &:hover {
             background-color: rgba(Colors.$blue, 0.6);
-            color: Colors.$crust;
+            label { color: Colors.$crust; }
         }
     }
 

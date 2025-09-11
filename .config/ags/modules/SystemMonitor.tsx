@@ -36,7 +36,7 @@ class SystemMonitorClass {
         this.batteryPercentage = createBinding(this.battery, "percentage");
         this.batteryCharging = createBinding(this.battery, "charging");
         this.batteryCritical = createComputed([this.batteryPercentage, this.batteryCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-        this.batteryLifeLabel = this.batteryCharging.as(c => c ? `Charging: ${formatTimeVerbose(this.battery.time_to_full)} left` : `Discharging: ${formatTimeVerbose(this.battery.time_to_empty)} left`);
+        this.batteryLifeLabel = this.batteryCharging(c => c ? `Charging: ${formatTimeVerbose(this.battery.time_to_full)} left` : `Discharging: ${formatTimeVerbose(this.battery.time_to_empty)} left`);
 
         this.cpuSource = new GTop.glibtop_cpu();
         this.memSource = new GTop.glibtop_mem();
@@ -79,17 +79,13 @@ class SystemMonitorClass {
 
     private indicator(widgets: IndicatorWidgets, cssClasses?: string[] | Accessor<string[]>) {
         const [hoveredChild, setHoveredChild]= createState(widgets.icon);
-        const hover = new Gtk.EventControllerMotion;
-        const onEnter = hover.connect('enter', () => setHoveredChild(widgets.label));
-        const onLeave = hover.connect('leave', () => setHoveredChild(widgets.icon));
-
-        onCleanup(() => {
-            hover.disconnect(onEnter);
-            hover.disconnect(onLeave);
-        });
 
         return (
-            <box $={self => self.add_controller(hover)}>
+            <box>
+                <Gtk.EventControllerMotion
+                    onEnter={() => setHoveredChild(widgets.label)}
+                    onLeave={() => setHoveredChild(widgets.icon)}
+                />
                 <stack
                     cssClasses={cssClasses}
                     visibleChild={hoveredChild}
@@ -109,7 +105,7 @@ class SystemMonitorClass {
                 {this.indicator(
                     {
                         icon: <label cssClasses={['Icon']} label={''} /> as Gtk.Widget,
-                        label: <label cssClasses={['Label']} label={this._metrics.as(m => `${m.cpu}%`)} widthChars={4} />  as Gtk.Widget
+                        label: <label cssClasses={['Label']} label={this._metrics(m => `${m.cpu}%`)} widthChars={4} />  as Gtk.Widget
                     },
                     ["CpuUsage"]
                 )}
@@ -117,7 +113,7 @@ class SystemMonitorClass {
                 {this.indicator(
                     {
                         icon: <label cssClasses={['Icon']} label={'󰘚'} />  as Gtk.Widget,
-                        label: <label cssClasses={['Label']} label={this._metrics.as(m => `${m.mem}%`)} widthChars={4} />  as Gtk.Widget
+                        label: <label cssClasses={['Label']} label={this._metrics(m => `${m.mem}%`)} widthChars={4} />  as Gtk.Widget
                     },
                     ["MemoryUsage"]
                 )}
@@ -125,7 +121,7 @@ class SystemMonitorClass {
                 {this.indicator(
                     {
                         icon: <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} /> as Gtk.Widget,
-                        label: <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage.as(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} widthChars={4} />  as Gtk.Widget
+                        label: <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} widthChars={4} />  as Gtk.Widget
                     },
                     this.batteryCritical
                 )}

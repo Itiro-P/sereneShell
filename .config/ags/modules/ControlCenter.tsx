@@ -5,56 +5,56 @@ import wallpaperSelector from "./WallpaperSelector";
 import compositorManager from "../services/CompositorManager";
 
 class ControlCenterClass {
-    public constructor() {
-    }
 
-    private get ToggleVisibleComponents() {
-        onCleanup(() => settingsService.saveOptions());
-        return (
-            <box cssClasses={["ToggleVisibleComponents"]} orientation={Gtk.Orientation.VERTICAL}>
-                <label cssClasses={["Subtitle"]} label={'Animations & Components'} />
-                <box cssClasses={["ToggleAnimations", "Option"]}>
-                    <label label={"Animations "} halign={Gtk.Align.START} />
-                    <Gtk.Switch
-                        active={settingsService.animationsEnabled}
-                        onStateSet={
-                            (src, val) => {
-                                settingsService.setAnimationsEnabled = val;
-                                compositorManager.toggleAnimations(val);
-                            }
-                        }
-                    />
-                </box>
-                <box cssClasses={["ToggleCava", "Option"]}>
-                    <label label={"Cava "} halign={Gtk.Align.START} />
-                    <Gtk.Switch active={settingsService.cavaVisible} onStateSet={(src, val) => settingsService.setCavaVisible = val} />
-                </box>
-            </box>
-        );
-    }
+    public constructor() {}
 
-    private ControlCenterPopover(gdkmonitor: Gdk.Monitor) {
-        return (
-            <popover onClosed={() => settingsService.saveOptions()}>
-                <box cssClasses={["ControlCenterPopover"]}>
-                    <box orientation={Gtk.Orientation.VERTICAL}>
-                        {this.ToggleVisibleComponents}
-                        {wallpaperSelector.SelectorIndicator(gdkmonitor)}
-                    </box>
-                </box>
-            </popover>
-        );
+    private save: () => void = () => {
+        settingsService.saveOptions();
     }
 
     public ControlCenter(gdkmonitor: Gdk.Monitor) {
+        onCleanup(this.save);
         return (
-            <menubutton cssClasses={["ControlCenter"]} popover={this.ControlCenterPopover(gdkmonitor) as Gtk.Popover}>
-                <label cssClasses={['Label']} label={'󰣇'} />
+            <menubutton
+                cssClasses={["ControlCenter"]}
+                popover={
+                    <popover onClosed={this.save}>
+                        <box
+                            cssClasses={["ControlCenterPopover"]}
+                            orientation={Gtk.Orientation.VERTICAL}
+                        >
+                            <label
+                                cssClasses={["Subtitle"]}
+                                label={"Animations & Components"}
+                            />
+                            <box cssClasses={["ToggleAnimations", "Option"]}>
+                                <label label={"Animations "} halign={Gtk.Align.START} />
+                                <Gtk.Switch
+                                    active={settingsService.animationsEnabled}
+                                    onStateSet={(src, val) => {
+                                        settingsService.setAnimationsEnabled = val;
+                                        compositorManager.toggleAnimations(val);
+                                    }}
+                                />
+                            </box>
+                            <box cssClasses={["ToggleCava", "Option"]}>
+                                <label label={"Cava "} halign={Gtk.Align.START} />
+                                <Gtk.Switch
+                                    active={settingsService.cavaVisible}
+                                    onStateSet={(src, val) => settingsService.setCavaVisible = val}
+                                />
+                            </box>
+                            {wallpaperSelector.SelectorIndicator(gdkmonitor)}
+                        </box>
+                    </popover> as Gtk.Popover
+                }
+            >
+                <label cssClasses={["Label"]} label={"󰣇"} />
             </menubutton>
         );
     }
 }
 
-const controlCenter = new ControlCenterClass;
+const controlCenter = new ControlCenterClass();
 
 export default controlCenter;

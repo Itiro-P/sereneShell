@@ -23,7 +23,7 @@ class CavaWidget extends Gtk.DrawingArea {
         super();
         this.set_hexpand(true);
         this.set_vexpand(true);
-        this.valuesAccessor = v.as(v => {
+        this.valuesAccessor = v(v => {
             const height = this.get_allocated_height();
             return v.map(i => height * (1 - i));
         });
@@ -106,7 +106,7 @@ class CavaClass {
             this.default.set_input(CavaConfig.input);
             this.default.set_noise_reduction(CavaConfig.noiseReduction);
             this.default.set_stereo(CavaConfig.stereo);
-            this._values = createBinding(this.default, 'values').as((v) => {
+            this._values = createBinding(this.default, 'values')((v) => {
                 try {
                     const sens = CavaConfig.sensitivity;
                     return v.map(i => i * sens);

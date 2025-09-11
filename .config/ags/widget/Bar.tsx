@@ -24,7 +24,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT}
             application={app}
-            $={(self) => onCleanup(() => self.destroy())}
+            $={self => onCleanup(() => self.destroy())}
         >
             <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
                 <box halign={Gtk.Align.START}>
@@ -32,7 +32,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                 </box>
                 <box halign={Gtk.Align.CENTER}>
                     {media.Media}
-                    {workspaces.Workspaces({ monitor: compMonitor })}
+                    {workspaces.Workspaces(compMonitor)}
                 </box>
                 <box halign={Gtk.Align.END}>
                     {dateTime.DateTime}

@@ -31,7 +31,7 @@ class DateTimeClass {
     public get DateTime() {
         return (
             <menubutton cssClasses={["DateTimeCalendar"]} popover={this.DateTimePopover as Gtk.Popover}>
-                <label cssClasses={["Time"]} label={this._dateTime.as(t => ` ${t.time}`)} tooltipMarkup={this._dateTime.as(d => `󰃭 ${d.date}`)} />
+                <label cssClasses={["Time"]} label={this._dateTime(t => " " + t.time)} tooltipMarkup={this._dateTime(d => "󰃭 " + d.date)} />
             </menubutton>
         );
     }

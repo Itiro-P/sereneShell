@@ -1,4 +1,4 @@
-import { Accessor, createBinding, onCleanup, With } from "ags";
+import { Accessor, createBinding, With } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
 import AstalMpris from "gi://AstalMpris?version=0.1";
 
@@ -30,7 +30,7 @@ class MediaClass {
 
     public constructor() {
         this.mpris = AstalMpris.get_default();
-        this._activePlayerData = createBinding(this.mpris, "players").as(
+        this._activePlayerData = createBinding(this.mpris, "players")(
             (players) => {
                 let playing: AstalMpris.Player | null = null;
                 let paused: AstalMpris.Player | null = null;
@@ -60,8 +60,8 @@ class MediaClass {
                         title: createBinding(final, 'title'),
                         artist: createBinding(final, 'artist'),
                         album: createBinding(final, 'album'),
-                        statusIcon: status.as(st => this.getPlayerStatusIcon(st === AstalMpris.PlaybackStatus.PLAYING ? 'paused' : 'playing')),
-                        statusText: status.as(st => this.getPlayerStatus(st)),
+                        statusIcon: status(st => this.getPlayerStatusIcon(st === AstalMpris.PlaybackStatus.PLAYING ? 'paused' : 'playing')),
+                        statusText: status(st => this.getPlayerStatus(st)),
                         next: () => {
                             if (canGoNext.get()) final!.next();
                         },
@@ -129,32 +129,28 @@ class MediaClass {
                             sensitive={player.active}
                             popover={
                                 <popover>
-                                    <box cssClasses={["MprisPopover"]} overflow={Gtk.Overflow.HIDDEN}>
-                                        <box cssClasses={["MprisPlayer"]} orientation={Gtk.Orientation.VERTICAL}>
-                                            <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
-                                                <label cssClasses={["Title"]} label={player.title} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                                <label cssClasses={["Artist"]} label={player.artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                                <label cssClasses={["Album"]} label={player.album} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                            </box>
-                                            <box cssClasses={["LowerPart"]} orientation={Gtk.Orientation.VERTICAL}>
-                                                <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
-                                                    <button
-                                                        cssClasses={["Previous"]}
-                                                        iconName={PlayerButtonIcons.previous}
-                                                        onClicked={player.previous}
-                                                    />
-                                                    <button
-                                                        cssClasses={["PlayPause"]}
-                                                        iconName={player.statusIcon}
-                                                        onClicked={player.playPause}
-                                                    />
-                                                    <button
-                                                        cssClasses={["Next"]}
-                                                        iconName={PlayerButtonIcons.next}
-                                                        onClicked={player.next}
-                                                    />
-                                                </box>
-                                            </box>
+                                    <box cssClasses={["MprisPopover"]} orientation={Gtk.Orientation.VERTICAL}>
+                                        <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
+                                            <label cssClasses={["Title"]} label={player.title} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                            <label cssClasses={["Artist"]} label={player.artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                            <label cssClasses={["Album"]} label={player.album} ellipsize={3} maxWidthChars={15} widthChars={30} />
+                                        </box>
+                                        <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
+                                            <button
+                                                cssClasses={["Previous"]}
+                                                iconName={PlayerButtonIcons.previous}
+                                                onClicked={player.previous}
+                                            />
+                                            <button
+                                                cssClasses={["PlayPause"]}
+                                                iconName={player.statusIcon}
+                                                onClicked={player.playPause}
+                                            />
+                                            <button
+                                                cssClasses={["Next"]}
+                                                iconName={PlayerButtonIcons.next}
+                                                onClicked={player.next}
+                                            />
                                         </box>
                                     </box>
                                 </popover> as Gtk.Popover}
