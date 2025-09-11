@@ -4,7 +4,7 @@ Aqui eu guardo minhas configurações pessoais para configuração rápida de um
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1eba113f-37ed-4c71-a401-90c33e70b968" />
 
 Essas configurações são totalmente _pessoais_. Não espere que funcione em qualquer sistema.
-A distro que eu mais uso é o Archlinux, mas não uso nada que dependa diretamente dele (além dos PKGSBUILDs). Apenas uso a instalação básica do Hyprland.
+A distro que eu mais uso é o Archlinux, mas não uso nada que dependa diretamente dele. Apenas uso a instalação básica do Hyprland. (suporte a Niri em fase inicial).
 
 ## Instalação
 
