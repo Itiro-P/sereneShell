@@ -1,5 +1,4 @@
 import { Gdk, Gtk } from "ags/gtk4";
-import { onCleanup } from "ags";
 import settingsService from "../services/Settings";
 import wallpaperSelector from "./WallpaperSelector";
 import compositorManager from "../services/CompositorManager";

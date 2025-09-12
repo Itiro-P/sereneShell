@@ -1,6 +1,6 @@
 import { Gtk } from "ags/gtk4";
 import compositorManager, { CompositorClient, CompositorMonitor, CompositorWorkspace } from "../services/CompositorManager";
-import { Accessor, createBinding, For, onCleanup } from "ags";
+import { Accessor, createBinding, For } from "ags";
 import iconFinder from "../services/IconFinder";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 

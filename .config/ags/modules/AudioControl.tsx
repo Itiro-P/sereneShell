@@ -1,7 +1,7 @@
 import Wp from "gi://AstalWp";
 import GLib from "gi://GLib?version=2.0";
 import { Gtk, Gdk } from "ags/gtk4";
-import { Accessor, createBinding, onCleanup, With } from "ags";
+import { Accessor, createBinding, With } from "ags";
 
 class AudioControlClass {
     private default: Wp.Wp;

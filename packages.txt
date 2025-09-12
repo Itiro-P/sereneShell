@@ -31,7 +31,6 @@ kitty
 rofi
 wlogout
 nwg-displays
-nwg-dock-hyprland
 gitkraken
 clapper
 gst-libav

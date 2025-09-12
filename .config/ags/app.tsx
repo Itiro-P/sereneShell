@@ -1,7 +1,7 @@
 import style from "./styles/index.scss";
-import Bar from "./widget/Bar";
 import app from "ags/gtk4/app";
 import { createBinding, For, This } from "ags";
+import Bar from "./widget/Bar";
 import CavaOverlay from "./widget/CavaOverlay";
 import Cheatsheet from "./widget/Cheatsheet";
 
