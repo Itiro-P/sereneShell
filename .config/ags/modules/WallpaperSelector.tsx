@@ -2,7 +2,7 @@ import { Accessor, createState, onCleanup, Setter } from "ags";
 import { createPoll } from "ags/time";
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
-import { Swww } from "../utils/Swww";
+import { Swww } from "../services/Swww";
 import { Gdk, Gtk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 import settingsService from "../services/Settings";

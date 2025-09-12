@@ -14,7 +14,7 @@ const optionsFallback: Options = {
     wallpaperSelectorActive: true
 }
 
-const path = GLib.get_home_dir() + '/.config/ags/options/options.json';
+const path = GLib.get_home_dir() + '/.config/ags/jsons/options.json';
 
 class SettingsClass {
     private _animationsEnabled: Accessor<boolean>;

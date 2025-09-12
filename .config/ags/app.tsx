@@ -7,6 +7,7 @@ import Cheatsheet from "./widget/Cheatsheet";
 
 function main() {
     const monitors = createBinding(app, "monitors");
+
     return (
         <For each={monitors}>
             {monitor => (

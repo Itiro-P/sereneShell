@@ -8,17 +8,12 @@ class ControlCenterClass {
 
     public constructor() {}
 
-    private save: () => void = () => {
-        settingsService.saveOptions();
-    }
-
     public ControlCenter(gdkmonitor: Gdk.Monitor) {
-        onCleanup(this.save);
         return (
             <menubutton
                 cssClasses={["ControlCenter"]}
                 popover={
-                    <popover onClosed={this.save}>
+                    <popover>
                         <box
                             cssClasses={["ControlCenterPopover"]}
                             orientation={Gtk.Orientation.VERTICAL}

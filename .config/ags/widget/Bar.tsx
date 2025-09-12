@@ -9,6 +9,8 @@ import controlCenter from "../modules/ControlCenter";
 import workspaces from "../modules/Workspaces";
 import { onCleanup } from "ags";
 import compositorManager from "../services/CompositorManager";
+import iconFinder from "../services/IconFinder";
+import settingsService from "../services/Settings";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
@@ -24,7 +26,11 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT}
             application={app}
-            $={self => onCleanup(() => self.destroy())}
+            $={self => onCleanup(() => {
+                iconFinder.saveIconNames();
+                settingsService.saveOptions();
+                self.destroy();
+            })}
         >
             <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
                 <box halign={Gtk.Align.START}>

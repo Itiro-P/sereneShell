@@ -1,4 +1,3 @@
-import { exec, execAsync } from "ags/process";
 import GLib from "gi://GLib?version=2.0";
 
 export namespace Swww {
