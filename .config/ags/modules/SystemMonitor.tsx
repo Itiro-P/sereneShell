@@ -66,10 +66,10 @@ class SystemMonitorClass {
 
                 const cpuDiff = this.cpuData.diff;
 
-                const cpuPercent = cpuDiff.total > 0 ? Math.round(((cpuDiff.user + cpuDiff.sys) / cpuDiff.total) * 100) : 0;
-                const memPercent = this.memSource.total > 0 ? Math.round((this.memSource.user / this.memSource.total) * 100) : 0;
+                const cpuPercent = Math.round(((cpuDiff.user + cpuDiff.sys) / cpuDiff.total) * 100);
+                const memPercent = Math.round((this.memSource.user / this.memSource.total) * 100);
 
-                return { cpu: Math.min(100, cpuPercent), mem: Math.min(100, memPercent) };
+                return { cpu: cpuPercent, mem: memPercent };
             } catch (error) {
                 console.warn("Error when obtaining system metrics:", error);
                 return { cpu: 0, mem: 0 };

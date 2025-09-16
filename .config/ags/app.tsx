@@ -1,13 +1,18 @@
 import style from "./styles/index.scss";
 import app from "ags/gtk4/app";
-import { createBinding, For, This } from "ags";
+import { createBinding, For, onCleanup, This } from "ags";
 import Bar from "./widget/Bar";
 import CavaOverlay from "./widget/CavaOverlay";
 import Cheatsheet from "./widget/Cheatsheet";
+import settingsService from "./services/Settings";
+import iconFinder from "./services/IconFinder";
 
 function main() {
+    onCleanup(() => {
+        settingsService.saveOptions();
+        iconFinder.saveIconNames();
+    });
     const monitors = createBinding(app, "monitors");
-
     return (
         <For each={monitors}>
             {monitor => (

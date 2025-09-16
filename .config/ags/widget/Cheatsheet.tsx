@@ -67,7 +67,6 @@ export default function Cheatsheet({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) 
                             <Entry bind="SUPER + Enter" action="Terminal" />
                             <Entry bind="SUPER + T" action="Launcher" />
                             <Entry bind="SUPER + E" action="Open File Manager" />
-                            <Entry bind="SUPER + D" action="Toggle Dock" />
                             <Entry bind="SUPER + H" action="Toggle Cheatsheet" />
                             <Entry bind="SUPER + ESC" action="Toggle Wlogout" />
                         </box>

@@ -26,11 +26,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             gdkmonitor={gdkmonitor}
             anchor={TOP | RIGHT | LEFT}
             application={app}
-            $={self => onCleanup(() => {
-                iconFinder.saveIconNames();
-                settingsService.saveOptions();
-                self.destroy();
-            })}
+            $={self => onCleanup(() => self.destroy())}
         >
             <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
                 <box halign={Gtk.Align.START}>

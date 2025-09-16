@@ -97,9 +97,7 @@ class IconFinderClass {
     }
 
     public saveIconNames() {
-        console.log("Saving icon names...");
         const toSave = JSON.stringify([...this.iconMap.entries()], null, 2);
-        console.log(toSave);
         writeFile(path, toSave);
     }
 }

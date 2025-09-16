@@ -1,8 +1,9 @@
 import { Gtk } from "ags/gtk4";
-import compositorManager, { CompositorClient, CompositorMonitor, CompositorWorkspace } from "../services/CompositorManager";
-import { Accessor, createBinding, For } from "ags";
+import compositorManager from "../services/CompositorManager";
+import { Accessor, createBinding, createComputed, For } from "ags";
 import iconFinder from "../services/IconFinder";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import { IClient, IMonitor, IWorkspace } from "../types";
 
 
 class WorkspacesClass {
@@ -10,38 +11,48 @@ class WorkspacesClass {
     public constructor() {
     }
 
-    private WorkspaceClient(client: CompositorClient) {
+    private WorkspaceClient(client: IClient) {
         const isFocused = compositorManager.focusedClient(fc => fc === client);
+        const icon = iconFinder.findIcon(client.initialClass.get());
+        const tooltip = createComputed([client.title, client.initialTitle], (title, initTitle) => `<b>${title}</b>\n${initTitle}`);
+
         return (
             <button
                 cssClasses={isFocused(is => ["WorkspaceClient", is ? "CFocused" : ""])}
-                iconName={iconFinder.findIcon(client.get_initial_class())}
-                tooltipMarkup={`<b>${client.get_title()}</b>\n<i>${client.get_initial_class()}</i>`}
-                onClicked={() => { if(compositorManager.focusedClient.get() !== client) client.focus() }}
+                iconName={icon}
+                tooltipMarkup={tooltip}
+                onClicked={() => {
+                    if(compositorManager.focusedClient.get() !== client) client.focus()
+                }}
             />
         );
     }
 
-    private Workspace(workspace: CompositorWorkspace) {
+    private Workspace(workspace: IWorkspace) {
         const isFocused = compositorManager.focusedWorkspace(ws => ws === workspace);
-        const clients = createBinding(workspace, "clients")(cs => cs.filter(c => !c.get_pinned()));
+        const clients = workspace.clients;
+
         return (
             <box cssClasses={isFocused(is => ["Workspace", is ? "WFocused" : ""])}>
                 <button
                     cssClasses={["WorkspaceIdButton"]}
-                    onClicked={() => { if(compositorManager.focusedWorkspace.get().get_id() !== workspace.get_id()) workspace.focus() }}
+                    onClicked={() => {
+                        if(compositorManager.focusedWorkspace.get().id.get() !== workspace.id.get())
+                            workspace.focus()
+                    }}
                     halign={Gtk.Align.CENTER}
                     valign={Gtk.Align.CENTER}
-                    label={workspace.get_id().toString()}
+                    label={workspace.id(id => id.toString())}
                 />
+
                 <box cssClasses={["Clients"]} visible={clients(cs => cs.length > 0 && cs.length < 6)}>
-                    <For each={clients} children={(client: AstalHyprland.Client) => this.WorkspaceClient(client)} />
+                    <For each={clients} children={(client: IClient) => this.WorkspaceClient(client)} />
                 </box>
             </box>
         );
     }
 
-    private WorkspacePopover(theRest: Accessor<CompositorWorkspace[]>) {
+    private WorkspacePopover(theRest: Accessor<IWorkspace[]>) {
         return (
             <popover cssClasses={["WorkspacePopover"]}>
                 <box orientation={Gtk.Orientation.VERTICAL}>
@@ -51,7 +62,7 @@ class WorkspacesClass {
         );
     }
 
-    private MoreWorkspacesButton(theRest: Accessor<CompositorWorkspace[]>) {
+    private MoreWorkspacesButton(theRest: Accessor<IWorkspace[]>) {
         return (
             <menubutton
                 cssClasses={["MoreWorkspacesButton"]}
@@ -63,19 +74,18 @@ class WorkspacesClass {
         );
     }
 
-    public Workspaces(monitor: CompositorMonitor) {
+    public Workspaces(monitor: IMonitor) {
         const monitorWorkspaces = compositorManager.workspaces(ws => {
-            const filtered = ws.filter(workspace => workspace.get_monitor() === monitor);
             return {
-                main: filtered.slice(0, this.maxWorkspaces),
-                theRest: filtered.slice(this.maxWorkspaces)
+                main: ws.slice(0, this.maxWorkspaces),
+                theRest: ws.slice(this.maxWorkspaces)
             };
         });
 
         return (
             <box cssClasses={["Workspaces"]}>
                 <box>
-                    <For each={monitorWorkspaces(mw => mw.main)} children={(w: CompositorWorkspace) => this.Workspace(w)} />
+                    <For each={monitorWorkspaces(mw => mw.main)} children={(w: IWorkspace) => this.Workspace(w)} />
                 </box>
                 {this.MoreWorkspacesButton(monitorWorkspaces(mw => mw.theRest))}
             </box>
