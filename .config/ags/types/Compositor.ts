@@ -7,12 +7,14 @@ export interface IClient {
     initialTitle: Accessor<string>;
     class: Accessor<string>;
     initialClass: Accessor<string>;
+    isFocused: Accessor<boolean>;
 }
 
 export interface IWorkspace {
     focus: () => void;
     clients: Accessor<IClient[]>;
     id: Accessor<number>;
+    isFocused: Accessor<boolean>;
 }
 
 export interface IMonitor {
@@ -26,6 +28,7 @@ export interface IMonitor {
     model: string;
     workspaces: Accessor<IWorkspace[]>;
     focusedWorkspace: Accessor<IWorkspace>;
+    isFocused: Accessor<boolean>;
 }
 
 export interface ICompositor {

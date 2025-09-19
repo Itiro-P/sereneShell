@@ -101,7 +101,7 @@ class SystemMonitorClass {
 
     public get SystemMonitor() {
         return (
-            <box cssClasses={["SystemMonitor"]}>
+            <box cssClasses={["SystemMonitor"]} homogeneous>
                 {this.indicator(
                     {
                         icon: <label cssClasses={['Icon']} label={''} /> as Gtk.Widget,

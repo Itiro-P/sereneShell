@@ -1,6 +1,7 @@
-import { Accessor, createBinding, With } from "ags";
+import { Accessor, createBinding, createState, With } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
 import AstalMpris from "gi://AstalMpris?version=0.1";
+import Pango from "gi://Pango?version=1.0";
 
 type PlayerButton = 'previous' | 'next' | 'playing' | 'paused' | 'stopped';
 
@@ -27,6 +28,7 @@ type PlayerData = {
 class MediaClass {
     private mpris: AstalMpris.Mpris;
     private _activePlayerData: Accessor<PlayerData>;
+    private readonly metadataArray: string[] = ["Title", "Artist", "Album"];
 
     public constructor() {
         this.mpris = AstalMpris.get_default();
@@ -122,41 +124,51 @@ class MediaClass {
             <box>
             <With value={this._activePlayerData}>
                 {player => {
+                    const [hovered, setHovered] = createState(false);
+                    const visibleChild = hovered(h => h ? 'FullStatus' : 'MinimalStatus');
+
+                    const [visibleChildMetadata, setVisibleMetadata] = createState(0);
                     return (
-                        <menubutton
-                            alwaysShowArrow={false}
-                            cssClasses={["Media"]}
-                            sensitive={player.active}
-                            popover={
-                                <popover>
-                                    <box cssClasses={["MprisPopover"]} orientation={Gtk.Orientation.VERTICAL}>
-                                        <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
-                                            <label cssClasses={["Title"]} label={player.title} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                            <label cssClasses={["Artist"]} label={player.artist} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                            <label cssClasses={["Album"]} label={player.album} ellipsize={3} maxWidthChars={15} widthChars={30} />
-                                        </box>
-                                        <box cssClasses={["Controllers"]} halign={Gtk.Align.CENTER}>
-                                            <button
-                                                cssClasses={["Previous"]}
-                                                iconName={PlayerButtonIcons.previous}
-                                                onClicked={player.previous}
-                                            />
-                                            <button
-                                                cssClasses={["PlayPause"]}
-                                                iconName={player.statusIcon}
-                                                onClicked={player.playPause}
-                                            />
-                                            <button
-                                                cssClasses={["Next"]}
-                                                iconName={PlayerButtonIcons.next}
-                                                onClicked={player.next}
-                                            />
-                                        </box>
+                        <box cssClasses={["Media"]}>
+                            <Gtk.EventControllerMotion onEnter={() => setHovered(true)} onLeave={() => setHovered(false)} />
+                            <stack
+                                visibleChildName={visibleChild}
+                                transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+                                transitionDuration={300}
+                            >
+                                <label $type="named" name={'MinimalStatus'} cssClasses={["MinimalStatus"]} label={player.statusText} widthChars={10} />
+                                <box $type="named" name={'FullStatus'} cssClasses={["FullStatus"]}>
+                                    <Gtk.EventControllerMotion onLeave={() => setVisibleMetadata(0)} />
+                                    <stack
+                                        visibleChildName={visibleChildMetadata(vcm => this.metadataArray[vcm])}
+                                        transitionType={Gtk.StackTransitionType.SLIDE_DOWN}
+                                        transitionDuration={300}
+                                    >
+                                        <Gtk.GestureClick button={Gdk.BUTTON_PRIMARY} onPressed={() => {setVisibleMetadata((visibleChildMetadata.get() + 1)%3)}} />
+                                        <label $type="named" name={"Title"} cssClasses={["Title"]} label={player.title} ellipsize={Pango.EllipsizeMode.END} widthChars={10} />
+                                        <label $type="named" name={"Artist"} cssClasses={["Artist"]} label={player.artist} ellipsize={Pango.EllipsizeMode.END} widthChars={10} />
+                                        <label $type="named" name={"Album"} cssClasses={["Album"]} label={player.album} ellipsize={Pango.EllipsizeMode.END} widthChars={10} />
+                                    </stack>
+                                    <box cssClasses={["Controllers"]}>
+                                        <button
+                                            cssClasses={["Previous"]}
+                                            iconName={PlayerButtonIcons.previous}
+                                            onClicked={player.previous}
+                                        />
+                                        <button
+                                            cssClasses={["PlayPause"]}
+                                            iconName={player.statusIcon}
+                                            onClicked={player.playPause}
+                                        />
+                                        <button
+                                            cssClasses={["Next"]}
+                                            iconName={PlayerButtonIcons.next}
+                                            onClicked={player.next}
+                                        />
                                     </box>
-                                </popover> as Gtk.Popover}
-                        >
-                            <label label={player.statusText} widthChars={12}/>
-                        </menubutton>
+                                </box>
+                            </stack>
+                        </box>
                     );
                 }}
             </With>

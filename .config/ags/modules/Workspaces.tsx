@@ -1,43 +1,39 @@
 import { Gtk } from "ags/gtk4";
 import compositorManager from "../services/CompositorManager";
-import { Accessor, createBinding, createComputed, For } from "ags";
+import { Accessor, createComputed, For } from "ags";
 import iconFinder from "../services/IconFinder";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import { IClient, IMonitor, IWorkspace } from "../types";
 
 
 class WorkspacesClass {
-    private readonly maxWorkspaces: number = 10;
+    private readonly maxWorkspaces: number = 5;
     public constructor() {
     }
 
     private WorkspaceClient(client: IClient) {
-        const isFocused = compositorManager.focusedClient(fc => fc === client);
-        const icon = iconFinder.findIcon(client.initialClass.get());
         const tooltip = createComputed([client.title, client.initialTitle], (title, initTitle) => `<b>${title}</b>\n${initTitle}`);
 
         return (
             <button
-                cssClasses={isFocused(is => ["WorkspaceClient", is ? "CFocused" : ""])}
-                iconName={icon}
+                cssClasses={client.isFocused(is => ["WorkspaceClient", is ? "CFocused" : ""])}
+                iconName={iconFinder.findIcon(client.initialClass.get())}
                 tooltipMarkup={tooltip}
                 onClicked={() => {
-                    if(compositorManager.focusedClient.get() !== client) client.focus()
+                    if(compositorManager.focusedClient?.get() !== client) client.focus()
                 }}
             />
         );
     }
 
     private Workspace(workspace: IWorkspace) {
-        const isFocused = compositorManager.focusedWorkspace(ws => ws === workspace);
         const clients = workspace.clients;
-
+        const clientCount = clients(cs => cs.length > 0 && cs.length < 5);
         return (
-            <box cssClasses={isFocused(is => ["Workspace", is ? "WFocused" : ""])}>
+            <box cssClasses={workspace.isFocused(is => ["Workspace", is ? "WFocused" : ""])}>
                 <button
                     cssClasses={["WorkspaceIdButton"]}
                     onClicked={() => {
-                        if(compositorManager.focusedWorkspace.get().id.get() !== workspace.id.get())
+                        if(compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get())
                             workspace.focus()
                     }}
                     halign={Gtk.Align.CENTER}
@@ -45,7 +41,7 @@ class WorkspacesClass {
                     label={workspace.id(id => id.toString())}
                 />
 
-                <box cssClasses={["Clients"]} visible={clients(cs => cs.length > 0 && cs.length < 6)}>
+                <box cssClasses={["Clients"]} visible={clientCount}>
                     <For each={clients} children={(client: IClient) => this.WorkspaceClient(client)} />
                 </box>
             </box>
@@ -75,11 +71,8 @@ class WorkspacesClass {
     }
 
     public Workspaces(monitor: IMonitor) {
-        const monitorWorkspaces = compositorManager.workspaces(ws => {
-            return {
-                main: ws.slice(0, this.maxWorkspaces),
-                theRest: ws.slice(this.maxWorkspaces)
-            };
+        const monitorWorkspaces = monitor.workspaces(ws => {
+            return { main: ws.slice(0, this.maxWorkspaces), theRest: ws.slice(this.maxWorkspaces) };
         });
 
         return (

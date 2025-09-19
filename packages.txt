@@ -30,14 +30,13 @@ vesktop
 kitty
 rofi
 wlogout
+swaddle
 nwg-displays
 gitkraken
 clapper
 gst-libav
 ristretto
 hyprland
-hypr-zoom
-hyprcap
 hyprcursor
 hyprgraphics
 hyprland
@@ -45,12 +44,8 @@ hyprland-protocols
 hyprland-qt-support
 hyprland-qtutils
 hyprlang
-hyprlight
-hyprpaper
 hyprpicker
-hyprpop
 hyprshot
-hyprsunset
 hyprutils
 hyprwayland-scanner
 hyprwindow
@@ -75,3 +70,5 @@ gtklock
 overskride
 swww
 swayidle
+grim
+slurp

@@ -1,5 +1,4 @@
 import { Astal, Gtk, Gdk } from "ags/gtk4";
-import systemMonitor from "../modules/SystemMonitor";
 import systemTray from "../modules/SystemTray";
 import media from "../modules/Media";
 import app from "ags/gtk4/app";
@@ -9,8 +8,6 @@ import controlCenter from "../modules/ControlCenter";
 import workspaces from "../modules/Workspaces";
 import { onCleanup } from "ags";
 import compositorManager from "../services/CompositorManager";
-import iconFinder from "../services/IconFinder";
-import settingsService from "../services/Settings";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
@@ -33,13 +30,12 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                     {systemTray.SystemTray}
                 </box>
                 <box halign={Gtk.Align.CENTER}>
-                    {media.Media}
-                    {workspaces.Workspaces(compMonitor)}
+                    {compMonitor ? workspaces.Workspaces(compMonitor) : <box/>}
                 </box>
                 <box halign={Gtk.Align.END}>
+                    {media.Media}
                     {dateTime.DateTime}
                     {audioControl.AudioControl}
-                    {systemMonitor.SystemMonitor}
                     {controlCenter.ControlCenter(gdkmonitor)}
                 </box>
             </box>
