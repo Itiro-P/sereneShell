@@ -4,55 +4,64 @@
 @use 'common/Font';
 
 .SystemMonitor {
-    * {
-        margin: 0px 2px;
-        font-weight: bold
-    }
-}
-
-.MemoryUsage {
-    @extend %component-circle;
-    @include Transitions.noneToInverseChild(Colors.$peach, Colors.$base, Colors.$peach);
-}
-
-.CpuUsage {
-    @extend %component-circle;
-    @include Transitions.noneToInverseChild(Colors.$green, Colors.$base, Colors.$green);
-}
-
-.Battery {
-    @extend %component-circle;
-}
-
-.BatteryNormal {
-    @include Transitions.noneToInverseChild(Colors.$lavender, Colors.$crust, Colors.$lavender);
-}
-
-.BatteryCritical {
-    @include Transitions.noneToInverseChild(Colors.$red, Colors.$crust, Colors.$red);
-}
-
-.BatteryPopover {
-    background-color: rgba(Colors.$surface0, 0.8);
-    padding: 2px;
-    border-radius: 16px;
-    .Title, .BatteryLife, .ToggleButton {
-        margin: 2px;
+    margin: 2px;
+    .Icon {
+        margin: 4px;
     }
 
-    .Title {
-        color: Colors.$text;
+    .Slider {
+        @extend %component-slider;
+        background-color: Colors.$surface2;
+    }
+
+    .PercentageLabel {
         font-weight: bold;
     }
 
-    .BatteryLife {
-        color: Colors.$text;
+    .Cpu, .Memory, .Battery {
+        background-color: Colors.$base;
+        padding: 4px;
+        margin: 2px;
+        border-radius: 16px;
     }
 
-    .ToggleButton {
-        margin: 2px 4px;
-        padding: 2px;
-        border-radius: 10px;
-        @include Transitions.inverse(rgba(Colors.$base, 0.75), rgba(Colors.$blue, 0.75));
+    .Cpu {
+        .Icon, .PercentageLabel {
+            color: Colors.$teal;
+        }
+
+        .Slider {
+            & highlight {
+                background-color: Colors.$teal;
+            }
+        }
+    }
+
+    .Memory {
+        .Icon, .PercentageLabel {
+            color: Colors.$green;
+        }
+
+        .Slider {
+            & highlight {
+                background-color: Colors.$green;
+            }
+        }
+    }
+
+    .Battery {
+        .Icon {
+            margin: 0;
+            padding: 0;
+        }
+        .Icon, .PercentageLabel {
+            color: Colors.$lavender;
+        }
+
+        .Slider {
+            & highlight {
+                background-color: Colors.$lavender;
+            }
+        }
     }
 }

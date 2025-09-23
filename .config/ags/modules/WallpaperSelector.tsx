@@ -33,9 +33,7 @@ class WallpaperSelectorClass {
     }
 
     private isImageFile(filename: string) {
-        const extension = filename
-            .toLowerCase()
-            .substring(filename.lastIndexOf("."));
+        const extension = filename.toLowerCase().substring(filename.lastIndexOf("."));
         return imageExtensions.includes(extension) ? extension : null;
     }
 
@@ -57,8 +55,7 @@ class WallpaperSelectorClass {
             while ((fileInfo = enumerator.next_file(null)) !== null) {
                 if (fileInfo.get_file_type() === Gio.FileType.REGULAR) {
                     const fileName = fileInfo.get_name();
-                    const ext = this.isImageFile(fileName);
-                    if (ext) images.push(fileName);
+                    if (this.isImageFile(fileName)) images.push(fileName);
                 }
             }
 
@@ -84,16 +81,13 @@ class WallpaperSelectorClass {
                 const connector = gdkmonitor.get_connector();
                 if (connector) {
                     const imgArray = this.images.get();
-                    const img =
-                        imgArray[Math.floor(Math.random() * imgArray.length)];
+                    const img = imgArray[Math.floor(Math.random() * imgArray.length)];
                     Swww.manager.setWallpaper(`${path}/${img}`, {
                         outputs: connector,
                         transitionType: Swww.TransitionType.GROW,
                     });
                 } else {
-                    execAsync(
-                        `notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`,
-                    );
+                    execAsync(`notify-send "Monitor ${gdkmonitor.get_description()} não tem conector" "${gdkmonitor.get_description()} não tem conector."`);
                 }
             }
         });
@@ -101,12 +95,7 @@ class WallpaperSelectorClass {
         return (
             <box cssClasses={["ToggleActive", "Option"]}>
                 <label label={"Wallpaper Selector "} halign={Gtk.Align.START} />
-                <Gtk.Switch
-                    active={this._timerActive}
-                    onStateSet={(src, val) =>
-                        (settingsService.setWallpaperSelectorActive = val)
-                    }
-                />
+                <switch active={this._timerActive} onStateSet={(src, val) => (settingsService.setWallpaperSelectorActive = val)} />
             </box>
         );
     }

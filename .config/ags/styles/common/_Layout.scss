@@ -16,8 +16,8 @@ $slider-height: 20px;
 
 %component-circle {
     border-radius: 100%;
-    min-width: $circle-diameter;
-    min-height: $circle-diameter;
+    width: $circle-diameter;
+    height: $circle-diameter;
 }
 
 %component-slider {

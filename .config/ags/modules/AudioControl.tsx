@@ -57,11 +57,10 @@ class AudioControlClass {
 
                         return (
                             <box cssClasses={["MixerEntry"]}>
+                                <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
                                 <button cssClasses={["Icon"]} iconName={icon} onClicked={() => edp.set_mute(!edp.get_mute())} />
-                                <box>
-                                    <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
-                                    <slider cssClasses={["Slider"]} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} />
-                                </box>
+                                <slider cssClasses={["Slider"]} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} />
+                                <label cssClasses={["PercentageLabel"]} label={volume(v => `${Math.round(v * 100)}%`)} maxWidthChars={4} hexpand />
                             </box>
                         );
                     }}
@@ -70,15 +69,16 @@ class AudioControlClass {
         );
     }
 
-    private get Mixer() {
+    public get Mixer() {
         return (
-            <popover cssClasses={["Mixer"]}>
-                <box orientation={Gtk.Orientation.VERTICAL}>
+            <box cssClasses={["Mixer"]} orientation={Gtk.Orientation.VERTICAL}>
+                <box cssClasses={["Title"]} halign={Gtk.Align.CENTER} hexpand>
                     <label cssClasses={["Label"]} label={"Mixer"} />
-                    {this.MixerEntry(this.defaultSpeaker)}
-                    {this.MixerEntry(this.defaultMicrophone)}
+                    <button cssClasses={["PavucontrolButton"]} label={"Pavucontrol"} onClicked={(self) => GLib.spawn_command_line_async('pavucontrol')} />
                 </box>
-            </popover>
+                {this.MixerEntry(this.defaultSpeaker)}
+                {this.MixerEntry(this.defaultMicrophone)}
+            </box>
         );
     }
 
@@ -87,7 +87,6 @@ class AudioControlClass {
             <box cssClasses={["AudioControl"]}>
                 <Gtk.GestureClick button={Gdk.BUTTON_SECONDARY} onPressed={() => GLib.spawn_command_line_async('pavucontrol')} />
                 {this.Endpoint(this.defaultSpeaker)}
-                <menubutton popover={this.Mixer as Gtk.Popover} child={<label label={''}></label> as Gtk.Widget} />
             </box>
         );
     }

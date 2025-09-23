@@ -2,6 +2,7 @@ import { Accessor, createBinding, createState, With } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
 import AstalMpris from "gi://AstalMpris?version=0.1";
 import Pango from "gi://Pango?version=1.0";
+import cava from "./Cava";
 
 type PlayerButton = 'previous' | 'next' | 'playing' | 'paused' | 'stopped';
 
@@ -121,7 +122,7 @@ class MediaClass {
 
     public get Media() {
         return (
-            <box>
+            <revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} transitionDuration={500} revealChild={this._activePlayerData(apd => apd.active)}>
             <With value={this._activePlayerData}>
                 {player => {
                     const [hovered, setHovered] = createState(false);
@@ -130,13 +131,16 @@ class MediaClass {
                     const [visibleChildMetadata, setVisibleMetadata] = createState(0);
                     return (
                         <box cssClasses={["Media"]}>
-                            <Gtk.EventControllerMotion onEnter={() => setHovered(true)} onLeave={() => setHovered(false)} />
+                            <Gtk.EventControllerMotion onEnter={() => { if(player.active) { setHovered(true) }}} onLeave={() => setHovered(false)} />
                             <stack
                                 visibleChildName={visibleChild}
                                 transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
                                 transitionDuration={300}
                             >
-                                <label $type="named" name={'MinimalStatus'} cssClasses={["MinimalStatus"]} label={player.statusText} widthChars={10} />
+                                <box $type="named" name={'MinimalStatus'} cssClasses={["MinimalStatus"]}>
+                                    <label label={player.statusText} widthChars={10} />
+                                    <box children={cava.Cava(["CavaMedia"])} hexpand={false} widthRequest={140} />
+                                </box>
                                 <box $type="named" name={'FullStatus'} cssClasses={["FullStatus"]}>
                                     <Gtk.EventControllerMotion onLeave={() => setVisibleMetadata(0)} />
                                     <stack
@@ -145,9 +149,9 @@ class MediaClass {
                                         transitionDuration={300}
                                     >
                                         <Gtk.GestureClick button={Gdk.BUTTON_PRIMARY} onPressed={() => {setVisibleMetadata((visibleChildMetadata.get() + 1)%3)}} />
-                                        <label $type="named" name={"Title"} cssClasses={["Title"]} label={player.title} ellipsize={Pango.EllipsizeMode.END} widthChars={10} />
-                                        <label $type="named" name={"Artist"} cssClasses={["Artist"]} label={player.artist} ellipsize={Pango.EllipsizeMode.END} widthChars={10} />
-                                        <label $type="named" name={"Album"} cssClasses={["Album"]} label={player.album} ellipsize={Pango.EllipsizeMode.END} widthChars={10} />
+                                        <label $type="named" name={"Title"} cssClasses={["Title"]} label={player.title} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={16} />
+                                        <label $type="named" name={"Artist"} cssClasses={["Artist"]} label={player.artist} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={16} />
+                                        <label $type="named" name={"Album"} cssClasses={["Album"]} label={player.album} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={16} />
                                     </stack>
                                     <box cssClasses={["Controllers"]}>
                                         <button
@@ -172,7 +176,7 @@ class MediaClass {
                     );
                 }}
             </With>
-            </box>
+            </revealer>
         );
     }
 }

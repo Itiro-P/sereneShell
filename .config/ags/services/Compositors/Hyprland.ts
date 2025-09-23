@@ -188,6 +188,9 @@ export class Hyprland implements ICompositor {
         try {
             exec(`hyprctl keyword animations:enabled ${newState ? 1 : 0}`);
             exec(`hyprctl keyword decoration:shadow:enabled ${newState ? 1 : 0}`);
+            exec(`hyprctl keyword decoration:blur:enabled ${newState ? 1 : 0}`);
+            exec(`hyprctl keyword decoration:active_opacity ${newState ? 0.9 : 1}`);
+            exec(`hyprctl keyword decoration:inactive_opacity ${newState ? 0.85 : 1}`);
         } catch (error) {
             console.error("Erro ao alterar animações:", error);
         }

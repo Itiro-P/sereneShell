@@ -131,6 +131,7 @@ class CavaClass {
             <box
                 cssClasses={[...cssClasses, "Cava"]}
                 overflow={Gtk.Overflow.HIDDEN}
+                halign={Gtk.Align.FILL}
                 $={() => CavaClass.widgetCount += 1}
                 onDestroy={
                     () => {

@@ -2,9 +2,11 @@ import { Gdk } from "ags/gtk4";
 import { exec } from "ags/process";
 import { ICompositor } from "../types";
 import { Hyprland, Niri } from "./Compositors";
+import settingsService from "./Settings";
 
 class CompositorManagerClass {
     private compositor: ICompositor | null;
+    private unsub: () => void;
 
     public constructor() {
         const compositor = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
@@ -16,12 +18,13 @@ class CompositorManagerClass {
                 break;
             case "niri":
             case "Niri":
-            //    this.compositor = new Niri;
-            //    break;
+                this.compositor = new Niri;
+                break;
             default:
                 console.warn("Compositor not identified/supported " + compositor);
                 this.compositor = null;
         }
+        this.unsub = settingsService.animationsEnabled.subscribe(() => compositorManager.toggleAnimations(settingsService.animationsEnabled.get()));
     }
 
     public get workspaces() {
@@ -45,11 +48,11 @@ class CompositorManagerClass {
     }
 
     public get animationState() {
-        return this.compositor?.getAnimationState();
+        return this.compositor?.getAnimationState() ?? false;
     }
 
     public toggleAnimations(val?: boolean) {
-        if(val) this.compositor?.toggleAnimations(val);
+        if(val !== undefined) this.compositor?.toggleAnimations(val);
     }
 }
 

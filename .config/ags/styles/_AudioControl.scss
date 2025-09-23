@@ -1,5 +1,6 @@
 @use 'common/Colors';
 @use 'common/Layout';
+@use 'common/Font';
 @use 'common/Transitions';
 
 .AudioControl {
@@ -9,19 +10,31 @@
 
 .Mixer {
     padding: 6px;
-    border-radius: 16px;
-    background-color: rgba(Colors.$surface0, 0.8);
-    border: none;
+    padding: 2px;
 
-    .Label {
-        font-weight: bold;
-        font-size: 24px;
-        margin: 6px;
-        color: Colors.$text;
+    .Title {
+        margin: 2px;
+        padding: 2px;
+
+        .Label, .PavucontrolButton {
+            padding: 2px;
+            font-weight: bold;
+            font-size: Font.$font-size-large;
+            color: Colors.$text;
+        }
+
+        .PavucontrolButton {
+            transition: all 0.3s ease-in-out;
+            border-radius: 0px 16px 16px 0px;
+            &:hover {
+                label { color: Colors.$blue; }
+                background-color: Colors.$crust;
+            }
+        }
     }
 
     .MixerEntry {
-        background-color: Colors.$surface1;
+        background-color: Colors.$base;
         padding: 2px;
         margin: 2px;
         border: none;
@@ -29,7 +42,7 @@
 
         .Icon {
             @extend %component-circle;
-            @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
+            @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
         }
 
         .Slider {
@@ -39,6 +52,16 @@
             & highlight {
                 background-color: Colors.$blue;
             }
+
+            & through {
+                min-height: 1px;
+                min-width: 1px;
+                background-color: Colors.$subtext1;
+            }
+        }
+
+        .PercentageLabel {
+            font-weight: bold;
         }
     }
 }

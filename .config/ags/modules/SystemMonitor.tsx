@@ -1,7 +1,7 @@
 import AstalBattery from "gi://AstalBattery"
 import GTop from "gi://GTop?version=2.0";
 import { formatTimeVerbose } from "../services/TimeFormatter";
-import { Accessor, createBinding, createComputed, createState, onCleanup } from "ags";
+import { Accessor, createBinding, createComputed } from "ags";
 import { createPoll } from "ags/time";
 import { Gtk } from "ags/gtk4";
 
@@ -10,18 +10,13 @@ type Metrics = {
     mem: number
 }
 
-type IndicatorWidgets = {
-    icon: Gtk.Widget,
-    label: Gtk.Widget
-}
-
 const pollTime = 3000;
 
 class SystemMonitorClass {
     private battery: AstalBattery.Device;
     private batteryPercentage: Accessor<number>;
     private batteryCharging: Accessor<boolean>;
-    private batteryCritical: Accessor<string[]>;
+    private batteryCritical: Accessor<boolean>;
     private batteryLifeLabel: Accessor<string>;
     private batteryIcon: Accessor<string>;
 
@@ -35,8 +30,8 @@ class SystemMonitorClass {
         this.batteryIcon = createBinding(this.battery, "batteryIconName");
         this.batteryPercentage = createBinding(this.battery, "percentage");
         this.batteryCharging = createBinding(this.battery, "charging");
-        this.batteryCritical = createComputed([this.batteryPercentage, this.batteryCharging], (p, c) => ["Battery", p <= 0.3 && !c ? "BatteryCritical" : "BatteryNormal"]);
-        this.batteryLifeLabel = this.batteryCharging(c => c ? `Charging: ${formatTimeVerbose(this.battery.time_to_full)} left` : `Discharging: ${formatTimeVerbose(this.battery.time_to_empty)} left`);
+        this.batteryCritical = createComputed([this.batteryPercentage, this.batteryCharging], (p, c) => p <= 0.3 && !c);
+        this.batteryLifeLabel = createComputed([this.batteryCharging, createBinding(this.battery, "timeToFull"), createBinding(this.battery, "timeToEmpty")], (c, f, e) => c ? `Charging: ${formatTimeVerbose(f)} left` : `Discharging: ${formatTimeVerbose(e)} left`);
 
         this.cpuSource = new GTop.glibtop_cpu();
         this.memSource = new GTop.glibtop_mem();
@@ -77,54 +72,47 @@ class SystemMonitorClass {
         });
     }
 
-    private indicator(widgets: IndicatorWidgets, cssClasses?: string[] | Accessor<string[]>) {
-        const [hoveredChild, setHoveredChild]= createState(widgets.icon);
+    public get BatteryCritical() {
+        return this.batteryCritical;
+    }
 
+    private get Cpu() {
         return (
-            <box>
-                <Gtk.EventControllerMotion
-                    onEnter={() => setHoveredChild(widgets.label)}
-                    onLeave={() => setHoveredChild(widgets.icon)}
-                />
-                <stack
-                    cssClasses={cssClasses}
-                    visibleChild={hoveredChild}
-                    transitionType={Gtk.StackTransitionType.CROSSFADE}
-                    transitionDuration={200}
-                >
-                    {widgets.icon}
-                    {widgets.label}
-                </stack>
+            <box cssClasses={["Cpu"]}>
+                <label cssClasses={['Icon']} label={''} />
+                <slider cssClasses={["Slider"]} value={this._metrics(m => m.cpu)} step={1} min={0} max={100} sensitive={false} />
+                <label cssClasses={['PercentageLabel']} label={this._metrics(m => `${m.cpu}%`)} maxWidthChars={4} hexpand />
+            </box>
+        );
+    }
+
+    private get Memory() {
+        return (
+            <box cssClasses={["Memory"]}>
+                <label cssClasses={['Icon']} label={'󰘚'} />
+                <slider cssClasses={["Slider"]} value={this._metrics(m => m.mem)} step={1} min={0} max={100} sensitive={false} />
+                <label cssClasses={['PercentageLabel']} label={this._metrics(m => `${m.mem}%`)} maxWidthChars={4} hexpand />
+            </box>
+        );
+    }
+
+    private get Battery() {
+        return (
+            <box cssClasses={["Battery"]}>
+                <image cssClasses={["Icon"]} iconName={this.batteryIcon} />
+                <slider cssClasses={["Slider"]} value={this.batteryPercentage} step={0.1} min={0} max={1} sensitive={false} />
+                <label cssClasses={["PercentageLabel"]} label={this.batteryPercentage(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} maxWidthChars={4} hexpand />
             </box>
         );
     }
 
     public get SystemMonitor() {
         return (
-            <box cssClasses={["SystemMonitor"]} homogeneous>
-                {this.indicator(
-                    {
-                        icon: <label cssClasses={['Icon']} label={''} /> as Gtk.Widget,
-                        label: <label cssClasses={['Label']} label={this._metrics(m => `${m.cpu}%`)} widthChars={4} />  as Gtk.Widget
-                    },
-                    ["CpuUsage"]
-                )}
-
-                {this.indicator(
-                    {
-                        icon: <label cssClasses={['Icon']} label={'󰘚'} />  as Gtk.Widget,
-                        label: <label cssClasses={['Label']} label={this._metrics(m => `${m.mem}%`)} widthChars={4} />  as Gtk.Widget
-                    },
-                    ["MemoryUsage"]
-                )}
-
-                {this.indicator(
-                    {
-                        icon: <image cssClasses={["BatteryIcon"]} iconName={this.batteryIcon} /> as Gtk.Widget,
-                        label: <label cssClasses={["BatteryUsageLabel"]} label={this.batteryPercentage(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} widthChars={4} />  as Gtk.Widget
-                    },
-                    this.batteryCritical
-                )}
+            <box cssClasses={["SystemMonitor"]} orientation={Gtk.Orientation.VERTICAL}>
+                {this.Cpu}
+                {this.Memory}
+                {this.Battery}
+                <label cssClasses={["StatusLabel"]} visible={this.batteryPercentage(p => p < 1)} label={this.batteryLifeLabel} />
             </box>
         );
     }

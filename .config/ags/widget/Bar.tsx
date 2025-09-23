@@ -4,7 +4,7 @@ import media from "../modules/Media";
 import app from "ags/gtk4/app";
 import dateTime from "../modules/DateTime";
 import audioControl from "../modules/AudioControl";
-import controlCenter from "../modules/ControlCenter";
+import controlMenu from "../modules/ControlMenu";
 import workspaces from "../modules/Workspaces";
 import { onCleanup } from "ags";
 import compositorManager from "../services/CompositorManager";
@@ -16,6 +16,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     return (
         <window
             name='Bar'
+            namespace='Bar'
             cssClasses={["Bar"]}
             visible
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
@@ -25,20 +26,20 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             application={app}
             $={self => onCleanup(() => self.destroy())}
         >
-            <box cssClasses={["Bar"]} halign={Gtk.Align.FILL} homogeneous>
-                <box halign={Gtk.Align.START}>
+            <centerbox cssClasses={["Bar"]}>
+                <box $type="start">
                     {systemTray.SystemTray}
                 </box>
-                <box halign={Gtk.Align.CENTER}>
+                <box $type="center">
                     {compMonitor ? workspaces.Workspaces(compMonitor) : <box/>}
                 </box>
-                <box halign={Gtk.Align.END}>
+                <box $type="end">
                     {media.Media}
                     {dateTime.DateTime}
                     {audioControl.AudioControl}
-                    {controlCenter.ControlCenter(gdkmonitor)}
+                    {controlMenu.ControlMenuButton(gdkmonitor.get_connector()!)}
                 </box>
-            </box>
+            </centerbox>
         </window>
     );
 }

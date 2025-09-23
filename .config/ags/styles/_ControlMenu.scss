@@ -1,0 +1,58 @@
+@use 'common/Colors';
+@use 'common/Transitions';
+@use 'common/Font';
+@use 'common/Layout';
+
+.ControlMenuButton {
+    @extend %widget;
+    label {
+        @extend %component-circle;
+        font-size: 24px;
+   }
+}
+
+.ControlMenuButtonNormal {
+    @include Transitions.inverseChild(Colors.$base, Colors.$blue);
+}
+
+.ControlMenuButtonCritical {
+    @include Transitions.inverseChild(Colors.$base, Colors.$red);
+}
+
+.ControlMenu {
+    background-color: Colors.$surface0;
+    padding: 10px;
+    border-radius: 16px 0px 0px 16px;
+
+    .Title {
+        font-size: Font.$font-size-large;
+        font-weight: bolder;
+    }
+
+    .Subtitle {
+        font-size: Font.$font-size-large;
+        margin: 4px;
+    }
+
+    .Option {
+        padding: 2px;
+        margin: 2px;
+        switch {
+            padding: 2px;
+            margin: 2px;
+            background-color: Colors.$base;
+            image, slider {
+                background-color: Colors.$blue;
+                min-width: 20px;
+                min-height: 5px;
+            }
+            transition: all 0.3s ease-in-out;
+            &:hover {
+                background-color: Colors.$blue;
+                image, slider {
+                    background-color: Colors.$base;
+                }
+            }
+        }
+    }
+}

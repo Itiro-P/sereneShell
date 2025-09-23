@@ -6,6 +6,7 @@ import CavaOverlay from "./widget/CavaOverlay";
 import Cheatsheet from "./widget/Cheatsheet";
 import settingsService from "./services/Settings";
 import iconFinder from "./services/IconFinder";
+import controlMenu from "./modules/ControlMenu";
 
 function main() {
     onCleanup(() => {
@@ -15,13 +16,16 @@ function main() {
     const monitors = createBinding(app, "monitors");
     return (
         <For each={monitors}>
-            {monitor => (
-                <This this={app}>
-                    <Bar gdkmonitor={monitor} />
-                    <CavaOverlay gdkmonitor={monitor} />
-                    <Cheatsheet gdkmonitor={monitor} />
-                </This>
-            )}
+            {monitor => {
+                return (
+                    <This this={app}>
+                        <Bar gdkmonitor={monitor} />
+                        <CavaOverlay gdkmonitor={monitor} />
+                        <Cheatsheet gdkmonitor={monitor} />
+                        {controlMenu.ControlMenu(monitor)}
+                    </This>
+                );
+            }}
         </For>
     );
 }

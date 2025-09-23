@@ -1,4 +1,5 @@
 sort=-time
+anchor=top-left
 layer=overlay
 background-color=#313244
 width=500
