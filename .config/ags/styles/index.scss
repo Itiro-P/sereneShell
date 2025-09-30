@@ -10,6 +10,7 @@
 @use 'ControlMenu';
 @use 'Cheatsheet';
 @use 'Cava';
+@use 'WallpaperSwitcher';
 
 /* Resetting every decoration applied earlier */
 * {
@@ -29,7 +30,7 @@
 }
 
 .Bar {
-    background: Colors.$base;
+    background: rgba(Colors.$base, 0.8);
     border-radius: 28px;
     margin: 4px 6px;
 }

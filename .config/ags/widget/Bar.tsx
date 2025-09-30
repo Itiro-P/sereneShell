@@ -15,9 +15,8 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
 
     return (
         <window
-            name='Bar'
+            name={'Bar ' + gdkmonitor.get_connector()}
             namespace='Bar'
-            cssClasses={["Bar"]}
             visible
             exclusivity={Astal.Exclusivity.EXCLUSIVE}
             layer={Astal.Layer.BOTTOM}

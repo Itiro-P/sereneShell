@@ -61,12 +61,16 @@ export class HyprWorkspace implements IWorkspace {
         this._workspace = workspace;
         this._context = context;
         this.id = createBinding(workspace, "id");
-        this.clients = createBinding(workspace, "clients")(cs => cs.map(c => new HyprClient(c, context)));
+        this.clients = createBinding(workspace, "clients")(cs => cs.sort((a, b) => this.isLesser(a, b)).map(c => new HyprClient(c, context)));
         this.isFocused = this._context.focusedWorkspace(fw => fw === workspace);
     }
 
     public focus() {
         this._workspace.focus();
+    }
+
+    private isLesser(a: AstalHyprland.Client, b: AstalHyprland.Client) {
+        return a.get_x() - b.get_x() - a.get_y() - b.get_y();
     }
 }
 
@@ -91,9 +95,7 @@ export class HyprMonitor implements IMonitor {
         };
 
         // Usar context ao invés de membro estático
-        this.workspaces = this._context.workspaces(ws =>
-            ws.filter(w => w.get_monitor() === monitor).sort((a, b) => a.get_id() - b.get_id()).map(w => new HyprWorkspace(w, context))
-        );
+        this.workspaces = this._context.workspaces(ws => ws.filter(w => w.get_monitor() === monitor).sort((a, b) => a.get_id() - b.get_id()).map(w => new HyprWorkspace(w, context)));
 
         this.focusedWorkspace = createBinding(monitor, "activeWorkspace")(aw =>
             new HyprWorkspace(aw, context)
@@ -162,9 +164,7 @@ export class Hyprland implements ICompositor {
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        const compMonitor = this._context.getHyprland()
-            .get_monitors()
-            .find(cm => this.areMonitorsEqual(monitor, cm));
+        const compMonitor = this._context.getHyprland().get_monitors().find(cm => this.areMonitorsEqual(monitor, cm));
 
         if (!compMonitor) {
             throw new Error("Monitor compositor não encontrado");

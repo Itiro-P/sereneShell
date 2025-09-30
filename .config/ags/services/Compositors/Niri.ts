@@ -148,7 +148,6 @@ export class Niri implements ICompositor {
     private areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: AstalNiri.Output): boolean {
         const geometry = monitor.get_geometry();
         const logical = compMonitor.get_logical();
-
         if (!logical) return false;
 
         return compMonitor.get_model() === monitor.get_model()
@@ -158,7 +157,6 @@ export class Niri implements ICompositor {
 
     public getCompositorMonitor(monitor: Gdk.Monitor): IMonitor {
         const compMonitor = this._context.getNiri().get_outputs().find(cm => this.areMonitorsEqual(monitor, cm));
-
         if (!compMonitor) {
             throw new Error(`Monitor compositor não encontrado: ${monitor.get_model()}`);
         }

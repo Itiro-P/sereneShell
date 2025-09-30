@@ -1,0 +1,42 @@
+@use 'common/Colors';
+@use 'common/Transitions';
+@use 'common/Font';
+@use 'common/Layout';
+
+.WallpaperSwitcher {
+    background-color: rgba(Colors.$surface0, 0.8);
+    padding: 4px;
+    border-radius: 12px 12px 0px 0px;
+
+    label {
+        font-size: Font.$font-size-large;
+        margin: 2px;
+    }
+
+    switch {
+        padding: 2px;
+        margin: 2px;
+        background-color: Colors.$base;
+        image, slider {
+            background-color: Colors.$blue;
+            min-width: 20px;
+            min-height: 5px;
+        }
+        transition: all 0.3s ease-in-out;
+        &:hover {
+            background-color: Colors.$blue;
+            image, slider {
+                background-color: Colors.$base;
+            }
+        }
+    }
+
+    .Wallpaper {
+        border: 2px solid Colors.$blue;
+        border-radius: 16px;
+    }
+
+    .Active {
+        border-color: Colors.$flamingo;
+    }
+}

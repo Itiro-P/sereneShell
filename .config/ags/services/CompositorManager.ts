@@ -18,8 +18,8 @@ class CompositorManagerClass {
                 break;
             case "niri":
             case "Niri":
-                this.compositor = new Niri;
-                break;
+            //    this.compositor = new Niri;
+            //    break;
             default:
                 console.warn("Compositor not identified/supported " + compositor);
                 this.compositor = null;

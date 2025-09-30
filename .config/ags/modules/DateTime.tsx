@@ -1,4 +1,3 @@
-import { Gtk } from "ags/gtk4";
 import { Accessor } from "ags";
 import GLib from "gi://GLib?version=2.0";
 import { createPoll } from "ags/time";
@@ -20,19 +19,9 @@ class DateTimeClass {
         });
     }
 
-    private get DateTimePopover() {
-        return (
-            <Gtk.Popover>
-                <Gtk.Calendar cssClasses={["Calendar"]} />
-            </Gtk.Popover>
-        );
-    }
-
     public get DateTime() {
         return (
-            <menubutton cssClasses={["DateTimeCalendar"]} popover={this.DateTimePopover as Gtk.Popover}>
-                <label cssClasses={["Time"]} label={this._dateTime(t => " " + t.time)} tooltipMarkup={this._dateTime(d => "󰃭 " + d.date)} />
-            </menubutton>
+            <label cssClasses={["Time"]} label={this._dateTime(t => " " + t.time)} tooltipMarkup={this._dateTime(d => "󰃭 " + d.date)} />
         );
     }
 }

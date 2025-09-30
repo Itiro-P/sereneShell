@@ -3,47 +3,8 @@
 @use 'common/Font';
 @use 'common/Transitions';
 
-.DateTimeCalendar {
+.Time {
     @extend %widget;
     font-weight: bold;
-    @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
-
-
-    .Calendar {
-        * {
-            all: unset;
-            color: Colors.$text;
-        }
-
-        label.day-number, label.other-month, label.today {
-            border-radius: 10%;
-        }
-
-        header {
-            background-color: rgba(Colors.$surface0, 0.8);
-        }
-
-        button {
-            border-radius: 50%;
-            @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
-        }
-
-        grid {
-            background-color: rgba(Colors.$surface1, 0.7);
-
-            label.other-month {
-                opacity: 0.5;
-                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$rosewater);
-            }
-
-            label.day-number {
-                @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$mauve);
-            }
-
-            label.today {
-                color: Colors.$base;
-                background-color: Colors.$lavender;
-            }
-        }
-    }
+    @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
 }

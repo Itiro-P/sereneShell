@@ -61,22 +61,22 @@ export namespace Swww {
 
     class Manager {
         constructor() {
-            GLib.spawn_command_line_async('swww clear');
+            //GLib.spawn_command_line_async('swww clear');
         }
 
         public setWallpaper(path: string, options?: Partial<ParserOptions>): boolean {
             let command = `swww img ${path}`;
-            if(options) {
-                if(options.resize) command += ` --resize ${options.resize}`;
-                if(options.filter) command += ` -f ${options.filter}`;
-                if(options.invertY) command += ` --invert-y ${options.invertY.valueOf()}`;
-                if(options.transitionAngle) command += ` --transition-angle ${options.transitionAngle}`;
-                if(options.transitionDurantion) command += ` --transition-duration ${options.transitionDurantion}`;
-                if(options.transitionPos) command += ` --transition-pos ${options.transitionPos}`;
-                if(options.transitionStep) command += ` --transition-step ${options.transitionStep}`;
-                if(options.transitionType) command += ` --transition-type ${options.transitionType}`;
-                if(options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
-                if(options.outputs) command += ` --outputs ${options.outputs}`;
+            if (options) {
+                if (options.resize) command += ` --resize ${options.resize}`;
+                if (options.filter) command += ` -f ${options.filter}`;
+                if (options.invertY) command += ` --invert-y ${options.invertY.valueOf()}`;
+                if (options.transitionAngle) command += ` --transition-angle ${options.transitionAngle}`;
+                if (options.transitionDurantion) command += ` --transition-duration ${options.transitionDurantion}`;
+                if (options.transitionPos) command += ` --transition-pos ${options.transitionPos}`;
+                if (options.transitionStep) command += ` --transition-step ${options.transitionStep}`;
+                if (options.transitionType) command += ` --transition-type ${options.transitionType}`;
+                if (options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
+                if (options.outputs) command += ` --outputs ${options.outputs}`;
             }
             GLib.spawn_command_line_async(command);
             return true;
