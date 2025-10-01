@@ -4,7 +4,7 @@
 @use 'common/Transitions';
 
 .Time {
-    @extend %widget;
+    @extend %component;
     font-weight: bold;
     @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
 }

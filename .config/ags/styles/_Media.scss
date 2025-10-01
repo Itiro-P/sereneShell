@@ -4,7 +4,8 @@
 @use 'common/Transitions';
 
 .Media {
-    @extend %widget;
+    @extend %component;
+    border-radius: 0px;
     label {
         font-weight: bold;
     }
@@ -13,6 +14,7 @@
         .Previous, .PlayPause, .Next {
             border-radius: 100%;
             padding: 1px;
+            margin: 0px 1px;
             image {
                 margin: 1px;
             }

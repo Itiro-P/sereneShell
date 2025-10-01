@@ -76,7 +76,11 @@ class ControlMenuClass {
                                     onStateSet={(src, val) => settingsService.setCavaVisible = val}
                                 />
                             </box>
-                            <button cssClasses={["Option"]} label={'Wallpapers'} onClicked={
+                            <button
+                                cssClasses={["Option"]}
+                                label={'Wallpapers'}
+                                halign={Gtk.Align.START}
+                                onClicked={
                                 () => {
                                     app.toggle_window(`WallpaperSwitcher ${gdkmonitor.get_connector()}`);
                                     app.toggle_window(`ControlMenu ${gdkmonitor.get_connector()}`);

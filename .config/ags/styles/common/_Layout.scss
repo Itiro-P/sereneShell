@@ -2,38 +2,34 @@ $circle-diameter: 24px;
 $slider-width: 160px;
 $slider-height: 20px;
 
-%widget {
-    background: none;
-    padding: 4px;
+%component {
+    padding: 2px;
     margin: 2px;
-    border: none;
-    border-radius: 18px;
+    border-radius: 1em;
+}
 
-    * {
-        margin: 0px 2px;
-    }
+%component-small {
+    padding: 1px;
+    margin: 1px;
+    border-radius: 1em;
 }
 
 %component-circle {
     border-radius: 100%;
-    width: $circle-diameter;
-    height: $circle-diameter;
+    min-width: $circle-diameter;
+    min-height: $circle-diameter;
+}
+
+%component-switch {
+    padding: 1px;
+    image, slider {
+        padding: 1px;
+    }
 }
 
 %component-slider {
-    border-radius: 20px;
+    border-radius: 1em;
+    padding: 2px;
     min-width: $slider-width;
     min-height: $slider-height;
-}
-
-%title {
-
-}
-
-%subtitle {
-
-}
-
-%option {
-
 }

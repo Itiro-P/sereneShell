@@ -2,6 +2,10 @@
 @use 'common/Layout';
 @use 'common/Font';
 
+.SystemTray {
+    margin-left: 2px;
+}
+
 .TrayItem {
     @extend %component-circle;
     margin: 2px;

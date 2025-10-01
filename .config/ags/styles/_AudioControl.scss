@@ -4,17 +4,15 @@
 @use 'common/Transitions';
 
 .AudioControl {
-    @extend %widget;
+    @extend %component;
     @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
 }
 
 .Mixer {
-    padding: 6px;
-    padding: 2px;
+    @extend %component;
 
     .Title {
-        margin: 2px;
-        padding: 2px;
+        @extend %component;
 
         .Label, .PavucontrolButton {
             padding: 2px;
@@ -34,11 +32,8 @@
     }
 
     .MixerEntry {
+        @extend %component;
         background-color: Colors.$base;
-        padding: 2px;
-        margin: 2px;
-        border: none;
-        border-radius: 16px;
 
         .Icon {
             @extend %component-circle;
@@ -54,8 +49,6 @@
             }
 
             & through {
-                min-height: 1px;
-                min-width: 1px;
                 background-color: Colors.$subtext1;
             }
         }

@@ -3,15 +3,13 @@
 @use 'common/Transitions';
 
 .Workspaces {
-    @extend %widget;
+    @extend %component-small;
     background-color: rgba(Colors.$surface0, 0.8);
-    border-radius: 24px;
 
     .Workspace {
+        @extend %component-small;
         font-weight: bold;
         background-color: rgba(Colors.$crust, 0.8);
-        margin: 1px 2px;
-        border-radius: 18px;
         transition: all 0.2s ease;
 
         &:hover {
@@ -20,7 +18,7 @@
         }
 
         .WorkspaceIdButton {
-            padding: 1px 2px;
+            @extend %component-circle;
         }
     }
 
@@ -49,14 +47,11 @@
         @extend %component-circle;
         font-weight: bold;
         background-color: rgba(Colors.$crust, 0.8);
-        margin: 1px;
         @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
     }
 
     .WorkspacePopover {
-        border-radius: 16px;
-        padding: 6px;
+        @extend %component-circle;
         background-color: rgba(Colors.$surface0, 0.9);
-        margin: 2px;
     }
 }

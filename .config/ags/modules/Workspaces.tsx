@@ -1,4 +1,4 @@
-import { Gtk } from "ags/gtk4";
+import { Gdk, Gtk } from "ags/gtk4";
 import compositorManager from "../services/CompositorManager";
 import { Accessor, createComputed, For } from "ags";
 import iconFinder from "../services/IconFinder";
@@ -30,12 +30,14 @@ class WorkspacesClass {
         const clientCount = clients(cs => cs.length > 0 && cs.length < 5);
         return (
             <box cssClasses={workspace.isFocused(is => ["Workspace", is ? "WFocused" : ""])}>
+                <Gtk.GestureClick
+                    button={Gdk.BUTTON_SECONDARY}
+                    onPressed={() => { if (compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get()) workspace.focus() }}
+                />
                 <button
                     cssClasses={["WorkspaceIdButton"]}
-                    onClicked={() => {
-                        if(compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get())
-                            workspace.focus()
-                    }}
+                    onClicked={() => { if (compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get()) workspace.focus() }}
+                    visible={clients(c => c.length === 0)}
                     halign={Gtk.Align.CENTER}
                     valign={Gtk.Align.CENTER}
                     label={workspace.id(id => id.toString())}

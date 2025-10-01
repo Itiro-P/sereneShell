@@ -4,9 +4,8 @@
 @use 'common/Transitions';
 
 .Cheatsheet {
-    padding: 10px;
+    @extend %component;
     border: 2px solid Colors.$blue;
-    border-radius: 20px;
     background-color: rgba(Colors.$base, 0.8);
 
     .Title {
@@ -20,15 +19,13 @@
     }
 
     .Section {
-        margin: 4px;
-        padding: 4px;
+        @extend %component;
     }
 
     .Entry {
-        margin: 3px;
-        border-radius: 6px;
+        @extend %component;
         .Bind, .Action {
-            padding: 2px;
+            @extend %component;
         }
 
         .Bind {

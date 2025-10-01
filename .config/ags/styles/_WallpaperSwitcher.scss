@@ -14,13 +14,11 @@
     }
 
     switch {
-        padding: 2px;
-        margin: 2px;
+        @extend %component;
         background-color: Colors.$base;
         image, slider {
+            @extend %component-switch;
             background-color: Colors.$blue;
-            min-width: 20px;
-            min-height: 5px;
         }
         transition: all 0.3s ease-in-out;
         &:hover {

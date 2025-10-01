@@ -4,7 +4,7 @@
 @use 'SystemMonitor';
 @use 'AudioControl';
 @use 'Workspaces';
-@use 'TrayItem';
+@use 'SystemTray';
 @use 'Media';
 @use 'Tooltip';
 @use 'ControlMenu';
@@ -31,6 +31,6 @@
 
 .Bar {
     background: rgba(Colors.$base, 0.8);
+    margin: 2px 4px;
     border-radius: 28px;
-    margin: 4px 6px;
 }

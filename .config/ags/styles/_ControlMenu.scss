@@ -4,7 +4,7 @@
 @use 'common/Layout';
 
 .ControlMenuButton {
-    @extend %widget;
+    @extend %component;
     label {
         @extend %component-circle;
         font-size: 24px;
@@ -35,16 +35,12 @@
     }
 
     .Option {
-        padding: 2px;
-        margin: 2px;
+        @extend %component;
         switch {
-            padding: 2px;
-            margin: 2px;
+            @extend %component-switch;
             background-color: Colors.$base;
             image, slider {
                 background-color: Colors.$blue;
-                min-width: 20px;
-                min-height: 5px;
             }
             transition: all 0.3s ease-in-out;
             &:hover {
@@ -57,14 +53,12 @@
     }
 
     .StackSwitcher {
-        margin: 2px;
-        padding: 2px;
-        border-radius: 16px;
+        @extend %component;
         background-color: rgba(Colors.$surface1, 0.8);
 
         .PageSwitcher {
-            padding: 4px;
-            border-radius: 12px;
+            @extend %component;
+            font-weight: bold;
         }
 
         .Active {

@@ -130,7 +130,7 @@ class MediaClass {
 
                     const [visibleChildMetadata, setVisibleMetadata] = createState(0);
                     return (
-                        <box cssClasses={["Media"]}>
+                        <box cssClasses={["Media"]} overflow={Gtk.Overflow.HIDDEN}>
                             <Gtk.EventControllerMotion onEnter={() => { if(player.active) { setHovered(true) }}} onLeave={() => setHovered(false)} />
                             <stack
                                 visibleChildName={visibleChild}
