@@ -1,4 +1,4 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Font';
 @use 'common/Layout';
 @use 'common/Transitions';
@@ -18,7 +18,7 @@
             image {
                 margin: 1px;
             }
-            @include Transitions.inverseChild(Colors.$base, Colors.$blue);
+            @include Transitions.inverseChild(Palette.$secondary, Palette.$on_secondary);
         }
     }
 }

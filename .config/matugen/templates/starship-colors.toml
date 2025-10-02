@@ -1,0 +1,206 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](primary)\
+$os\
+$username\
+[](bg:secondary fg:primary)\
+$directory\
+[](bg:tertiary fg:secondary)\
+$git_branch\
+$git_status\
+[](fg:tertiary bg:accent)\
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+[](fg:accent bg:container)\
+$conda\
+[](fg:container bg:surface)\
+$time\
+[ ](fg:surface)\
+$cmd_duration\
+$line_break\
+$character"""
+
+palette = 'matugen'
+
+[os]
+disabled = false
+style = "bg:primary fg:on-primary"
+
+[os.symbols]
+Windows = ""
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = true
+style_user = "bg:primary fg:on-primary"
+style_root = "bg:primary fg:on-primary"
+format = '[ $user]($style)'
+
+[directory]
+style = "bg:secondary fg:on-secondary"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+symbol = ""
+style = "bg:tertiary"
+format = '[[ $symbol $branch ](fg:on-tertiary bg:tertiary)]($style)'
+
+[git_status]
+style = "bg:tertiary"
+format = '[[($all_status$ahead_behind )](fg:on-tertiary bg:tertiary)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[c]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[php]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[java]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version) ](fg:on-accent bg:accent)]($style)'
+
+[python]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol( $version)(\($virtualenv\)) ](fg:on-accent bg:accent)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:container"
+format = '[[ $symbol( $context) ](fg:on-container bg:container)]($style)'
+
+[conda]
+symbol = "  "
+style = "fg:on-container bg:container"
+format = '[$symbol$environment ]($style)'
+ignore_base = false
+
+[time]
+disabled = true
+time_format = "%R"
+style = "bg:surface"
+format = '[[  $time ](fg:on-surface bg:surface)]($style)'
+
+[line_break]
+disabled = true
+
+[character]
+disabled = false
+success_symbol = '[❯](bold fg:success)'
+error_symbol = '[❯](bold fg:error)'
+vimcmd_symbol = '[❮](bold fg:success)'
+vimcmd_replace_one_symbol = '[❮](bold fg:tertiary)'
+vimcmd_replace_symbol = '[❮](bold fg:tertiary)'
+vimcmd_visual_symbol = '[❮](bold fg:secondary)'
+
+[cmd_duration]
+show_milliseconds = true
+format = " in $duration "
+style = "bg:surface"
+disabled = false
+show_notifications = true
+min_time_to_notify = 45000
+
+[palettes.matugen]
+
+primary = '{{colors.primary.default.hex}}'
+on-primary = '{{colors.on_primary.default.hex}}'
+primary-container = '{{colors.primary_container.default.hex}}'
+on-primary-container = '{{colors.on_primary_container.default.hex}}'
+
+secondary = '{{colors.secondary.default.hex}}'
+on-secondary = '{{colors.on_secondary.default.hex}}'
+secondary-container = '{{colors.secondary_container.default.hex}}'
+on-secondary-container = '{{colors.on_secondary_container.default.hex}}'
+
+tertiary = '{{colors.tertiary.default.hex}}'
+on-tertiary = '{{colors.on_tertiary.default.hex}}'
+tertiary-container = '{{colors.tertiary_container.default.hex}}'
+on-tertiary-container = '{{colors.on_tertiary_container.default.hex}}'
+
+error = '{{colors.error.default.hex}}'
+on-error = '{{colors.on_error.default.hex}}'
+error-container = '{{colors.error_container.default.hex}}'
+on-error-container = '{{colors.on_error_container.default.hex}}'
+
+surface = '{{colors.surface.default.hex}}'
+on-surface = '{{colors.on_surface.default.hex}}'
+surface-variant = '{{colors.surface_variant.default.hex}}'
+on-surface-variant = '{{colors.on_surface_variant.default.hex}}'
+
+container = '{{colors.surface_container.default.hex}}'
+on-container = '{{colors.on_surface.default.hex}}'
+container-high = '{{colors.surface_container_high.default.hex}}'
+container-low = '{{colors.surface_container_low.default.hex}}'
+
+accent = '{{colors.tertiary.default.hex}}'
+on-accent = '{{colors.on_tertiary.default.hex}}'
+
+success = '{{colors.primary.default.hex}}'
+
+outline = '{{colors.outline.default.hex}}'
+outline-variant = '{{colors.outline_variant.default.hex}}'

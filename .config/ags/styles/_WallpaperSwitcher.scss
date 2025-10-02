@@ -1,10 +1,10 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Transitions';
 @use 'common/Font';
 @use 'common/Layout';
 
 .WallpaperSwitcher {
-    background-color: rgba(Colors.$surface0, 0.8);
+    background-color: rgba(Palette.$surface_container, 0.8);
     padding: 4px;
     border-radius: 12px 12px 0px 0px;
 
@@ -15,26 +15,26 @@
 
     switch {
         @extend %component;
-        background-color: Colors.$base;
+        background-color: Palette.$inverse_on_surface;
         image, slider {
             @extend %component-switch;
-            background-color: Colors.$blue;
+            background-color: Palette.$surface_container_high;
         }
         transition: all 0.3s ease-in-out;
         &:hover {
-            background-color: Colors.$blue;
+            background-color: Palette.$primary;
             image, slider {
-                background-color: Colors.$base;
+                background-color: Palette.$on_primary;
             }
         }
     }
 
     .Wallpaper {
-        border: 2px solid Colors.$blue;
+        border: 2px solid Palette.$primary;
         border-radius: 16px;
     }
 
     .Active {
-        border-color: Colors.$flamingo;
+        border-color: Palette.$secondary;
     }
 }

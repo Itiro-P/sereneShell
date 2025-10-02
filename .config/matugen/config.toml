@@ -1,0 +1,45 @@
+[config]
+version_check = false
+caching = true
+
+[templates.wlogout]
+input_path = '~/.config/matugen/templates/colors.css'
+output_path = '~/.config/wlogout/colors.css'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty-colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+post_hook = 'pkill -SIGUSR1 kitty'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-colors.conf'
+output_path = '~/.config/rofi/colors.rasi'
+
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship-colors.toml'
+output_path = '~/.config/starship.toml'
+
+[templates.vesktop]
+input_path = '~/.config/matugen/templates/midnight-discord.css'
+output_path = '~/.config/vesktop/themes/midnight-discord.css'
+
+[templates.ags]
+input_path = '~/.config/matugen/templates/_Palette.scss'
+output_path = '~/.config/ags/styles/common/_Palette.scss'
+post_hook = 'ags request css-reset'
+
+[templates.gtklock]
+input_path = '~/.config/matugen/templates/colors.css'
+output_path = '~/.config/gtklock/colors.css'
+
+[templates.gtk3]
+input_path = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/colors.css'
+
+[templates.gtk4]
+input_path = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/colors.css'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hypr-colors.conf'
+output_path = '~/.config/hypr/configs/colors.conf'

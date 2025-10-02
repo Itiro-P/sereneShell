@@ -1,4 +1,8 @@
 import GLib from "gi://GLib?version=2.0";
+import wallpaperSwitcher from "../modules/WallpaperSwitcher";
+import { exec, execAsync } from "ags/process";
+import { onMount } from "ags";
+import { timeout } from "ags/time";
 
 export namespace Swww {
     export enum Resize {
@@ -60,11 +64,20 @@ export namespace Swww {
 
 
     class Manager {
+        private shouldChangeColorScheme: boolean = true;
+
         constructor() {
-            //GLib.spawn_command_line_async('swww clear');
         }
 
-        public setWallpaper(path: string, options?: Partial<ParserOptions>): boolean {
+        public checkLastWallpaper(connector: string) {
+            const output = exec("swww query");
+            const regex = new RegExp(`: ${connector}: .*?image: (.*?\\/([^\\/]+\\.[^.]+))$`, 'm');
+            const match = output.match(regex);
+            return match ? match[2] : null;
+        }
+
+        public setWallpaper(path: string, options: Partial<ParserOptions>, ignoreTimer: boolean = false): boolean {
+            if (path === undefined) return false;
             let command = `swww img ${path}`;
             if (options) {
                 if (options.resize) command += ` --resize ${options.resize}`;
@@ -78,7 +91,12 @@ export namespace Swww {
                 if (options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
                 if (options.outputs) command += ` --outputs ${options.outputs}`;
             }
-            GLib.spawn_command_line_async(command);
+            execAsync(command);
+            if(this.shouldChangeColorScheme || ignoreTimer) {
+                this.shouldChangeColorScheme = false;
+                timeout(120000, () => this.shouldChangeColorScheme = true);
+                execAsync(`matugen image ${path}`);
+            }
             return true;
         }
     }

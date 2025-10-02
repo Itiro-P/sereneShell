@@ -1,7 +1,7 @@
-@use 'common/Colors';
+@use 'common/Palette';
 
 tooltip {
     padding: 6px;
     border-radius: 10px;
-    background-color: Colors.$surface0;
+    background-color: Palette.$surface_bright;
 }

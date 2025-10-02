@@ -1,4 +1,4 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Font';
 @use 'Time';
 @use 'SystemMonitor';
@@ -8,7 +8,6 @@
 @use 'Media';
 @use 'Tooltip';
 @use 'ControlMenu';
-@use 'Cheatsheet';
 @use 'Cava';
 @use 'WallpaperSwitcher';
 
@@ -18,7 +17,7 @@
     font-size: Font.$font-size-normal;
     -gtk-icon-size: Font.$icon-size;
 
-    color: Colors.$text;
+    color: Palette.$on_background;
     background: none;
 
     border: none;
@@ -30,7 +29,7 @@
 }
 
 .Bar {
-    background: rgba(Colors.$base, 0.8);
+    background: rgba(Palette.$background, 0.8);
     margin: 2px 4px;
     border-radius: 28px;
 }

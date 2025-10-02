@@ -1,4 +1,4 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Layout';
 @use 'common/Font';
 
@@ -13,18 +13,18 @@
     transition: all 0.25s ease;
 
     &:hover {
-        background-color: rgba(Colors.$blue, 0.8);
-        color: Colors.$crust;
+        background-color: rgba(Palette.$primary, 0.8);
+        color: Palette.$on_primary_fixed;
     }
 
     &:active {
-        background-color: rgba(Colors.$blue, 0.6);
-        color: Colors.$crust;
+        background-color: rgba(Palette.$primary, 0.6);
+        color: Palette.$on_primary_fixed;
     }
 
     popover.menu {
         margin: 10px;
-        background-color: Colors.$surface0;
+        background-color: Palette.$surface_container;
         border-radius: 10px;
     }
 
@@ -35,10 +35,10 @@
     }
 
     popover.menu modelbutton:hover {
-        background: rgba(Colors.$surface1, 0.2);
+        background: rgba(Palette.$surface_container_high, 0.2);
     }
 
     popover.menu modelbutton:active {
-        background: rgba(Colors.$surface1, 0.4);
+        background: rgba(Palette.$surface_container_highest, 0.4);
     }
 }

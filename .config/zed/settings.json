@@ -37,7 +37,7 @@
     "theme": {
         "mode": "dark",
         "light": "Catppuccin Mocha",
-        "dark": "Catppuccin Mocha"
+        "dark": "One Dark"
     },
     "show_edit_predictions": true,
     "indent_guides": {

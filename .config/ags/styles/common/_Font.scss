@@ -1,7 +1,7 @@
-@use 'Colors';
+@use 'Palette';
 
 $font-family: 'Monospace';
-$font-color: Colors.$text;
+$font-color: Palette.$outline;
 $font-size-small: 14px;
 $font-size-normal: 16px;
 $font-size-large: 20px;

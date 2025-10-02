@@ -37,7 +37,7 @@ class WorkspacesClass {
                 <button
                     cssClasses={["WorkspaceIdButton"]}
                     onClicked={() => { if (compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get()) workspace.focus() }}
-                    visible={clients(c => c.length === 0)}
+                    visible={clientCount(cc => !cc)}
                     halign={Gtk.Align.CENTER}
                     valign={Gtk.Align.CENTER}
                     label={workspace.id(id => id.toString())}

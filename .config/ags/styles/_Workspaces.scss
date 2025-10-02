@@ -1,24 +1,19 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Layout';
 @use 'common/Transitions';
 
 .Workspaces {
     @extend %component-small;
-    background-color: rgba(Colors.$surface0, 0.8);
+    background-color: rgba(Palette.$surface_container, 0.8);
 
     .Workspace {
         @extend %component-small;
         font-weight: bold;
-        background-color: rgba(Colors.$crust, 0.8);
-        transition: all 0.2s ease;
-
-        &:hover {
-            background-color: rgba(Colors.$blue, 0.9);
-            label { color: Colors.$crust; }
-        }
+        @include Transitions.inverseChild(Palette.$on_primary, Palette.$primary);
 
         .WorkspaceIdButton {
             @extend %component-circle;
+            padding: 0px 1px;
         }
     }
 
@@ -30,28 +25,29 @@
         @extend %component-circle;
         transition: background-color 0.2s ease;
         &:hover {
-            background-color: Colors.$mantle;
+            background-color: Palette.$surface_container_highest;
         }
     }
 
     .CFocused {
-        background-color: Colors.$mantle;
+        background-color: Palette.$surface_container_highest;
     }
 
     .WFocused {
-        background-color: rgba(Colors.$blue, 0.9);
-        label { color: Colors.$crust; }
+        background-color: rgba(Palette.$primary, 0.9);
+        label { color: Palette.$on_primary; }
     }
 
     .MoreWorkspacesButton {
         @extend %component-circle;
+        padding: 0px 1px;
         font-weight: bold;
-        background-color: rgba(Colors.$crust, 0.8);
-        @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+        background-color: rgba(Palette.$on_primary, 0.8);
+        @include Transitions.noneToInverseChild(Palette.$outline, Palette.$on_primary, Palette.$primary);
     }
 
     .WorkspacePopover {
         @extend %component-circle;
-        background-color: rgba(Colors.$surface0, 0.9);
+        background-color: rgba(Palette.$surface, 0.9);
     }
 }

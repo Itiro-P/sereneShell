@@ -1,4 +1,4 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Transitions';
 @use 'common/Font';
 @use 'common/Layout';
@@ -12,15 +12,15 @@
 }
 
 .ControlMenuButtonNormal {
-    @include Transitions.inverseChild(Colors.$base, Colors.$blue);
+    @include Transitions.inverseChild(Palette.$on_primary, Palette.$primary);
 }
 
 .ControlMenuButtonCritical {
-    @include Transitions.inverseChild(Colors.$base, Colors.$red);
+    @include Transitions.inverseChild(Palette.$error, Palette.$on_error);
 }
 
 .ControlMenu {
-    background-color: rgba(Colors.$surface0, 0.8);
+    background-color: rgba(Palette.$surface, 0.8);
     padding: 10px;
     border-radius: 16px 0px 0px 16px;
 
@@ -38,15 +38,15 @@
         @extend %component;
         switch {
             @extend %component-switch;
-            background-color: Colors.$base;
+            background-color: Palette.$secondary;
             image, slider {
-                background-color: Colors.$blue;
+                background-color: Palette.$on_secondary;
             }
             transition: all 0.3s ease-in-out;
             &:hover {
-                background-color: Colors.$blue;
+                background-color: Palette.$on_secondary;
                 image, slider {
-                    background-color: Colors.$base;
+                    background-color: Palette.$secondary;
                 }
             }
         }
@@ -54,7 +54,7 @@
 
     .StackSwitcher {
         @extend %component;
-        background-color: rgba(Colors.$surface1, 0.8);
+        background-color: rgba(Palette.$surface_container, 0.8);
 
         .PageSwitcher {
             @extend %component;
@@ -62,14 +62,14 @@
         }
 
         .Active {
-            background: Colors.$blue;
+            background: Palette.$secondary;
             * {
-                color: Colors.$base;
+                color: Palette.$on_secondary;
             }
         }
 
         .Inactive {
-            @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+            @include Transitions.noneToInverseChild(Palette.$secondary, Palette.$secondary, Palette.$on_secondary);
         }
     }
 }
@@ -77,37 +77,77 @@
 .Calendar {
     * {
         all: unset;
-        color: Colors.$text;
+        color: Palette.$outline;
     }
 
-    label.day-number, label.other-month, label.today {
+    label.day-number,
+    label.other-month,
+    label.today {
         border-radius: 10%;
     }
 
     header {
-        background-color: rgba(Colors.$surface0, 0.8);
+        background-color: rgba(Palette.$surface, 0.8);
+        color: Palette.$on_surface;
     }
 
     button {
         border-radius: 50%;
-        @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+        background-color: transparent;
+        color: Palette.$on_surface_variant;
+        transition: all 0.2s ease;
+        padding: 8px;
+
+        &:hover {
+            background-color: Palette.$surface_container;
+            color: Palette.$on_surface;
+        }
+
+        &:active {
+            background-color: Palette.$surface_container_high;
+            color: Palette.$inverse_on_surface;
+        }
     }
 
     grid {
-        background-color: rgba(Colors.$surface1, 0.7);
+        background-color: rgba(Palette.$surface, 0.7);
 
         label.other-month {
             opacity: 0.5;
-            @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$rosewater);
+            color: Palette.$on_surface_variant;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: Palette.$surface_container;
+                opacity: 0.7;
+            }
         }
 
         label.day-number {
-            @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$mauve);
+            color: Palette.$on_surface_variant;
+            transition: all 0.2s ease;
+            padding: 4px;
+
+            &:hover {
+                background-color: Palette.$surface_container;
+                color: Palette.$on_surface;
+            }
+
+            &:active {
+                background-color: Palette.$inverse_on_surface;
+                color: Palette.$inverse_surface;
+            }
         }
 
         label.today {
-            color: Colors.$base;
-            background-color: Colors.$lavender;
+            color: Palette.$on_tertiary;
+            background-color: Palette.$tertiary;
+            font-weight: 600;
+
+            &:hover {
+                background-color: Palette.$tertiary_container;
+                color: Palette.$on_tertiary_container;
+            }
         }
     }
 }

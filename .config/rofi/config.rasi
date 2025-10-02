@@ -1,3 +1,5 @@
+@import "colors.rasi"
+
 configuration {
     font: "monospace 14";
     show-icons: true;
@@ -8,75 +10,14 @@ configuration {
     hover-select: false;
 }
 
-* {
-    /* Catppuccin Mocha Colors */
-    rosewater: #f5e0dc;
-    flamingo: #f2cdcd;
-    pink: #f5c2e7;
-    mauve: #cba6f7;
-    red: #f38ba8;
-    maroon: #eba0ac;
-    peach: #fab387;
-    yellow: #f9e2af;
-    green: #a6e3a1;
-    teal: #94e2d5;
-    sky: #89dceb;
-    sapphire: #74c7ec;
-    blue: #89b4fa;
-    lavender: #b4befe;
-    text: #cdd6f4;
-    subtext1: #bac2de;
-    subtext0: #a6adc8;
-    overlay2: #9399b2;
-    overlay1: #7f849c;
-    overlay0: #6c7086;
-    surface2: #585b70;
-    surface1: #45475a;
-    surface0: #313244;
-    base: #1e1e2e;
-    mantle: #181825;
-    crust: #11111b;
-
-    /* Theme Variables */
-    background-color: transparent;
-    background: @base;
-    foreground: @text;
-    lightbg: @mantle;
-    lightfg: @text;
-    border-color: @overlay0;
-    separatorcolor: @overlay0;
-
-    /* State Colors */
-    normal-background: transparent;
-    normal-foreground: @foreground;
-    urgent-background: transparent;
-    urgent-foreground: @red;
-    active-background: transparent;
-    active-foreground: @blue;
-
-    selected-normal-background: @surface1;
-    selected-normal-foreground: @text;
-    selected-urgent-background: @red;
-    selected-urgent-foreground: @base;
-    selected-active-background: @blue;
-    selected-active-foreground: @base;
-
-    alternate-normal-background: transparent;
-    alternate-normal-foreground: @foreground;
-    alternate-urgent-background: transparent;
-    alternate-urgent-foreground: @red;
-    alternate-active-background: transparent;
-    alternate-active-foreground: @blue;
-}
-
 window {
     location: north;
     y-offset: calc(50% - 176px);
     width: 480;
     border-radius: 24px;
-    background-color: @background;
+    background-color: @surface-container;
     border: 2px;
-    border-color: @border-color;
+    border-color: @outline;
     padding: 0;
 }
 
@@ -88,42 +29,42 @@ mainbox {
 
 inputbar {
     border: 2px;
-    border-color: @border-color;
+    border-color: @outline-variant;
     border-radius: 16px;
-    background-color: @surface0;
+    background-color: @surface-container-high;
     padding: 8px 16px;
     spacing: 8px;
-    text-color: @foreground;
+    text-color: @on-surface;
     children: [ prompt, entry ];
 }
 
 prompt {
     spacing: 0;
-    text-color: @blue;
+    text-color: @primary;
     background-color: transparent;
 }
 
 entry {
-    text-color: @foreground;
+    text-color: @on-surface;
     background-color: transparent;
     cursor: text;
     spacing: 0;
-    placeholder-color: @overlay1;
+    placeholder-color: @on-surface-variant;
     placeholder: "Type to filter";
 }
 
 message {
     margin: 12px 0 0;
     border-radius: 16px;
-    background-color: @surface0;
+    background-color: @surface-container-low;
     border: 2px;
-    border-color: @border-color;
+    border-color: @outline-variant;
     padding: 0;
 }
 
 textbox {
     padding: 8px 24px;
-    text-color: @foreground;
+    text-color: @on-surface;
     background-color: transparent;
 }
 
@@ -144,54 +85,57 @@ element {
     spacing: 8px;
     border-radius: 16px;
     background-color: transparent;
-    text-color: @normal-foreground;
+    text-color: @on-surface;
     cursor: pointer;
     border: 0;
 }
 
+/* Estados normais */
 element normal.normal {
-    background-color: @normal-background;
-    text-color: @normal-foreground;
+    background-color: transparent;
+    text-color: @on-surface;
 }
 
 element normal.urgent {
-    background-color: @urgent-background;
-    text-color: @urgent-foreground;
+    background-color: @error-container;
+    text-color: @on-error-container;
 }
 
 element normal.active {
-    background-color: @active-background;
-    text-color: @active-foreground;
+    background-color: @secondary-container;
+    text-color: @on-secondary-container;
 }
 
+/* Estados selecionados */
 element selected.normal {
-    background-color: @selected-normal-background;
-    text-color: @selected-normal-foreground;
+    background-color: @primary-container;
+    text-color: @on-primary-container;
 }
 
 element selected.urgent {
-    background-color: @selected-urgent-background;
-    text-color: @selected-urgent-foreground;
+    background-color: @error;
+    text-color: @on-error;
 }
 
 element selected.active {
-    background-color: @selected-active-background;
-    text-color: @selected-active-foreground;
+    background-color: @secondary;
+    text-color: @on-secondary;
 }
 
+/* Estados alternados */
 element alternate.normal {
-    background-color: @alternate-normal-background;
-    text-color: @alternate-normal-foreground;
+    background-color: transparent;
+    text-color: @on-surface;
 }
 
 element alternate.urgent {
-    background-color: @alternate-urgent-background;
-    text-color: @alternate-urgent-foreground;
+    background-color: @error-container;
+    text-color: @on-error-container;
 }
 
 element alternate.active {
-    background-color: @alternate-active-background;
-    text-color: @alternate-active-foreground;
+    background-color: @tertiary-container;
+    text-color: @on-tertiary-container;
 }
 
 element-icon {
@@ -214,46 +158,46 @@ scrollbar {
     padding: 0;
     handle-width: 8px;
     border: 0;
-    handle-color: @overlay0;
-    background-color: @surface0;
+    handle-color: @outline;
+    background-color: @surface-container-lowest;
 }
 
 sidebar {
-    border-color: @separatorcolor;
+    border-color: @outline-variant;
     border: 2px dash 0px 0px;
 }
 
 button {
     cursor: pointer;
     spacing: 0;
-    text-color: @normal-foreground;
+    text-color: @on-surface-variant;
     background-color: transparent;
 }
 
 button selected {
-    background-color: @selected-normal-background;
-    text-color: @selected-normal-foreground;
+    background-color: @secondary-container;
+    text-color: @on-secondary-container;
 }
 
 num-filtered-rows {
     expand: false;
-    text-color: @overlay1;
+    text-color: @on-surface-variant;
 }
 
 num-rows {
     expand: false;
-    text-color: @overlay1;
+    text-color: @on-surface-variant;
 }
 
 textbox-num-sep {
     expand: false;
     str: "/";
-    text-color: @overlay1;
+    text-color: @on-surface-variant;
 }
 
 case-indicator {
     spacing: 0;
-    text-color: @normal-foreground;
+    text-color: @on-surface-variant;
 }
 
 textbox-prompt-colon {

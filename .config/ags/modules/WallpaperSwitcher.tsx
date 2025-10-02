@@ -21,6 +21,7 @@ const imageExtensions = [
 
 class WallpaperSwitcherClass {
     private wallpapers: Accessor<Map<string, Gdk.Paintable>>;
+    private _activeWallpapers: Map<string, string>;
     private setWallpapers: Setter<Map<string, Gdk.Paintable>>;
     private timerActive: Accessor<boolean>;
     private timer: Accessor<boolean>;
@@ -29,6 +30,7 @@ class WallpaperSwitcherClass {
         [this.wallpapers, this.setWallpapers] = createState<Map<string, Gdk.Paintable>>(new Map());
         this.timer = createPoll(true, pollTime, (prev) => !prev);
         this.timerActive = settingsService.wallpaperSelectorActive;
+        this._activeWallpapers = new Map();
         this.scanForImages();
     }
 
@@ -112,6 +114,10 @@ class WallpaperSwitcherClass {
 
     }
 
+    public get activeWallpapers() {
+        return this._activeWallpapers;
+    }
+
     private wallpaperPreview({ fullPath, paintable, connector, setActiveWallpaper, activeWallpaper }: { fullPath: string, paintable: Gdk.Paintable, connector: string, setActiveWallpaper: Setter<string>, activeWallpaper: Accessor<string> }) {
         const isActive = activeWallpaper(wa => wa === fullPath);
         return (
@@ -119,9 +125,10 @@ class WallpaperSwitcherClass {
                 cssClasses={isActive( ia => ["Wallpaper", ia ? "Active" : ""])}
                 onClicked={() => {
                     setActiveWallpaper(fullPath);
-                    Swww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
+                    Swww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Swww.TransitionType.GROW }, true);
                     app.toggle_window('WallpaperSwitcher ' + connector);
-                }} overflow={Gtk.Overflow.HIDDEN}
+                }}
+                overflow={Gtk.Overflow.HIDDEN}
             >
                 <Adw.Clamp maximumSize={wallpaperPreviewSize.height} heightRequest={wallpaperPreviewSize.height}>
                     <Adw.Clamp maximumSize={wallpaperPreviewSize.width} widthRequest={wallpaperPreviewSize.width}>
@@ -141,12 +148,17 @@ class WallpaperSwitcherClass {
         const [activeWallpaper, setActiveWallpaper] = createState<string>("");
         const changeWallpaper = this.timer.subscribe(() => {
             if(this.timerActive.get()) {
-                setActiveWallpaper(this.randomImg);
-                Swww.manager.setWallpaper(`${path}/${activeWallpaper.get()}`, { outputs: gdkmonitor.get_connector()!, transitionType: Swww.TransitionType.GROW });
+                const img = this.randomImg ?? Swww.manager.checkLastWallpaper(gdkmonitor.get_connector()!);
+                if(img) {
+                    setActiveWallpaper(img);
+                    Swww.manager.setWallpaper(`${path}/${activeWallpaper.get()}`, { outputs: gdkmonitor.get_connector()!, transitionType: Swww.TransitionType.GROW });
+                }
             }
         });
 
-        onCleanup(() => changeWallpaper);
+        onCleanup(() => {
+            changeWallpaper();
+        });
 
         return (
             <window

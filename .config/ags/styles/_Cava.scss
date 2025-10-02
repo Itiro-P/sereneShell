@@ -1,11 +1,11 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Transitions';
 
 .CavaMedia {
-    color: Colors.$blue;
+    color: Palette.$primary;
 }
 
 .CavaOverlay {
     border-radius:  40px 40px 0px 0px;
-    @include Transitions.noneToInverse(rgba(Colors.$blue, 0.6), Colors.$base, rgba(Colors.$blue, 0.6));
+    @include Transitions.noneToInverse(rgba(Palette.$primary, 0.6), Palette.$on_primary, rgba(Palette.$primary, 0.6));
 }

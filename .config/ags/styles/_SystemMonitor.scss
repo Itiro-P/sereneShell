@@ -1,4 +1,4 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Layout';
 @use 'common/Transitions';
 @use 'common/Font';
@@ -11,7 +11,7 @@
 
     .Slider {
         @extend %component-slider;
-        background-color: Colors.$surface2;
+        background-color: Palette.$surface_container;
     }
 
     .PercentageLabel {
@@ -20,29 +20,29 @@
 
     .Cpu, .Memory, .Battery {
         @extend %component;
-        background-color: Colors.$base;
+        background-color: Palette.$surface_container_high;
     }
 
     .Cpu {
         .Icon, .PercentageLabel {
-            color: Colors.$teal;
+            color: Palette.$primary;
         }
 
         .Slider {
             & highlight {
-                background-color: Colors.$teal;
+                background-color: Palette.$primary;
             }
         }
     }
 
     .Memory {
         .Icon, .PercentageLabel {
-            color: Colors.$green;
+            color: Palette.$secondary;
         }
 
         .Slider {
             & highlight {
-                background-color: Colors.$green;
+                background-color: Palette.$secondary;
             }
         }
     }
@@ -53,12 +53,12 @@
             padding: 0;
         }
         .Icon, .PercentageLabel {
-            color: Colors.$lavender;
+            color: Palette.$tertiary;
         }
 
         .Slider {
             & highlight {
-                background-color: Colors.$lavender;
+                background-color: Palette.$tertiary;
             }
         }
     }

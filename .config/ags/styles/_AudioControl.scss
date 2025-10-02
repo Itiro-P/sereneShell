@@ -1,11 +1,11 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Layout';
 @use 'common/Font';
 @use 'common/Transitions';
 
 .AudioControl {
     @extend %component;
-    @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+    @include Transitions.noneToInverseChild(Palette.$on_background, Palette.$on_primary, Palette.$primary);
 }
 
 .Mixer {
@@ -18,38 +18,37 @@
             padding: 2px;
             font-weight: bold;
             font-size: Font.$font-size-large;
-            color: Colors.$text;
+        }
+
+        .Label {
+            color: Palette.$secondary;
         }
 
         .PavucontrolButton {
-            transition: all 0.3s ease-in-out;
             border-radius: 0px 16px 16px 0px;
-            &:hover {
-                label { color: Colors.$blue; }
-                background-color: Colors.$crust;
-            }
+            @include Transitions.inverseChild(Palette.$on_secondary, Palette.$secondary);
         }
     }
 
     .MixerEntry {
         @extend %component;
-        background-color: Colors.$base;
+        background-color: Palette.$surface_container;
 
         .Icon {
             @extend %component-circle;
-            @include Transitions.noneToInverseChild(Colors.$text, Colors.$base, Colors.$blue);
+            @include Transitions.inverseChild(Palette.$secondary, Palette.$on_secondary);
         }
 
         .Slider {
             @extend %component-slider;
-            background-color: Colors.$surface2;
+            background-color: Palette.$surface_container_high;
 
             & highlight {
-                background-color: Colors.$blue;
+                background-color: Palette.$on_surface_variant;
             }
 
             & through {
-                background-color: Colors.$subtext1;
+                background-color: Palette.$inverse_on_surface;
             }
         }
 

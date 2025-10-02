@@ -19,7 +19,7 @@ ttf-nerd-fonts-symbols-common
 ttf-roboto
 woff2
 woff2-font-awesome
-nautilus
+thunar
 swayosd
 xfce-polkit
 zen-browser-bin
@@ -72,3 +72,6 @@ swww
 swayidle
 grim
 slurp
+matugen-bin
+vesktop
+obsidian-bin

@@ -130,12 +130,12 @@ window-rule {
 
 window-rule {
     match is-focused=true
-    opacity 0.95
+    opacity 0.90
 }
 
 window-rule {
     match is-focused=false
-    opacity 0.90
+    opacity 0.85
 }
 
 window-rule {
@@ -233,7 +233,7 @@ binds {
     Mod+L { spawn "gtklock"; }
     Mod+Escape { spawn-sh "killall wlogout || wlogout"; }
     Mod+H { spawn "ags" "toggle" "Cheatsheet"; }
-    Mod+E { spawn "nautilus"; }
+    Mod+E { spawn "thunar"; }
     Mod+Space { spawn "niri" "msg" "action" "switch-layout" "next"; }
 
     XF86AudioNext { spawn "playerctl" "next"; }

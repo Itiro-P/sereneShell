@@ -1,4 +1,4 @@
-@use 'common/Colors';
+@use 'common/Palette';
 @use 'common/Layout';
 @use 'common/Font';
 @use 'common/Transitions';
@@ -6,5 +6,5 @@
 .Time {
     @extend %component;
     font-weight: bold;
-    @include Transitions.noneToInverse(Colors.$text, Colors.$base, Colors.$blue);
+    @include Transitions.noneToInverse(Palette.$on_background, Palette.$on_primary, Palette.$primary);
 }
