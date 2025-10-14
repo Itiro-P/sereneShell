@@ -52,3 +52,8 @@ output_path = '~/.config/fastfetch/config.jsonc'
 input_path = '~/.config/matugen/templates/niri-colors.kdl'
 output_path = '~/.config/niri/_colors.kdl'
 post_hook = 'niri msg action load-config-file'
+
+[templates.mako]
+input_path = '~/.config/matugen/templates/mako-colors'
+output_path = '~/.config/mako/config'
+post_hook = 'makoctl reload'

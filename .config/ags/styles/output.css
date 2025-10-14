@@ -34,47 +34,47 @@
 .Time {
   font-weight: bold;
   background: none;
-  color: #dee3e6;
+  color: #f0dedf;
   transition: all 0.3s ease;
 }
 .Time:hover {
-  background: #85d2e7;
-  color: #003641;
+  background: #ffb2bc;
+  color: #561d28;
 }
 
 .SystemMonitor .Icon {
   margin: 4px;
 }
 .SystemMonitor .Slider {
-  background-color: #1b2022;
+  background-color: #261d1e;
 }
 .SystemMonitor .PercentageLabel {
   font-weight: bold;
 }
 .SystemMonitor .Cpu, .SystemMonitor .Memory, .SystemMonitor .Battery {
-  background-color: #252b2d;
+  background-color: #312828;
 }
 .SystemMonitor .Cpu .Icon, .SystemMonitor .Cpu .PercentageLabel {
-  color: #85d2e7;
+  color: #ffb2bc;
 }
 .SystemMonitor .Cpu .Slider highlight {
-  background-color: #85d2e7;
+  background-color: #ffb2bc;
 }
 .SystemMonitor .Memory .Icon, .SystemMonitor .Memory .PercentageLabel {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 .SystemMonitor .Memory .Slider highlight {
-  background-color: #b2cbd3;
+  background-color: #e5bdc1;
 }
 .SystemMonitor .Battery .Icon {
   margin: 0;
   padding: 0;
 }
 .SystemMonitor .Battery .Icon, .SystemMonitor .Battery .PercentageLabel {
-  color: #bfc4eb;
+  color: #eabf8f;
 }
 .SystemMonitor .Battery .Slider highlight {
-  background-color: #bfc4eb;
+  background-color: #eabf8f;
 }
 
 .AudioControl {
@@ -82,13 +82,13 @@
   background: none;
 }
 .AudioControl * {
-  color: #dee3e6;
+  color: #f0dedf;
 }
 .AudioControl:hover {
-  background: #85d2e7;
+  background: #ffb2bc;
 }
 .AudioControl:hover * {
-  color: #003641;
+  color: #561d28;
 }
 
 .Mixer .Title .Label, .Mixer .Title .PavucontrolButton {
@@ -97,67 +97,67 @@
   font-size: 20px;
 }
 .Mixer .Title .Label {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 .Mixer .Title .PavucontrolButton {
   border-radius: 0px 16px 16px 0px;
   transition: all 0.3s ease;
-  background: #1d343a;
+  background: #43292d;
 }
 .Mixer .Title .PavucontrolButton * {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 .Mixer .Title .PavucontrolButton:hover {
-  background: #b2cbd3;
+  background: #e5bdc1;
 }
 .Mixer .Title .PavucontrolButton:hover * {
-  color: #1d343a;
+  color: #43292d;
 }
 .Mixer .MixerEntry {
-  background-color: #1b2022;
+  background-color: #261d1e;
 }
 .Mixer .MixerEntry .Icon {
   transition: all 0.3s ease;
-  background: #b2cbd3;
+  background: #e5bdc1;
 }
 .Mixer .MixerEntry .Icon * {
-  color: #1d343a;
+  color: #43292d;
 }
 .Mixer .MixerEntry .Icon:hover {
-  background: #1d343a;
+  background: #43292d;
 }
 .Mixer .MixerEntry .Icon:hover * {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 .Mixer .MixerEntry .Slider {
-  background-color: #252b2d;
+  background-color: #312828;
 }
 .Mixer .MixerEntry .Slider highlight {
-  background-color: #bfc8cb;
+  background-color: #d7c1c3;
 }
 .Mixer .MixerEntry .Slider through {
-  background-color: #2c3133;
+  background-color: #382e2f;
 }
 .Mixer .MixerEntry .PercentageLabel {
   font-weight: bold;
 }
 
 .Workspaces {
-  background-color: rgba(27, 32, 34, 0.8);
+  background-color: rgba(38, 29, 30, 0.8);
 }
 .Workspaces .Workspace {
   font-weight: bold;
   transition: all 0.3s ease;
-  background: #003641;
+  background: #561d28;
 }
 .Workspaces .Workspace * {
-  color: #85d2e7;
+  color: #ffb2bc;
 }
 .Workspaces .Workspace:hover {
-  background: #85d2e7;
+  background: #ffb2bc;
 }
 .Workspaces .Workspace:hover * {
-  color: #003641;
+  color: #561d28;
 }
 .Workspaces .Workspace .WorkspaceIdButton {
   padding: 0px 1px;
@@ -169,35 +169,35 @@
   transition: background-color 0.2s ease;
 }
 .Workspaces .WorkspaceClient:hover {
-  background-color: #303638;
+  background-color: #3d3233;
 }
 .Workspaces .CFocused {
-  background-color: #303638;
+  background-color: #3d3233;
 }
 .Workspaces .WFocused {
-  background-color: rgba(133, 210, 231, 0.9);
+  background-color: rgba(255, 178, 188, 0.9);
 }
 .Workspaces .WFocused label {
-  color: #003641;
+  color: #561d28;
 }
 .Workspaces .MoreWorkspacesButton {
   padding: 0px 1px;
   font-weight: bold;
-  background-color: rgba(0, 54, 65, 0.8);
+  background-color: rgba(86, 29, 40, 0.8);
   transition: all 0.3s ease;
   background: none;
 }
 .Workspaces .MoreWorkspacesButton * {
-  color: #899295;
+  color: #9f8c8e;
 }
 .Workspaces .MoreWorkspacesButton:hover {
-  background: #85d2e7;
+  background: #ffb2bc;
 }
 .Workspaces .MoreWorkspacesButton:hover * {
-  color: #003641;
+  color: #561d28;
 }
 .Workspaces .WorkspacePopover {
-  background-color: rgba(15, 20, 22, 0.9);
+  background-color: rgba(26, 17, 18, 0.9);
 }
 
 .SystemTray {
@@ -210,16 +210,16 @@
   transition: all 0.25s ease;
 }
 .TrayItem:hover {
-  background-color: rgba(133, 210, 231, 0.8);
-  color: #001f26;
+  background-color: rgba(255, 178, 188, 0.8);
+  color: #3b0714;
 }
 .TrayItem:active {
-  background-color: rgba(133, 210, 231, 0.6);
-  color: #001f26;
+  background-color: rgba(255, 178, 188, 0.6);
+  color: #3b0714;
 }
 .TrayItem popover.menu {
   margin: 10px;
-  background-color: #1b2022;
+  background-color: #261d1e;
   border-radius: 10px;
 }
 .TrayItem popover.menu modelbutton {
@@ -228,10 +228,10 @@
   margin: 0 2px;
 }
 .TrayItem popover.menu modelbutton:hover {
-  background: rgba(37, 43, 45, 0.2);
+  background: rgba(49, 40, 40, 0.2);
 }
 .TrayItem popover.menu modelbutton:active {
-  background: rgba(48, 54, 56, 0.4);
+  background: rgba(61, 50, 51, 0.4);
 }
 
 .Media {
@@ -250,22 +250,22 @@
 }
 .Media .Controllers .Previous, .Media .Controllers .PlayPause, .Media .Controllers .Next {
   transition: all 0.3s ease;
-  background: #b2cbd3;
+  background: #e5bdc1;
 }
 .Media .Controllers .Previous *, .Media .Controllers .PlayPause *, .Media .Controllers .Next * {
-  color: #1d343a;
+  color: #43292d;
 }
 .Media .Controllers .Previous:hover, .Media .Controllers .PlayPause:hover, .Media .Controllers .Next:hover {
-  background: #1d343a;
+  background: #43292d;
 }
 .Media .Controllers .Previous:hover *, .Media .Controllers .PlayPause:hover *, .Media .Controllers .Next:hover * {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 
 tooltip {
   padding: 6px;
   border-radius: 10px;
-  background-color: #343a3c;
+  background-color: #413738;
 }
 
 .ControlMenuButton label {
@@ -274,16 +274,16 @@ tooltip {
 
 .ControlMenuButtonNormal {
   transition: all 0.3s ease;
-  background: #003641;
+  background: #561d28;
 }
 .ControlMenuButtonNormal * {
-  color: #85d2e7;
+  color: #ffb2bc;
 }
 .ControlMenuButtonNormal:hover {
-  background: #85d2e7;
+  background: #ffb2bc;
 }
 .ControlMenuButtonNormal:hover * {
-  color: #003641;
+  color: #561d28;
 }
 
 .ControlMenuButtonCritical {
@@ -301,7 +301,7 @@ tooltip {
 }
 
 .ControlMenu {
-  background-color: rgba(15, 20, 22, 0.8);
+  background-color: rgba(26, 17, 18, 0.8);
   padding: 10px;
   border-radius: 16px 0px 0px 16px;
 }
@@ -314,49 +314,49 @@ tooltip {
   margin: 4px;
 }
 .ControlMenu .Option switch {
-  background-color: #b2cbd3;
+  background-color: #e5bdc1;
 }
 .ControlMenu .Option switch image, .ControlMenu .Option switch slider {
-  background-color: #1d343a;
+  background-color: #43292d;
 }
 .ControlMenu .Option switch {
   transition: all 0.3s ease-in-out;
 }
 .ControlMenu .Option switch:hover {
-  background-color: #1d343a;
+  background-color: #43292d;
 }
 .ControlMenu .Option switch:hover image, .ControlMenu .Option switch:hover slider {
-  background-color: #b2cbd3;
+  background-color: #e5bdc1;
 }
 .ControlMenu .StackSwitcher {
-  background-color: rgba(27, 32, 34, 0.8);
+  background-color: rgba(38, 29, 30, 0.8);
 }
 .ControlMenu .StackSwitcher .PageSwitcher {
   font-weight: bold;
 }
 .ControlMenu .StackSwitcher .Active {
-  background: #b2cbd3;
+  background: #e5bdc1;
 }
 .ControlMenu .StackSwitcher .Active * {
-  color: #1d343a;
+  color: #43292d;
 }
 .ControlMenu .StackSwitcher .Inactive {
   transition: all 0.3s ease;
   background: none;
 }
 .ControlMenu .StackSwitcher .Inactive * {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 .ControlMenu .StackSwitcher .Inactive:hover {
-  background: #1d343a;
+  background: #43292d;
 }
 .ControlMenu .StackSwitcher .Inactive:hover * {
-  color: #b2cbd3;
+  color: #e5bdc1;
 }
 
 .Calendar * {
   all: unset;
-  color: #899295;
+  color: #9f8c8e;
 }
 .Calendar label.day-number,
 .Calendar label.other-month,
@@ -364,70 +364,70 @@ tooltip {
   border-radius: 10%;
 }
 .Calendar header {
-  background-color: rgba(15, 20, 22, 0.8);
-  color: #dee3e6;
+  background-color: rgba(26, 17, 18, 0.8);
+  color: #f0dedf;
 }
 .Calendar button {
   border-radius: 50%;
   background-color: transparent;
-  color: #bfc8cb;
+  color: #d7c1c3;
   transition: all 0.2s ease;
   padding: 8px;
 }
 .Calendar button:hover {
-  background-color: #1b2022;
-  color: #dee3e6;
+  background-color: #261d1e;
+  color: #f0dedf;
 }
 .Calendar button:active {
-  background-color: #252b2d;
-  color: #2c3133;
+  background-color: #312828;
+  color: #382e2f;
 }
 .Calendar grid {
-  background-color: rgba(15, 20, 22, 0.7);
+  background-color: rgba(26, 17, 18, 0.7);
 }
 .Calendar grid label.other-month {
   opacity: 0.5;
-  color: #bfc8cb;
+  color: #d7c1c3;
   transition: all 0.2s ease;
 }
 .Calendar grid label.other-month:hover {
-  background-color: #1b2022;
+  background-color: #261d1e;
   opacity: 0.7;
 }
 .Calendar grid label.day-number {
-  color: #bfc8cb;
+  color: #d7c1c3;
   transition: all 0.2s ease;
   padding: 4px;
 }
 .Calendar grid label.day-number:hover {
-  background-color: #1b2022;
-  color: #dee3e6;
+  background-color: #261d1e;
+  color: #f0dedf;
 }
 .Calendar grid label.day-number:active {
-  background-color: #2c3133;
-  color: #dee3e6;
+  background-color: #382e2f;
+  color: #f0dedf;
 }
 .Calendar grid label.today {
-  color: #292e4d;
-  background-color: #bfc4eb;
+  color: #452b07;
+  background-color: #eabf8f;
   font-weight: 600;
 }
 .Calendar grid label.today:hover {
-  background-color: #3f4565;
-  color: #dee1ff;
+  background-color: #5e411c;
+  color: #ffddb8;
 }
 
 .CavaMedia {
-  color: #85d2e7;
+  color: #ffb2bc;
 }
 
 .CavaBackground {
   border-radius: 40px 40px 0px 0px;
-  color: rgba(133, 210, 231, 0.6);
+  color: rgba(255, 178, 188, 0.6);
 }
 
 .WallpaperSwitcher {
-  background-color: rgba(27, 32, 34, 0.8);
+  background-color: rgba(38, 29, 30, 0.8);
   padding: 4px;
   border-radius: 12px 12px 0px 0px;
 }
@@ -436,26 +436,26 @@ tooltip {
   margin: 2px;
 }
 .WallpaperSwitcher switch {
-  background-color: #2c3133;
+  background-color: #382e2f;
 }
 .WallpaperSwitcher switch image, .WallpaperSwitcher switch slider {
-  background-color: #252b2d;
+  background-color: #312828;
 }
 .WallpaperSwitcher switch {
   transition: all 0.3s ease-in-out;
 }
 .WallpaperSwitcher switch:hover {
-  background-color: #85d2e7;
+  background-color: #ffb2bc;
 }
 .WallpaperSwitcher switch:hover image, .WallpaperSwitcher switch:hover slider {
-  background-color: #003641;
+  background-color: #561d28;
 }
 .WallpaperSwitcher .Wallpaper {
-  border: 2px solid #85d2e7;
+  border: 2px solid #ffb2bc;
   border-radius: 16px;
 }
 .WallpaperSwitcher .Active {
-  border-color: #b2cbd3;
+  border-color: #e5bdc1;
 }
 
 /* Resetting every decoration applied earlier */
@@ -463,7 +463,7 @@ tooltip {
   font-family: "Monospace";
   font-size: 16px;
   -gtk-icon-size: 24px;
-  color: #dee3e6;
+  color: #f0dedf;
   background: none;
   border: none;
   box-shadow: none;
@@ -473,7 +473,7 @@ tooltip {
 }
 
 .Bar {
-  background: rgba(15, 20, 22, 0.8);
+  background: rgba(26, 17, 18, 0.8);
   margin: 2px 4px;
   border-radius: 28px;
 }
