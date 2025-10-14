@@ -1,5 +1,16 @@
 // Niri configuration. Intended to be a mirror from Hyprland
 
+// include "_environment.kdl"
+// include "_input.kdl"
+// include "_outputs.kdl"
+// include "_binds.kdl"
+// include "_misc.kdl"
+// include "_layout.kdl"
+// include "_switch_events.kdl"
+// include "_window_rules.kdl"
+// include "_layer_rules.kdl"
+// include "_autostart.kdl"
+
 // Environment variables
 environment {
     QT_QPA_PLATFORM "wayland"
@@ -59,7 +70,7 @@ output "PNP(RDA) 18.5JL3 Unknown" {
 layout {
     gaps 8
     center-focused-column "on-overflow"
-
+    background-color "transparent"
     default-column-display "tabbed"
 
     tab-indicator {
@@ -122,6 +133,8 @@ cursor {
     xcursor-size 24
 }
 
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
 window-rule {
     draw-border-with-background false
     geometry-corner-radius 12
@@ -130,12 +143,12 @@ window-rule {
 
 window-rule {
     match is-focused=true
-    opacity 0.90
+    opacity 0.95
 }
 
 window-rule {
     match is-focused=false
-    opacity 0.85
+    opacity 0.90
 }
 
 window-rule {
@@ -156,8 +169,7 @@ window-rule {
 
 // "Pin" picture-in-picture windows and apply another border colors to distinguish them better
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    match app-id=r#"zen"# title="^Picture-in-Picture$"
+    match title="^Picture-in-Picture$"
     default-floating-position x=32 y=32 relative-to="bottom-right"
     opacity 1.0
 
@@ -165,6 +177,14 @@ window-rule {
         active-gradient from="#fab387" to="#f9e2af" angle=45
         inactive-gradient from="#fab387" to="#f9e2af" angle=45
     }
+}
+
+// Put swww and Cava to backdrop
+layer-rule {
+    match namespace="^CavaBackground$"
+    match namespace="^swww-daemon$"
+
+    place-within-backdrop true
 }
 
 animations {
@@ -215,13 +235,12 @@ animations {
 spawn-at-startup "swayidle" "-w"
 spawn-at-startup "mako"
 spawn-at-startup "swaddle"
-spawn-at-startup "/usr/lib/xfce-polkit/xfce-polkit"
+//spawn-at-startup "/usr/lib/xfce-polkit/xfce-polkit"
 spawn-at-startup "nm-applet"
 spawn-at-startup "swayosd-server"
 spawn-at-startup "swww-daemon"// "--no-cache"
 spawn-at-startup "ags" "run"
 
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 switch-events {
     lid-close { spawn "gtklock" "-d"; }

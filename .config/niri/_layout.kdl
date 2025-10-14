@@ -1,0 +1,49 @@
+include "_colors.kdl"
+
+// Layout configuration
+
+layout {
+    gaps 8
+    center-focused-column "on-overflow"
+    background-color "transparent"
+    default-column-display "tabbed"
+
+    tab-indicator {
+        width 6
+        gap 4
+        hide-when-single-tab
+        place-within-column
+    }
+
+    preset-column-widths {
+        proportion 0.25
+        proportion 0.5
+        proportion 0.75
+        proportion 1.0
+    }
+
+    default-column-width { proportion 0.75; }
+
+    focus-ring {
+        off
+    }
+
+    border {
+        on
+        width 2
+    }
+
+    shadow {
+        on
+        softness 12
+        spread 6
+        offset x=0 y=4
+    }
+
+    struts {
+        left 4
+        right 4
+        top 4
+        bottom 4
+    }
+}

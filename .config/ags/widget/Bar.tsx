@@ -1,4 +1,4 @@
-import { Astal, Gtk, Gdk } from "ags/gtk4";
+import { Astal, Gdk } from "ags/gtk4";
 import systemTray from "../modules/SystemTray";
 import media from "../modules/Media";
 import app from "ags/gtk4/app";

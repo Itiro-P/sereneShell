@@ -92,6 +92,10 @@ class MediaClass {
         );
     }
 
+    public get playerStatus() {
+        return this._activePlayerData(apd => apd.active);
+    }
+
     private getPlayerStatus(status: AstalMpris.PlaybackStatus) {
         switch(status) {
             case AstalMpris.PlaybackStatus.PLAYING:

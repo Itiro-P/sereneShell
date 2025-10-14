@@ -1,0 +1,10 @@
+// Autostart config
+
+spawn-at-startup "swayidle" "-w"
+spawn-at-startup "mako"
+spawn-at-startup "swaddle"
+//spawn-at-startup "/usr/lib/xfce-polkit/xfce-polkit"
+spawn-at-startup "nm-applet"
+spawn-at-startup "swayosd-server"
+spawn-at-startup "swww-daemon"// "--no-cache"
+spawn-at-startup "ags" "run"

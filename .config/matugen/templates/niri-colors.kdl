@@ -1,0 +1,29 @@
+// Matugen generated colors
+// Layout configuration
+layout {
+    tab-indicator {
+        active-color "{{colors.primary.default.hex}}"
+        inactive-color "{{colors.tertiary.default.hex}}"
+    }
+    insert-hint {
+        gradient from="{{colors.primary_container.default.hex}}80" to="{{colors.primary.default.hex}}80" angle=45 relative-to="workspace-view"
+    }
+    border {
+        active-gradient from="{{colors.primary.default.hex}}" to="{{colors.secondary.default.hex}}" angle=45 relative-to="workspace-view"
+        inactive-gradient from="{{colors.surface_variant.default.hex}}" to="{{colors.outline.default.hex}}" angle=45 relative-to="workspace-view"
+        urgent-gradient from="{{colors.error.default.hex}}" to="{{colors.error_container.default.hex}}" angle=45 relative-to="workspace-view"
+    }
+    shadow {
+        color "{{colors.shadow.default.hex}}"
+    }
+}
+// "Pin" picture-in-picture windows and apply another border colors to distinguish them better
+window-rule {
+    match title="^Picture-in-Picture$"
+    default-floating-position x=32 y=32 relative-to="bottom-right"
+    opacity 1.0
+    border {
+        active-gradient from="{{colors.tertiary.default.hex}}" to="{{colors.tertiary_container.default.hex}}" angle=45
+        inactive-gradient from="{{colors.tertiary.default.hex}}" to="{{colors.tertiary_container.default.hex}}" angle=45
+    }
+}

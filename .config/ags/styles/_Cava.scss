@@ -5,7 +5,7 @@
     color: Palette.$primary;
 }
 
-.CavaOverlay {
+.CavaBackground {
     border-radius:  40px 40px 0px 0px;
-    @include Transitions.noneToInverse(rgba(Palette.$primary, 0.6), Palette.$on_primary, rgba(Palette.$primary, 0.6));
+    color: rgba(Palette.$primary, 0.6);
 }

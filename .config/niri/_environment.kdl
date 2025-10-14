@@ -1,0 +1,17 @@
+// Environment variables
+environment {
+    QT_QPA_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "qt5ct"
+    QT_QPA_PLATORMTHEME_QT6 "qt6ct"
+    QT_STYLE_OVERRIDE "kvantum"
+    XDG_CURRENT_DESKTOP "Niri"
+    XDG_SESSION_TYPE "wayland"
+    XDG_SESSION_DESKTOP "Niri"
+    MOZ_ENABLE_WAYLAND "1"
+    // ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Classic"
+    xcursor-size 24
+}

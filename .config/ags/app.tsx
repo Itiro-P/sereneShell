@@ -2,7 +2,7 @@ import style from "./styles/index.scss";
 import app from "ags/gtk4/app";
 import { createBinding, For, onCleanup, This } from "ags";
 import Bar from "./widget/Bar";
-import CavaOverlay from "./widget/CavaOverlay";
+import CavaBackground from "./widget/CavaBackground";
 import settingsService from "./services/Settings";
 import iconFinder from "./services/IconFinder";
 import controlMenu from "./modules/ControlMenu";
@@ -37,7 +37,7 @@ function main() {
                 return (
                     <This this={app}>
                         <Bar gdkmonitor={monitor} />
-                        <CavaOverlay gdkmonitor={monitor} />
+                        <CavaBackground gdkmonitor={monitor} />
                         {wallpaperSwitcher.WallpaperSwitcher(monitor)}
                         {controlMenu.ControlMenu(monitor)}
                     </This>

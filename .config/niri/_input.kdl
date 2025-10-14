@@ -1,0 +1,24 @@
+// Input
+input {
+    focus-follows-mouse
+    keyboard {
+        xkb {
+            layout "br, us"
+            variant "abnt2, intl"
+            model ", pc105"
+        }
+        // numlock
+    }
+
+    touchpad {
+        tap
+    }
+
+    mouse {
+
+    }
+
+    trackpoint {
+        off
+    }
+}

@@ -64,7 +64,6 @@ export namespace Swww {
 
 
     class Manager {
-        private shouldChangeColorScheme: boolean = true;
 
         constructor() {
         }
@@ -76,7 +75,7 @@ export namespace Swww {
             return match ? match[2] : null;
         }
 
-        public setWallpaper(path: string, options: Partial<ParserOptions>, ignoreTimer: boolean = false): boolean {
+        public setWallpaper(path: string, options: Partial<ParserOptions>): boolean {
             if (path === undefined) return false;
             let command = `swww img ${path}`;
             if (options) {
@@ -92,11 +91,7 @@ export namespace Swww {
                 if (options.outputs) command += ` --outputs ${options.outputs}`;
             }
             execAsync(command);
-            if(this.shouldChangeColorScheme || ignoreTimer) {
-                this.shouldChangeColorScheme = false;
-                timeout(120000, () => this.shouldChangeColorScheme = true);
-                execAsync(`matugen image ${path}`);
-            }
+            execAsync(`matugen image ${path}`);
             return true;
         }
     }

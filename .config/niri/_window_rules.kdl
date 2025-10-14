@@ -1,0 +1,33 @@
+// Window rules
+
+window-rule {
+    draw-border-with-background false
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+window-rule {
+    match is-focused=true
+    opacity 0.95
+}
+
+window-rule {
+    match is-focused=false
+    opacity 0.90
+}
+
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"zen"# title="^Picture-in-Picture$"
+    match app-id=r#"xdg-desktop-portal-gtk$"#
+    match app-id=r#"nm-connection-editor$"#
+    match app-id=r#"xfce-polkit$"#
+    match app-id=r#"org.pulseaudio.pavucontrol$"#
+    match app-id=r#"Import Savegames$"#
+    open-floating true
+}

@@ -125,7 +125,7 @@ class WallpaperSwitcherClass {
                 cssClasses={isActive( ia => ["Wallpaper", ia ? "Active" : ""])}
                 onClicked={() => {
                     setActiveWallpaper(fullPath);
-                    Swww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Swww.TransitionType.GROW }, true);
+                    Swww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
                     app.toggle_window('WallpaperSwitcher ' + connector);
                 }}
                 overflow={Gtk.Overflow.HIDDEN}

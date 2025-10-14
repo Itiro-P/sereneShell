@@ -1,0 +1,5 @@
+// Switch/Lid events for laptops
+
+switch-events {
+    lid-close { spawn "gtklock" "-d"; }
+}
