@@ -1,6 +1,7 @@
 import GLib from "gi://GLib?version=2.0";
 import { readFile, writeFile } from "ags/file";
 import { Accessor, createState, Setter } from "ags";
+import { createSubprocess } from "ags/process";
 
 interface Options {
     animationsEnabled: boolean;
@@ -48,6 +49,8 @@ class SettingsClass {
         }
         writeFile(path, JSON.stringify(options, null, 2));
     }
+
+    public get
 
     public get animationsEnabled() {
         return this._animationsEnabled;

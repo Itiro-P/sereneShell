@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Abrir terminal aqui</name>
+	<submenu></submenu>
+	<unique-id>1759799493302195-1</unique-id>
+	<command>/usr/bin/kitty %f</command>
+	<description>Abrir o diretório no terminal</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+</actions>

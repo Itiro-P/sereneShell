@@ -143,7 +143,7 @@ class MediaClass {
                             >
                                 <box $type="named" name={'MinimalStatus'} cssClasses={["MinimalStatus"]}>
                                     <label label={player.statusText} widthChars={10} />
-                                    <box children={cava.Cava(["CavaMedia"])} hexpand={false} widthRequest={140} />
+                                    {<box children={cava.Cava(["CavaMedia"])} hexpand={false} widthRequest={140} />}
                                 </box>
                                 <box $type="named" name={'FullStatus'} cssClasses={["FullStatus"]}>
                                     <Gtk.EventControllerMotion onLeave={() => setVisibleMetadata(0)} />

@@ -59,8 +59,8 @@ class AudioControlClass {
                             <box cssClasses={["MixerEntry"]}>
                                 <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
                                 <button cssClasses={["Icon"]} iconName={icon} onClicked={() => edp.set_mute(!edp.get_mute())} />
-                                <slider cssClasses={["Slider"]} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} />
-                                <label cssClasses={["PercentageLabel"]} label={volume(v => `${Math.round(v * 100)}%`)} maxWidthChars={4} hexpand />
+                                <slider cssClasses={["Slider"]} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} hexpand />
+                                <label cssClasses={["PercentageLabel"]} label={volume(v => `${Math.round(v * 100)}%`)} widthChars={4} />
                             </box>
                         );
                     }}

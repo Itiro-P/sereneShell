@@ -2,15 +2,15 @@
 // Layout configuration
 layout {
     tab-indicator {
-        active-color "#ffb2bc"
-        inactive-color "#eabf8f"
+        active-color "#f6b2e0"
+        inactive-color "#f5b9a2"
     }
     insert-hint {
-        gradient from="#72333e80" to="#ffb2bc80" angle=45 relative-to="workspace-view"
+        gradient from="#68355b80" to="#f6b2e080" angle=45 relative-to="workspace-view"
     }
     border {
-        active-gradient from="#ffb2bc" to="#e5bdc1" angle=45 relative-to="workspace-view"
-        inactive-gradient from="#524345" to="#9f8c8e" angle=45 relative-to="workspace-view"
+        active-gradient from="#f6b2e0" to="#dcbed0" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#4f444a" to="#9b8d94" angle=45 relative-to="workspace-view"
         urgent-gradient from="#ffb4ab" to="#93000a" angle=45 relative-to="workspace-view"
     }
     shadow {
@@ -23,7 +23,7 @@ window-rule {
     default-floating-position x=32 y=32 relative-to="bottom-right"
     opacity 1.0
     border {
-        active-gradient from="#eabf8f" to="#5e411c" angle=45
-        inactive-gradient from="#eabf8f" to="#5e411c" angle=45
+        active-gradient from="#f5b9a2" to="#663c2b" angle=45
+        inactive-gradient from="#f5b9a2" to="#663c2b" angle=45
     }
 }

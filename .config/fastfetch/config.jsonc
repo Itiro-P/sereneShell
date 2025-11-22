@@ -4,15 +4,15 @@
     "type": "auto",
     "source": "",
     "color": {
-      "1": "#ffb2bc",
-      "2": "#e5bdc1",
-      "3": "#eabf8f",
-      "4": "#72333e",
-      "5": "#5c3f43",
-      "6": "#5e411c",
-      "7": "#524345",
-      "8": "#9f8c8e",
-      "9": "#524345"
+      "1": "#f6b2e0",
+      "2": "#dcbed0",
+      "3": "#f5b9a2",
+      "4": "#68355b",
+      "5": "#56404f",
+      "6": "#663c2b",
+      "7": "#4f444a",
+      "8": "#9b8d94",
+      "9": "#4f444a"
     },
     "width": null,
     "height": null,
@@ -38,10 +38,10 @@
     "hideCursor": false,
     "separator": ": ",
     "color": {
-      "keys": "#ffb2bc",
-      "title": "#e5bdc1",
-      "output": "#f0dedf",
-      "separator": "#9f8c8e"
+      "keys": "#f6b2e0",
+      "title": "#dcbed0",
+      "output": "#ecdfe5",
+      "separator": "#9b8d94"
     },
     "brightColor": true,
     "duration": {
@@ -55,8 +55,8 @@
       ],
       "ndigits": 0,
       "color": {
-        "green": "#eabf8f",
-        "yellow": "#e5bdc1",
+        "green": "#f5b9a2",
+        "yellow": "#dcbed0",
         "red": "#ffb4ab"
       },
       "spaceBeforeUnit": "default",
@@ -74,9 +74,9 @@
         "rightElapsed": ""
       },
       "color": {
-        "elapsed": "#ffb2bc",
-        "total": "#524345",
-        "border": "#9f8c8e"
+        "elapsed": "#f6b2e0",
+        "total": "#4f444a",
+        "border": "#9b8d94"
       },
       "width": 10
     },
@@ -109,15 +109,15 @@
       "keyIcon": "",
       "fqdn": false,
       "color": {
-        "user": "#ffb2bc",
-        "at": "#9f8c8e",
-        "host": "#e5bdc1"
+        "user": "#f6b2e0",
+        "at": "#9b8d94",
+        "host": "#dcbed0"
       }
     },
     {
       "type": "separator",
       "string": "-",
-      "outputColor": "#9f8c8e",
+      "outputColor": "#9b8d94",
       "times": 0
     },
     {

@@ -1,10 +1,10 @@
 # Matugen generated colors for Mako
 
 # Appearance - Modern translucent design
-background-color=#312828bb
-text-color=#f0dedf
-border-color=#ffb2bcaa
-progress-color=#ffb2bc
+background-color=#2f282cbb
+text-color=#ecdfe5
+border-color=#f6b2e0aa
+progress-color=#f6b2e0
 
 # Enhanced layout and positioning for visual appeal
 width=400
@@ -33,18 +33,18 @@ icons=1
 max-icon-size=48
 
 [urgency=low]
-background-color=#261d1e99
-border-color=#9f8c8e66
-text-color=#d7c1c3cc
+background-color=#241e2299
+border-color=#9b8d9466
+text-color=#d2c2cacc
 border-size=1
 default-timeout=4000
 padding=16
 border-radius=14
 
 [urgency=normal]
-background-color=#312828bb
-border-color=#ffb2bcaa
-text-color=#f0dedf
+background-color=#2f282cbb
+border-color=#f6b2e0aa
+text-color=#ecdfe5
 border-size=1
 default-timeout=6000
 padding=20
@@ -60,8 +60,8 @@ padding=22
 border-radius=18
 
 [grouped=true]
-background-color=#312828f0
-border-color=#ffb2bccc
+background-color=#2f282cf0
+border-color=#f6b2e0cc
 format=<b>%s (%g)</b>\n<span size='10pt'>%b</span>
 padding=22
 border-radius=18

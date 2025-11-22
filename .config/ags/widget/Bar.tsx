@@ -1,13 +1,14 @@
 import { Astal, Gdk } from "ags/gtk4";
 import systemTray from "../modules/SystemTray";
-import media from "../modules/Media";
 import app from "ags/gtk4/app";
 import dateTime from "../modules/DateTime";
 import audioControl from "../modules/AudioControl";
 import controlMenu from "../modules/ControlMenu";
 import workspaces from "../modules/Workspaces";
-import { onCleanup } from "ags";
+import { createBinding, onCleanup } from "ags";
 import compositorManager from "../services/CompositorManager";
+import AstalMpris from "gi://AstalMpris?version=0.1";
+import media from "../modules/Media";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;

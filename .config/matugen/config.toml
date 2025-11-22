@@ -57,3 +57,7 @@ post_hook = 'niri msg action load-config-file'
 input_path = '~/.config/matugen/templates/mako-colors'
 output_path = '~/.config/mako/config'
 post_hook = 'makoctl reload'
+
+[templates.zed]
+input_path = '~/.config/matugen/templates/zed-colors.json'
+output_path = '~/.config/zed/themes/matugen.json'

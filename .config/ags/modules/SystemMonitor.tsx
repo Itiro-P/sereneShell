@@ -80,8 +80,8 @@ class SystemMonitorClass {
         return (
             <box cssClasses={["Cpu"]}>
                 <label cssClasses={['Icon']} label={''} />
-                <slider cssClasses={["Slider"]} value={this._metrics(m => m.cpu)} step={1} min={0} max={100} sensitive={false} />
-                <label cssClasses={['PercentageLabel']} label={this._metrics(m => `${m.cpu}%`)} maxWidthChars={4} hexpand />
+                <slider cssClasses={["Slider"]} value={this._metrics(m => m.cpu)} step={1} min={0} max={100} sensitive={false} hexpand />
+                <label cssClasses={['PercentageLabel']} label={this._metrics(m => `${m.cpu}%`)} widthChars={4} />
             </box>
         );
     }
@@ -90,8 +90,8 @@ class SystemMonitorClass {
         return (
             <box cssClasses={["Memory"]}>
                 <label cssClasses={['Icon']} label={'󰘚'} />
-                <slider cssClasses={["Slider"]} value={this._metrics(m => m.mem)} step={1} min={0} max={100} sensitive={false} />
-                <label cssClasses={['PercentageLabel']} label={this._metrics(m => `${m.mem}%`)} maxWidthChars={4} hexpand />
+                <slider cssClasses={["Slider"]} value={this._metrics(m => m.mem)} step={1} min={0} max={100} sensitive={false} hexpand />
+                <label cssClasses={['PercentageLabel']} label={this._metrics(m => `${m.mem}%`)} widthChars={4} />
             </box>
         );
     }
@@ -100,8 +100,8 @@ class SystemMonitorClass {
         return (
             <box cssClasses={["Battery"]}>
                 <image cssClasses={["Icon"]} iconName={this.batteryIcon} />
-                <slider cssClasses={["Slider"]} value={this.batteryPercentage} step={0.1} min={0} max={1} sensitive={false} />
-                <label cssClasses={["PercentageLabel"]} label={this.batteryPercentage(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} maxWidthChars={4} hexpand />
+                <slider cssClasses={["Slider"]} value={this.batteryPercentage} step={0.1} min={0} max={1} sensitive={false} hexpand />
+                <label cssClasses={["PercentageLabel"]} label={this.batteryPercentage(p => `${Math.round(Math.min(1, p) * 100) ?? 0}%`)} widthChars={4} />
             </box>
         );
     }
