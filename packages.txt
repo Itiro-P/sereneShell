@@ -37,7 +37,7 @@ overskride
 papirus-icon-theme
 pavucontrol
 polkit-qt6
-qalculate-qt
+qalculate
 qt5ct
 qt6-wayland
 qt6ct
@@ -48,7 +48,7 @@ starship
 swaddle
 swayidle
 swayosd
-swww
+awww-git
 thunar
 ttf-fira-code
 ttf-hack

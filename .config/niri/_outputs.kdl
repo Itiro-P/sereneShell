@@ -24,7 +24,7 @@
     }
 }
 
-/-output "PNP(AOC) 2470W E72H1XA001302" {
+output "PNP(AOC) 2470W E72H1XA001302" {
     mode "1920x1080@60.000"
     scale 1
     transform "normal"
@@ -36,7 +36,7 @@
     }
 }
 
-/-output "eDP-1" {
+output "eDP-1" {
     mode "1920x1080@60.038"
     scale 1
     transform "normal"
@@ -47,7 +47,7 @@
     }
 }
 
-output "PNP(RDA) 18.5JL3 Unknown" {
+/-output "PNP(RDA) 18.5JL3 Unknown" {
     // off
     mode "1920x1080@60"
     scale 1
@@ -60,7 +60,7 @@ output "PNP(RDA) 18.5JL3 Unknown" {
     }
 }
 
-output "eDP-1" {
+/-output "eDP-1" {
     // off
     mode "1920x1080@60.038"
     scale 1

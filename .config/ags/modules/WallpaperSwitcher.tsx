@@ -2,7 +2,7 @@ import { Accessor, createState, For, onCleanup, Setter } from "ags";
 import { createPoll } from "ags/time";
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
-import { Swww } from "../services/Swww";
+import { Awww } from "../services/Awww";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
 import settingsService from "../services/Settings";
 import app from "ags/gtk4/app";
@@ -125,7 +125,7 @@ class WallpaperSwitcherClass {
                 cssClasses={isActive( ia => ["Wallpaper", ia ? "Active" : ""])}
                 onClicked={() => {
                     setActiveWallpaper(fullPath);
-                    Swww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Swww.TransitionType.GROW });
+                    Awww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Awww.TransitionType.GROW });
                     app.toggle_window('WallpaperSwitcher ' + connector);
                 }}
                 overflow={Gtk.Overflow.HIDDEN}
@@ -148,10 +148,10 @@ class WallpaperSwitcherClass {
         const [activeWallpaper, setActiveWallpaper] = createState<string>("");
         const changeWallpaper = this.timer.subscribe(() => {
             if(this.timerActive.get()) {
-                const img = this.randomImg ?? Swww.manager.checkLastWallpaper(gdkmonitor.get_connector()!);
+                const img = this.randomImg ?? Awww.manager.checkLastWallpaper(gdkmonitor.get_connector()!);
                 if(img) {
                     setActiveWallpaper(img);
-                    Swww.manager.setWallpaper(`${path}/${activeWallpaper.get()}`, { outputs: gdkmonitor.get_connector()!, transitionType: Swww.TransitionType.GROW });
+                    Awww.manager.setWallpaper(`${path}/${activeWallpaper.get()}`, { outputs: gdkmonitor.get_connector()!, transitionType: Swww.TransitionType.GROW });
                 }
             }
         });
