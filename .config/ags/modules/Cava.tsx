@@ -3,7 +3,7 @@ import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
-import { Accessor, createBinding, createState, onCleanup, Setter } from "ags";
+import { Accessor, createBinding, createEffect, createRoot, createState, Setter } from "ags";
 
 const CavaConfig = {
     autosens: true,
@@ -17,7 +17,6 @@ const CavaConfig = {
 
 class CavaWidget extends Gtk.DrawingArea {
     private valuesAccessor: Accessor<number[]>;
-    private unsubAccessor: () => void;
 
     constructor(v: Accessor<number[]>) {
         super();
@@ -27,9 +26,10 @@ class CavaWidget extends Gtk.DrawingArea {
             const height = this.get_allocated_height();
             return v.map(i => height * (1 - i));
         });
-        this.unsubAccessor = this.valuesAccessor.subscribe(() => this.queue_draw());
-
-        onCleanup(() => this.unsubAccessor());
+        createEffect(() => {
+            this.valuesAccessor();
+            this.queue_draw();
+        });
     }
 
     override vfunc_snapshot(snapshot: Gtk.Snapshot): void {
@@ -43,7 +43,7 @@ class CavaWidget extends Gtk.DrawingArea {
 
             if (width <= 0 || height <= 0) return;
 
-            const values = this.valuesAccessor.get();
+            const values = this.valuesAccessor.peek();
 
             if (values.length === 0) return;
 
@@ -87,16 +87,13 @@ const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 class CavaClass {
     private default: AstalCava.Cava | null;
     private _values: Accessor<number[]>;
-    private static widgetCount: number = 0;
 
     private _visibilityState: Accessor<boolean>;
     private _setVisibilityState: Setter<boolean>;
-    private unsub: () => void;
 
     public constructor() {
-        [this._visibilityState, this._setVisibilityState] = createState(settingsService.cavaVisible.get());
-
-        this.unsub = settingsService.cavaVisible.subscribe(() => this._setVisibilityState(settingsService.cavaVisible.get()));
+        [this._visibilityState, this._setVisibilityState] = createState(settingsService.cavaVisible.peek());
+        createRoot(() => createEffect(() => this._setVisibilityState(settingsService.cavaVisible())));
 
         this.default = AstalCava.get_default();
         if (this.default) {
@@ -132,13 +129,6 @@ class CavaClass {
                 cssClasses={[...cssClasses, "Cava"]}
                 overflow={Gtk.Overflow.HIDDEN}
                 halign={Gtk.Align.FILL}
-                $={() => CavaClass.widgetCount += 1}
-                onDestroy={
-                    () => {
-                        CavaClass.widgetCount -= 1
-                        if (CavaClass.widgetCount <= 0) this.unsub();
-                    }
-                }
             >
                 {new _cava(this._values)}
             </box>

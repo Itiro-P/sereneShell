@@ -11,15 +11,15 @@ class WorkspacesClass {
     }
 
     private WorkspaceClient(client: IClient) {
-        const tooltip = createComputed([client.title, client.initialTitle], (title, initTitle) => `<b>${title}</b>\n${initTitle}`);
+        const tooltip = createComputed(() => `<b>${client.title()}</b>\n${client.initialTitle()}`);
 
         return (
             <button
                 cssClasses={client.isFocused(is => ["WorkspaceClient", is ? "CFocused" : ""])}
-                iconName={iconFinder.findIcon(client.initialClass.get())}
+                iconName={iconFinder.findIcon(client.initialClass.peek())}
                 tooltipMarkup={tooltip}
                 onClicked={() => {
-                    if(compositorManager.focusedClient?.get() !== client) client.focus()
+                    if(compositorManager.focusedClient?.peek() !== client) client.focus()
                 }}
             />
         );
@@ -32,11 +32,11 @@ class WorkspacesClass {
             <box cssClasses={workspace.isFocused(is => ["Workspace", is ? "WFocused" : ""])}>
                 <Gtk.GestureClick
                     button={Gdk.BUTTON_SECONDARY}
-                    onPressed={() => { if (compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get()) workspace.focus() }}
+                    onPressed={() => { if (compositorManager.focusedWorkspace?.peek().id.peek() !== workspace.id.peek()) workspace.focus() }}
                 />
                 <button
                     cssClasses={["WorkspaceIdButton"]}
-                    onClicked={() => { if (compositorManager.focusedWorkspace?.get().id.get() !== workspace.id.get()) workspace.focus() }}
+                    onClicked={() => { if (compositorManager.focusedWorkspace?.peek().id.peek() !== workspace.id.peek()) workspace.focus() }}
                     visible={clientCount(cc => !cc)}
                     halign={Gtk.Align.CENTER}
                     valign={Gtk.Align.CENTER}

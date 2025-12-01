@@ -15,7 +15,7 @@ export default function CavaBackground({ gdkmonitor }: { gdkmonitor: Gdk.Monitor
                 exclusivity={Astal.Exclusivity.IGNORE}
                 gdkmonitor={gdkmonitor}
                 anchor={RIGHT | LEFT | BOTTOM}
-                visible={createComputed([media.playerStatus, cava.visibilityState], (ps, vs) => ps && vs)}
+                visible={createComputed(() => media.playerStatus() && cava.visibilityState())}
                 application={app}
                 $={self => onCleanup(() => self.destroy())}
             >

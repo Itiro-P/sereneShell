@@ -1,4 +1,4 @@
-import { Accessor, createState, For, onCleanup, Setter } from "ags";
+import { Accessor, createEffect, createState, For, onCleanup, Setter } from "ags";
 import { createPoll } from "ags/time";
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
@@ -11,7 +11,7 @@ import GdkPixbuf from "gi://GdkPixbuf?version=2.0";
 
 const path = GLib.get_home_dir() + "/.config/ags/wallpapers";
 const pollTime = 240000;
-const wallpaperPreviewSize = { width: 384, height: 216 };
+const wallpaperPreviewSize = { width: 288, height:162 };
 const imageExtensions = [
     ".jpg",
     ".jpeg",
@@ -20,8 +20,8 @@ const imageExtensions = [
 ];
 
 class WallpaperSwitcherClass {
-    private wallpapers: Accessor<Map<string, Gdk.Paintable>>;
     private _activeWallpapers: Map<string, string>;
+    private wallpapers: Accessor<Map<string, Gdk.Paintable>>;
     private setWallpapers: Setter<Map<string, Gdk.Paintable>>;
     private timerActive: Accessor<boolean>;
     private timer: Accessor<boolean>;
@@ -39,7 +39,7 @@ class WallpaperSwitcherClass {
         return imageExtensions.includes(extension) ? extension : null;
     }
 
-    private scanForImages() {
+    private async scanForImages() {
         try {
             const dir = Gio.File.new_for_path(path);
             dir.enumerate_children_async("standard::name,standard::type", Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null,
@@ -67,7 +67,7 @@ class WallpaperSwitcherClass {
                             if(files.length > 0) {
                                 for(const file of files) {
                                     const fileName = file.get_name();
-                                    if (!this.wallpapers.get().has(fileName) && this.isImageFile(fileName)) {
+                                    if (!this.wallpapers.peek().has(fileName) && this.isImageFile(fileName)) {
                                         const file = Gio.File.new_for_path('wallpapers/' + fileName);
                                         file.read_async(GLib.PRIORITY_DEFAULT, null, (source, result) => {
                                             try {
@@ -126,7 +126,7 @@ class WallpaperSwitcherClass {
                 onClicked={() => {
                     setActiveWallpaper(fullPath);
                     Awww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Awww.TransitionType.GROW });
-                    app.toggle_window('WallpaperSwitcher ' + connector);
+                    app.toggle_window('ControlMenu ' + connector);
                 }}
                 overflow={Gtk.Overflow.HIDDEN}
             >
@@ -140,58 +140,46 @@ class WallpaperSwitcherClass {
     }
 
     private get randomImg() {
-        const names = Array.from(this.wallpapers.get().keys());
+        const names = Array.from(this.wallpapers.peek().keys());
         return names[Math.floor(Math.random() * names.length)];
     }
 
-    public WallpaperSwitcher(gdkmonitor: Gdk.Monitor) {
+    public WallpaperSwitcher(gdkmonitor: string) {
         const [activeWallpaper, setActiveWallpaper] = createState<string>("");
-        const changeWallpaper = this.timer.subscribe(() => {
-            if(this.timerActive.get()) {
-                const img = this.randomImg ?? Awww.manager.checkLastWallpaper(gdkmonitor.get_connector()!);
+        createEffect(()=> {
+            if(this.timerActive() && (this.timer() || true)) {
+                const img = this.randomImg ?? Awww.manager.checkLastWallpaper(gdkmonitor);
                 if(img) {
                     setActiveWallpaper(img);
-                    Awww.manager.setWallpaper(`${path}/${activeWallpaper.get()}`, { outputs: gdkmonitor.get_connector()!, transitionType: Swww.TransitionType.GROW });
+                    Awww.manager.setWallpaper(`${path}/${activeWallpaper.peek()}`, { outputs: gdkmonitor, transitionType: Awww.TransitionType.GROW });
                 }
             }
         });
 
-        onCleanup(() => {
-            changeWallpaper();
-        });
-
         return (
-            <window
-                name={'WallpaperSwitcher ' + gdkmonitor.get_connector()}
-                namespace='WallpaperSwitcher'
-                layer={Astal.Layer.OVERLAY}
-                anchor={Astal.WindowAnchor.BOTTOM}
-                gdkmonitor={gdkmonitor}
-                keymode={Astal.Keymode.ON_DEMAND}
-                application={app}
-                $={self => onCleanup(() => self.destroy())}
-            >
-                <Gtk.EventControllerKey onKeyPressed={({ widget }, keyval: number) => {
-                    switch(keyval) {
-                        case Gdk.KEY_Escape:
-                            widget.hide();
-                            break;
-                        default:
-                    }}}
-                />
-                <box cssClasses={["WallpaperSwitcher"]} orientation={Gtk.Orientation.VERTICAL}>
-                    <box halign={Gtk.Align.CENTER}>
-                        <label label={'Automatic change'} />
-                        <switch
-                            active={settingsService.wallpaperSelectorActive}
-                            onStateSet={(src, val) => settingsService.setWallpaperSelectorActive = val}
-                        />
-                    </box>
-                    <Adw.Carousel allowLongSwipes allowScrollWheel allowMouseDrag>
-                        <For each={this.wallpapers} children={img => this.wallpaperPreview({ fullPath: img[0], paintable: img[1], connector: gdkmonitor.get_connector()!, setActiveWallpaper: setActiveWallpaper, activeWallpaper: activeWallpaper })} />
-                    </Adw.Carousel>
+            <box cssClasses={["WallpaperSwitcher"]} orientation={Gtk.Orientation.VERTICAL}>
+                <box halign={Gtk.Align.CENTER}>
+                    <label label={'Automatically switch wallpapers '} />
+                    <switch
+                        active={settingsService.wallpaperSelectorActive}
+                        onStateSet={(src, val) => settingsService.setWallpaperSelectorActive = val}
+                    />
                 </box>
-            </window>
+                <Adw.Carousel allowLongSwipes allowScrollWheel allowMouseDrag>
+                    <For
+                        each={this.wallpapers}
+                        children={
+                            img => this.wallpaperPreview({
+                                fullPath: img[0],
+                                paintable: img[1],
+                                connector: gdkmonitor,
+                                setActiveWallpaper:
+                                setActiveWallpaper,
+                                activeWallpaper: activeWallpaper }
+                            )}
+                    />
+                </Adw.Carousel>
+            </box>
         );
     }
 }

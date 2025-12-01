@@ -38,7 +38,6 @@ function main() {
                     <This this={app}>
                         <Bar gdkmonitor={monitor} />
                         {<CavaBackground gdkmonitor={monitor} />}
-                        {wallpaperSwitcher.WallpaperSwitcher(monitor)}
                         {controlMenu.ControlMenu(monitor)}
                     </This>
                 );

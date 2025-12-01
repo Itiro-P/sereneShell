@@ -137,7 +137,7 @@ export class Hyprland implements ICompositor {
         );
 
         // Aplicar configurações de animação
-        this.toggleAnimations(settingsService.animationsEnabled.get());
+        this.toggleAnimations(settingsService.animationsEnabled.peek());
     }
 
     public getWorkspaces() {

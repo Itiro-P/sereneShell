@@ -30,8 +30,8 @@ class SystemMonitorClass {
         this.batteryIcon = createBinding(this.battery, "batteryIconName");
         this.batteryPercentage = createBinding(this.battery, "percentage");
         this.batteryCharging = createBinding(this.battery, "charging");
-        this.batteryCritical = createComputed([this.batteryPercentage, this.batteryCharging], (p, c) => p <= 0.3 && !c);
-        this.batteryLifeLabel = createComputed([this.batteryCharging, createBinding(this.battery, "timeToFull"), createBinding(this.battery, "timeToEmpty")], (c, f, e) => c ? `Charging: ${formatTimeVerbose(f)} left` : `Discharging: ${formatTimeVerbose(e)} left`);
+        this.batteryCritical = createComputed(() => this.batteryPercentage() <= 0.3 && !this.batteryCharging());
+        this.batteryLifeLabel = createComputed(() => this.batteryCharging() ? `Charging: ${formatTimeVerbose(createBinding(this.battery, "timeToFull")())} left` : `Discharging: ${formatTimeVerbose(createBinding(this.battery, "timeToEmpty")())} left`);
 
         this.cpuSource = new GTop.glibtop_cpu();
         this.memSource = new GTop.glibtop_mem();

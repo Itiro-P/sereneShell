@@ -42,9 +42,9 @@ class SettingsClass {
 
     public saveOptions() {
         const options = {
-            animationsEnabled: this._animationsEnabled.get(),
-            cavaVisible: this._cavaVisible.get(),
-            wallpaperSelectorActive: this._wallpaperSelectorActive.get()
+            animationsEnabled: this._animationsEnabled.peek(),
+            cavaVisible: this._cavaVisible.peek(),
+            wallpaperSelectorActive: this._wallpaperSelectorActive.peek()
         }
         writeFile(path, JSON.stringify(options, null, 2));
     }
@@ -62,15 +62,15 @@ class SettingsClass {
     }
 
     public set setWallpaperSelectorActive(newState: boolean) {
-        if(this._wallpaperSelectorActive.get() !== newState) this._setWallpaperSelectorActive(newState);
+        if(this._wallpaperSelectorActive.peek() !== newState) this._setWallpaperSelectorActive(newState);
     }
 
     public set setAnimationsEnabled(newState: boolean) {
-        if (this._animationsEnabled.get() !== newState) this._setAnimationsEnabled(newState);
+        if (this._animationsEnabled.peek() !== newState) this._setAnimationsEnabled(newState);
     }
 
     public set setCavaVisible(newState: boolean) {
-        if(this._cavaVisible.get() !== newState) this._setCavaVisible(newState);
+        if(this._cavaVisible.peek() !== newState) this._setCavaVisible(newState);
     }
 }
 

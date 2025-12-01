@@ -5,13 +5,14 @@ import app from "ags/gtk4/app";
 import systemMonitor from "./SystemMonitor";
 import settingsService from "../services/Settings";
 import audioControl from "./AudioControl";
+import wallpaperSwitcher from "./WallpaperSwitcher";
 
 class ControlMenuClass {
 
     public constructor() {}
 
     public ControlMenu(gdkmonitor: Gdk.Monitor) {
-        const [visibleChild, setVisibleChild] = createState<"statsView" | "optionsView">("statsView");
+        const [visibleChild, setVisibleChild] = createState<"statsView" | "optionsView" | "wallpapersView">("statsView");
         return (
             <window
                 name={'ControlMenu ' + gdkmonitor.get_connector()}
@@ -34,26 +35,12 @@ class ControlMenuClass {
                 />
                 <box cssClasses={["ControlMenu"]} orientation={Gtk.Orientation.VERTICAL}>
                     <box cssClasses={["StackSwitcher"]} homogeneous>
-                        <box>
-                            <label cssClasses={["Title"]} label={'Control Menu'} />
-                            <button
-                                cssClasses={["PageSwitcher", "Inactive"]}
-                                onClicked={() => {
-                                    app.toggle_window(`WallpaperSwitcher ${gdkmonitor.get_connector()}`);
-                                    app.toggle_window(`ControlMenu ${gdkmonitor.get_connector()}`);
-                                }}
-                            >
-                                <box>
-                                    <image iconName={"application-x-executable"} />
-                                    <label label={"Wallpapers"} />
-                                </box>
-                            </button>
-                        </box>
+                        <label cssClasses={["Title"]} label={'Control Menu'} />
                         <box homogeneous>
                             <button
                                 cssClasses={visibleChild(vc => ["PageSwitcher", vc === "statsView" ? "Active": "Inactive"])}
                                 halign={Gtk.Align.CENTER}
-                                onClicked={() => { if(visibleChild.get() !== "statsView") setVisibleChild("statsView") }}
+                                onClicked={() => { if(visibleChild.peek() !== "statsView") setVisibleChild("statsView") }}
                             >
                                 <box>
                                     <image iconName={"application-x-executable"} />
@@ -63,7 +50,7 @@ class ControlMenuClass {
                             <button
                                 cssClasses={visibleChild(vc => ["PageSwitcher", vc === "optionsView" ? "Active": "Inactive"])}
                                 halign={Gtk.Align.CENTER}
-                                onClicked={() => { if(visibleChild.get() !== "optionsView") setVisibleChild("optionsView") }}
+                                onClicked={() => { if(visibleChild.peek() !== "optionsView") setVisibleChild("optionsView") }}
                             >
                                 <box>
                                     <image iconName={"application-x-executable"} />
@@ -111,6 +98,7 @@ class ControlMenuClass {
                             </box>
                         </stack>
                     </box>
+                    {wallpaperSwitcher.WallpaperSwitcher(gdkmonitor.get_connector()!)}
                 </box>
             </window>
         );

@@ -3,10 +3,10 @@ import { exec } from "ags/process";
 import { ICompositor } from "../types";
 import { Hyprland, Niri } from "./Compositors";
 import settingsService from "./Settings";
+import { createEffect, createRoot } from "ags";
 
 class CompositorManagerClass {
     private compositor: ICompositor | null;
-    private unsub: () => void;
 
     public constructor() {
         const compositor = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
@@ -24,7 +24,12 @@ class CompositorManagerClass {
                 console.warn("Compositor not identified/supported " + compositor);
                 this.compositor = null;
         }
-        this.unsub = settingsService.animationsEnabled.subscribe(() => compositorManager.toggleAnimations(settingsService.animationsEnabled.get()));
+        createRoot(() => {
+            createEffect(() => {
+                const result = settingsService.animationsEnabled();
+                if (result !== undefined) this.compositor?.toggleAnimations(result);
+            });
+        });
     }
 
     public get workspaces() {
@@ -49,10 +54,6 @@ class CompositorManagerClass {
 
     public get animationState() {
         return this.compositor?.getAnimationState() ?? false;
-    }
-
-    public toggleAnimations(val?: boolean) {
-        if(val !== undefined) this.compositor?.toggleAnimations(val);
     }
 }
 

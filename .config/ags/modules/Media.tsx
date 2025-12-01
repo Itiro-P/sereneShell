@@ -66,13 +66,13 @@ class MediaClass {
                         statusIcon: status(st => this.getPlayerStatusIcon(st === AstalMpris.PlaybackStatus.PLAYING ? 'paused' : 'playing')),
                         statusText: status(st => this.getPlayerStatus(st)),
                         next: () => {
-                            if (canGoNext.get()) final!.next();
+                            if (canGoNext.peek()) final!.next();
                         },
                         previous: () => {
-                            if (canGoPrevious.get()) final!.previous();
+                            if (canGoPrevious.peek()) final!.previous();
                         },
                         playPause: () => {
-                            if (canPause.get() || canPlay.get()) final!.play_pause();
+                            if (canPause.peek() || canPlay.peek()) final!.play_pause();
                         }
                     };
                 }
@@ -152,7 +152,7 @@ class MediaClass {
                                         transitionType={Gtk.StackTransitionType.SLIDE_DOWN}
                                         transitionDuration={300}
                                     >
-                                        <Gtk.GestureClick button={Gdk.BUTTON_PRIMARY} onPressed={() => {setVisibleMetadata((visibleChildMetadata.get() + 1)%3)}} />
+                                        <Gtk.GestureClick button={Gdk.BUTTON_PRIMARY} onPressed={() => {setVisibleMetadata((visibleChildMetadata.peek() + 1)%3)}} />
                                         <label $type="named" name={"Title"} cssClasses={["Title"]} label={player.title} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={16} />
                                         <label $type="named" name={"Artist"} cssClasses={["Artist"]} label={player.artist} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={16} />
                                         <label $type="named" name={"Album"} cssClasses={["Album"]} label={player.album} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={16} />

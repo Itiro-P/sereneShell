@@ -93,7 +93,7 @@ class IconFinderClass {
     }
 
     public findIcon(initialClass: string): string {
-        return this.iconMap.get(initialClass) ?? this.findFromGtk(initialClass) ?? this.findDesktopEntry(initialClass) ?? "application-x-executable";
+        return this.iconMap.peek(initialClass) ?? this.findFromGtk(initialClass) ?? this.findDesktopEntry(initialClass) ?? "application-x-executable";
     }
 
     public saveIconNames() {

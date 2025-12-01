@@ -4,9 +4,7 @@
 @use 'common/Layout';
 
 .WallpaperSwitcher {
-    background-color: rgba(Palette.$surface_container, 0.8);
     padding: 4px;
-    border-radius: 12px 12px 0px 0px;
 
     label {
         font-size: Font.$font-size-large;
@@ -30,7 +28,7 @@
     }
 
     .Wallpaper {
-        border: 2px solid Palette.$primary;
+        margin: 2px;
         border-radius: 16px;
     }
 
