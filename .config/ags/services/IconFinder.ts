@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "ags/file";
 import { Gdk, Gtk } from "ags/gtk4";
-import { exec } from "ags/process";
+import { execAsync } from "ags/process";
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
@@ -55,9 +55,17 @@ class IconFinderClass {
                     for (const candidate of possibleNames) {
                         if (baseName.toLowerCase() === candidate.toLowerCase()) {
                             const fullPath = basePath + "/" + fileName;
-                            const icon = exec(["bash", "-c", `cat ${fullPath} | grep Icon=`]).slice(5);
-                            this.iconMap.set(windowClass, icon);
-                            return icon;
+                            let icon = "";
+                            execAsync(["bash", "-c", `cat ${fullPath} | grep Icon=`]).then(
+                                (out) => {
+                                    icon = out.slice(5);
+                                    this.iconMap.set(windowClass, icon);
+                                    return icon;
+                                },
+                                (reason) => {
+                                    console.warn(`Failed to get icon: ${reason}`);
+                                }
+                            );
                         }
                     }
                 }
@@ -93,7 +101,7 @@ class IconFinderClass {
     }
 
     public findIcon(initialClass: string): string {
-        return this.iconMap.peek(initialClass) ?? this.findFromGtk(initialClass) ?? this.findDesktopEntry(initialClass) ?? "application-x-executable";
+        return this.iconMap.get(initialClass) ?? this.findFromGtk(initialClass) ?? this.findDesktopEntry(initialClass) ?? "application-x-executable";
     }
 
     public saveIconNames() {

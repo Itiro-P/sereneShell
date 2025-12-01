@@ -65,10 +65,17 @@ export namespace Awww {
         }
 
         public checkLastWallpaper(connector: string) {
-            const output = exec("awww query");
-            const regex = new RegExp(`: ${connector}: .*?image: (.*?\\/([^\\/]+\\.[^.]+))$`, 'm');
-            const match = output.match(regex);
-            return match ? match[2] : null;
+            const output = execAsync("awww query").then(
+                (out) => {
+                    const match = out.match(new RegExp(`: ${connector}: .*?image: (.*?\\/([^\\/]+\\.[^.]+))$`, 'm'));
+                    return match ? match[2] : null;
+                },
+                (reason) => {
+                    console.error("Failed to get output from wallpaper: " + reason);
+                    return null;
+                }
+            );
+            return null;
         }
 
         public setWallpaper(path: string, options: Partial<ParserOptions>): boolean {
@@ -86,8 +93,23 @@ export namespace Awww {
                 if (options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
                 if (options.outputs) command += ` --outputs ${options.outputs}`;
             }
-            execAsync(command);
-            execAsync(`matugen image ${path}`);
+            execAsync(`matugen image ${path}`).then(
+                () => {
+                    execAsync(command).then(
+                        () => {
+                            return true;
+                        },
+                        (reason) => {
+                            console.warn("Awww failed to process: " + reason);
+                            return false;
+                        }
+                    );
+                },
+                (reason) => {
+                    console.warn("Matugen failed to process: " + reason);
+                    return false;
+                }
+            );
             return true;
         }
     }

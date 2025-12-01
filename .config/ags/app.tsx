@@ -6,8 +6,7 @@ import CavaBackground from "./widget/CavaBackground";
 import settingsService from "./services/Settings";
 import iconFinder from "./services/IconFinder";
 import controlMenu from "./modules/ControlMenu";
-import wallpaperSwitcher from "./modules/WallpaperSwitcher";
-import { exec } from "ags/process";
+import { execAsync } from "ags/process";
 import GLib from "gi://GLib?version=2.0";
 
 const path = GLib.get_home_dir() + "/.config/ags/styles";
@@ -16,9 +15,15 @@ function requestHandler(argv: string[], response: (response: string) => void) {
     const [cmd, arg, ...rest] = argv
     switch(cmd) {
         case "css-reset":
-            exec(`sass ${path}/index.scss ${path}/output.css`);
-            app.apply_css(`${path}/output.css`, true);
-            response("CSS reset successful");
+            execAsync(`sass ${path}/index.scss ${path}/output.css`).then(
+                () => {
+                    app.apply_css(`${path}/output.css`, true);
+                    response("CSS reset successful");
+                },
+                (reason) => {
+                    response("CSS reset failed :" + reason);
+                }
+            );
             break;
         default:
             response("Unknown command");
@@ -37,8 +42,8 @@ function main() {
                 return (
                     <This this={app}>
                         <Bar gdkmonitor={monitor} />
-                        {<CavaBackground gdkmonitor={monitor} />}
-                        {controlMenu.ControlMenu(monitor)}
+                        <CavaBackground gdkmonitor={monitor} />
+                        <controlMenu.ControlMenu gdkmonitor={monitor} />
                     </This>
                 );
             }}

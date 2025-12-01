@@ -9,9 +9,9 @@ import wallpaperSwitcher from "./WallpaperSwitcher";
 
 class ControlMenuClass {
 
-    public constructor() {}
+    public constructor() { }
 
-    public ControlMenu(gdkmonitor: Gdk.Monitor) {
+    public ControlMenu({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
         const [visibleChild, setVisibleChild] = createState<"statsView" | "optionsView" | "wallpapersView">("statsView");
         return (
             <window

@@ -1,6 +1,6 @@
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import { IClient, ICompositor, IMonitor, IWorkspace } from "../../types";
-import { Accessor, createBinding } from "ags";
+import { Accessor, createBinding, createContext } from "ags";
 import { exec } from "ags/process";
 import settingsService from "../Settings";
 import { Gdk } from "ags/gtk4";

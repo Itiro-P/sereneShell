@@ -6,12 +6,11 @@ import settingsService from "./Settings";
 import { createEffect, createRoot } from "ags";
 
 class CompositorManagerClass {
-    private compositor: ICompositor | null;
+    private compositor: ICompositor | null = null;
 
     public constructor() {
-        const compositor = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
-        console.log("Identified compositor: " + compositor);
-        switch(compositor) {
+        const out = exec(["bash", "-c", "echo $XDG_CURRENT_DESKTOP"]);
+        switch(out) {
             case "hyprland":
             case "Hyprland":
                 this.compositor = new Hyprland;
@@ -21,13 +20,13 @@ class CompositorManagerClass {
                 //this.compositor = new Niri;
                 //break;
             default:
-                console.warn("Compositor not identified/supported " + compositor);
+                console.warn("Compositor not identified/supported " + out);
                 this.compositor = null;
         }
         createRoot(() => {
             createEffect(() => {
                 const result = settingsService.animationsEnabled();
-                if (result !== undefined) this.compositor?.toggleAnimations(result);
+                if (result) this.compositor?.toggleAnimations(result);
             });
         });
     }
