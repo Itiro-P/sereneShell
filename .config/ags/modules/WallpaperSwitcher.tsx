@@ -1,9 +1,9 @@
-import { Accessor, createEffect, createState, For, onCleanup, Setter } from "ags";
+import { Accessor, createEffect, createState, For, Setter } from "ags";
 import { createPoll } from "ags/time";
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 import { Awww } from "../services/Awww";
-import { Astal, Gdk, Gtk } from "ags/gtk4";
+import { Gdk, Gtk } from "ags/gtk4";
 import settingsService from "../services/Settings";
 import app from "ags/gtk4/app";
 import Adw from "gi://Adw?version=1";
@@ -72,7 +72,6 @@ class WallpaperSwitcherClass {
                                         file.read_async(GLib.PRIORITY_DEFAULT, null, (source, result) => {
                                             try {
                                                 const stream = file.read_finish(result);
-
                                                 GdkPixbuf.Pixbuf.new_from_stream_at_scale_async(
                                                     stream,
                                                     wallpaperPreviewSize.width,
@@ -83,18 +82,17 @@ class WallpaperSwitcherClass {
                                                             const pixbuf = GdkPixbuf.Pixbuf.new_from_stream_finish(result);
                                                             this.setWallpapers(prevMap => {
                                                                 const newMap = new Map(prevMap);
-                                                                newMap.set(fileName, Gdk.Texture.new_for_pixbuf(pixbuf));
+                                                                newMap.set(`${path}/${fileName}`, Gdk.Texture.new_for_pixbuf(pixbuf));
                                                                 return newMap;
                                                             });
-
                                                             stream.close(null);
                                                         } catch (error) {
-                                                            console.error(`Error loading thumbnail for ${fileName}:`, error);
+                                                            console.error(`Error loading thumbnail for ${fileName}: `, error);
                                                         }
                                                     }
                                                 );
                                             } catch (error) {
-                                                console.error(`Error reading file ${fileName}:`, error);
+                                                console.error(`Error reading file ${fileName}: `, error);
                                             }
                                         });
                                     }
@@ -111,7 +109,6 @@ class WallpaperSwitcherClass {
         } catch(error) {
             console.error("Error when proccessing images: ", error);
         }
-
     }
 
     public get activeWallpapers() {
@@ -125,7 +122,7 @@ class WallpaperSwitcherClass {
                 cssClasses={isActive( ia => ["Wallpaper", ia ? "Active" : ""])}
                 onClicked={() => {
                     setActiveWallpaper(fullPath);
-                    Awww.manager.setWallpaper(`${path}/${fullPath}`, { outputs: connector, transitionType: Awww.TransitionType.GROW });
+                    Awww.manager.setWallpaper(fullPath, { outputs: connector, transitionType: Awww.TransitionType.GROW });
                     app.toggle_window('ControlMenu ' + connector);
                 }}
                 overflow={Gtk.Overflow.HIDDEN}
@@ -148,11 +145,13 @@ class WallpaperSwitcherClass {
         const [activeWallpaper, setActiveWallpaper] = createState<string>("");
         createEffect(()=> {
             if(this.timerActive() && (this.timer() || true)) {
-                const img = this.randomImg ?? Awww.manager.checkLastWallpaper(gdkmonitor);
-                if(img) {
-                    setActiveWallpaper(img);
-                    Awww.manager.setWallpaper(`${path}/${activeWallpaper.peek()}`, { outputs: gdkmonitor, transitionType: Awww.TransitionType.GROW });
-                }
+                Awww.manager.checkLastWallpaper(gdkmonitor).then(img => {
+                    const finalImg = this.randomImg ?? img;
+                    if(finalImg) {
+                        setActiveWallpaper(finalImg);
+                        Awww.manager.setWallpaper(`${activeWallpaper.peek()}`, { outputs: gdkmonitor, transitionType: Awww.TransitionType.GROW });
+                    }
+                });
             }
         });
 
@@ -175,8 +174,8 @@ class WallpaperSwitcherClass {
                                 connector: gdkmonitor,
                                 setActiveWallpaper:
                                 setActiveWallpaper,
-                                activeWallpaper: activeWallpaper }
-                            )}
+                                activeWallpaper: activeWallpaper })
+                        }
                     />
                 </Adw.Carousel>
             </box>
