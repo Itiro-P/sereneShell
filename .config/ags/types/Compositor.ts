@@ -36,7 +36,7 @@ export interface ICompositor {
     getFocusedWorkspace: () => Accessor<IWorkspace>;
     getClients: () => Accessor<IClient[]>;
     getFocusedClient: () => Accessor<IClient>;
-    getCompositorMonitor: (monitor: Gdk.Monitor) => IMonitor;
+    getCompositorMonitor: (monitor: Gdk.Monitor) => Accessor<IMonitor | undefined>;
     getAnimationState: () => boolean;
     toggleAnimations: (val?: boolean) => void;
 }

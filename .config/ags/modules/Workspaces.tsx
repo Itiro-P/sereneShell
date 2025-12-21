@@ -76,7 +76,6 @@ class WorkspacesClass {
         const monitorWorkspaces = monitor.workspaces(ws => {
             return { main: ws.slice(0, this.maxWorkspaces), theRest: ws.slice(this.maxWorkspaces) };
         });
-
         return (
             <box cssClasses={["Workspaces"]}>
                 <box>

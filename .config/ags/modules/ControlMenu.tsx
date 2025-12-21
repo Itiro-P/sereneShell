@@ -1,46 +1,27 @@
-import { Gdk, Gtk } from "ags/gtk4";
-import { Astal } from "ags/gtk4";
-import { Accessor, createState, onCleanup } from "ags";
-import app from "ags/gtk4/app";
+import { Gtk } from "ags/gtk4";
+import { Accessor, createState } from "ags";
 import systemMonitor from "./SystemMonitor";
 import settingsService from "../services/Settings";
 import audioControl from "./AudioControl";
 import wallpaperSwitcher from "./WallpaperSwitcher";
+import Adw from "gi://Adw?version=1";
 
 class ControlMenuClass {
 
     public constructor() { }
 
-    public ControlMenu({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
+    public ControlPopover(connector: string) {
         const [visibleChild, setVisibleChild] = createState<"statsView" | "optionsView" | "wallpapersView">("statsView");
         return (
-            <window
-                name={'ControlMenu ' + gdkmonitor.get_connector()}
-                namespace='ControlMenu'
-                layer={Astal.Layer.OVERLAY}
-                anchor={Astal.WindowAnchor.RIGHT | Astal.WindowAnchor.TOP}
-                gdkmonitor={gdkmonitor}
-                keymode={Astal.Keymode.ON_DEMAND}
-                application={app}
-                $={self => onCleanup(() => self.destroy())}
-                onHide={() => setVisibleChild("statsView")}
-            >
-                <Gtk.EventControllerKey onKeyPressed={({ widget }, keyval: number) => {
-                    switch(keyval) {
-                        case Gdk.KEY_Escape:
-                            widget.hide();
-                            break;
-                        default:
-                    }}}
-                />
+            <popover onHide={() => setVisibleChild("statsView")}>
                 <box cssClasses={["ControlMenu"]} orientation={Gtk.Orientation.VERTICAL}>
                     <box cssClasses={["StackSwitcher"]} homogeneous>
                         <label cssClasses={["Title"]} label={'Control Menu'} />
                         <box homogeneous>
                             <button
-                                cssClasses={visibleChild(vc => ["PageSwitcher", vc === "statsView" ? "Active": "Inactive"])}
+                                cssClasses={visibleChild(vc => ["PageSwitcher", vc === "statsView" ? "Active" : "Inactive"])}
                                 halign={Gtk.Align.CENTER}
-                                onClicked={() => { if(visibleChild.peek() !== "statsView") setVisibleChild("statsView") }}
+                                onClicked={() => { if (visibleChild.peek() !== "statsView") setVisibleChild("statsView") }}
                             >
                                 <box>
                                     <image iconName={"application-x-executable"} />
@@ -48,9 +29,9 @@ class ControlMenuClass {
                                 </box>
                             </button>
                             <button
-                                cssClasses={visibleChild(vc => ["PageSwitcher", vc === "optionsView" ? "Active": "Inactive"])}
+                                cssClasses={visibleChild(vc => ["PageSwitcher", vc === "optionsView" ? "Active" : "Inactive"])}
                                 halign={Gtk.Align.CENTER}
-                                onClicked={() => { if(visibleChild.peek() !== "optionsView") setVisibleChild("optionsView") }}
+                                onClicked={() => { if (visibleChild.peek() !== "optionsView") setVisibleChild("optionsView") }}
                             >
                                 <box>
                                     <image iconName={"application-x-executable"} />
@@ -68,45 +49,54 @@ class ControlMenuClass {
                         >
                             <box $type={"named"} name={"statsView"}>
                                 <box orientation={Gtk.Orientation.VERTICAL}>
-                                    {systemMonitor.SystemMonitor}
-                                    {audioControl.Mixer}
+                                    <Adw.PreferencesGroup title={"Main Page"}>
+                                        <Gtk.ListBox selectionMode={Gtk.SelectionMode.NONE} cssClasses={[".boxed-list"]}>
+                                            {systemMonitor.SystemMonitor}
+                                            {audioControl.Mixer}
+                                        </Gtk.ListBox>
+                                    </Adw.PreferencesGroup>
                                 </box>
                             </box>
                             <box $type={"named"} name={"optionsView"} orientation={Gtk.Orientation.VERTICAL}>
-                                <label cssClasses={["Subtitle"]} label={"Animations & Components"} />
-                                <box cssClasses={["ToggleAnimations", "Option"]}>
-                                    <label label={"Animations "} halign={Gtk.Align.START} />
-                                    <switch
-                                        active={settingsService.animationsEnabled}
-                                        onStateSet={(src, val) => settingsService.setAnimationsEnabled = val}
-                                    />
-                                </box>
-                                <box cssClasses={["ToggleCava", "Option"]}>
-                                    <label label={"Cava "} halign={Gtk.Align.START} />
-                                    <switch
-                                        active={settingsService.cavaVisible}
-                                        onStateSet={(src, val) => settingsService.setCavaVisible = val}
-                                    />
-                                </box>
-                                <box cssClasses={["FocusMode", "Option"]}>
-                                    <label label={"Focus Mode "} halign={Gtk.Align.START} />
-                                    <switch
-                                        active={settingsService.cavaVisible}
-                                        onStateSet={(src, val) => settingsService.setCavaVisible = val}
-                                    />
-                                </box>
+                                <Adw.PreferencesGroup title={"Animations and Components"}>
+                                    <Gtk.ListBox selectionMode={Gtk.SelectionMode.NONE} cssClasses={[".boxed-list"]}>
+                                        <Adw.SwitchRow
+                                            cssClasses={["ToggleAnimations", "Option"]}
+                                            title={"Animations"}
+                                            active={settingsService.animationsEnabled}
+                                            onNotifyActive={self => settingsService.setAnimationsEnabled = self.get_active()}
+                                        />
+                                        <Adw.SwitchRow
+                                            cssClasses={["ToggleCava", "Option"]}
+                                            title={"Cava"}
+                                            active={settingsService.cavaVisible}
+                                            onNotifyActive={self => settingsService.setCavaVisible = self.get_active()}
+                                        />
+                                        <Adw.SwitchRow
+                                            cssClasses={["FocusMode", "Option"]}
+                                            title={"Focus Mode"}
+                                            active={settingsService.cavaVisible}
+                                            onNotifyActive={self => settingsService.setCavaVisible = self.get_active()}
+                                        />
+                                    </Gtk.ListBox>
+                                </Adw.PreferencesGroup>
                             </box>
                         </stack>
                     </box>
-                    {wallpaperSwitcher.WallpaperSwitcher(gdkmonitor.get_connector()!)}
+                    {wallpaperSwitcher.WallpaperSwitcher(connector)}
                 </box>
-            </window>
+            </popover>
         );
     }
 
     public ControlMenuButton(connector: string) {
         return (
-            <button cssClasses={systemMonitor.BatteryCritical(bc => ["ControlMenuButton", bc ? "ControlMenuButtonCritical" : "ControlMenuButtonNormal"])} label={"󰣇"} onClicked={() => app.toggle_window(`ControlMenu ${connector}`)} />
+            <menubutton
+                cssClasses={systemMonitor.BatteryCritical(bc => ["ControlMenuButton", bc ? "ControlMenuButtonCritical" : "ControlMenuButtonNormal"])}
+                popover={this.ControlPopover(connector) as Gtk.Popover}
+            >
+                <label label="󰣇" />
+            </menubutton>
         );
     }
 }

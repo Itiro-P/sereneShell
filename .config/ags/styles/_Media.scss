@@ -5,7 +5,7 @@
 
 .Media {
     @extend %component;
-    border-radius: 0px;
+    border-radius: 1em;
     label {
         font-weight: bold;
     }

@@ -5,18 +5,25 @@
 
 .ControlMenuButton {
     @extend %component;
-    label {
+
+    > button {
         @extend %component-circle;
-        font-size: 24px;
-   }
+        > box > contents > label {
+            font-size: Font.$icon-size;
+        }
+    }
 }
 
 .ControlMenuButtonNormal {
-    @include Transitions.inverseChild(Palette.$on_primary, Palette.$primary);
+    > button {
+        @include Transitions.inverseChild(Palette.$on_primary, Palette.$primary);
+    }
 }
 
 .ControlMenuButtonCritical {
-    @include Transitions.inverseChild(Palette.$error, Palette.$on_error);
+    > button {
+        @include Transitions.inverseChild(Palette.$error, Palette.$on_error);
+    }
 }
 
 .ControlMenu {

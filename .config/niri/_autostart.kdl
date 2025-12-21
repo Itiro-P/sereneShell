@@ -1,6 +1,7 @@
 // Autostart config
 
 spawn-at-startup "swayidle" "-w"
+//spawn-at-startup "kanshi"
 spawn-at-startup "mako"
 spawn-at-startup "swaddle"
 //spawn-at-startup "/usr/lib/xfce-polkit/xfce-polkit"

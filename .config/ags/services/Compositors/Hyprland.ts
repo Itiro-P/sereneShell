@@ -12,6 +12,7 @@ class HyprlandContext {
     public focusedClient: Accessor<AstalHyprland.Client>;
     public focusedWorkspace: Accessor<AstalHyprland.Workspace>;
     public focusedMonitor: Accessor<AstalHyprland.Monitor>;
+    public monitors: Accessor<AstalHyprland.Monitor[]>;
 
     constructor(hyprland: AstalHyprland.Hyprland) {
         this._hyprland = hyprland;
@@ -19,6 +20,7 @@ class HyprlandContext {
         this.focusedClient = createBinding(hyprland, "focusedClient");
         this.focusedWorkspace = createBinding(hyprland, "focusedWorkspace");
         this.focusedMonitor = createBinding(hyprland, "focusedMonitor");
+        this.monitors = createBinding(hyprland, "monitors");
     }
 
     public getHyprland() {
@@ -164,13 +166,7 @@ export class Hyprland implements ICompositor {
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        const compMonitor = this._context.getHyprland().get_monitors().find(cm => this.areMonitorsEqual(monitor, cm));
-
-        if (!compMonitor) {
-            throw new Error("Monitor compositor não encontrado");
-        }
-
-        return new HyprMonitor(compMonitor, this._context);
+        return this._context.monitors(mons => mons.find(cm => this.areMonitorsEqual(monitor, cm)))(mon => mon && new HyprMonitor(mon, this._context));
     }
 
     public getAnimationState() {

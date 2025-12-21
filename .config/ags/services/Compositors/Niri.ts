@@ -8,6 +8,7 @@ class NiriContext {
     public workspaces: Accessor<AstalNiri.Workspace[]>;
     public focusedWorkspace: Accessor<AstalNiri.Workspace>;
     public windows: Accessor<AstalNiri.Window[]>;
+    public outputs: Accessor<AstalNiri.Output[]>;
     public focusedWindow: Accessor<AstalNiri.Window>;
     public focusedOutput: Accessor<AstalNiri.Output>;
 
@@ -16,6 +17,7 @@ class NiriContext {
         this.workspaces = createBinding(niri, "workspaces")(ws => ws.sort((a, b) => a.get_id() - b.get_id()));
         this.focusedWorkspace = createBinding(niri, "focusedWorkspace");
         this.windows = createBinding(niri, "windows");
+        this.outputs = createBinding(niri, "outputs");
         this.focusedWindow = createBinding(niri, "focusedWindow");
         this.focusedOutput = createBinding(niri, "focusedOutput");
     }
@@ -49,8 +51,7 @@ export class NiriClient implements IClient {
     }
 
     public focus() {
-        // O ID 0 pode ser um placeholder - verificar documentação do Niri
-        this._client.focus(0);
+        this._client.focus(this._client.get_id());
     }
 }
 
@@ -64,7 +65,7 @@ export class NiriWorkspace implements IWorkspace {
     constructor(workspace: AstalNiri.Workspace, context: NiriContext) {
         this._workspace = workspace;
         this._context = context;
-        this.id = createBinding(workspace, "id");
+        this.id = createBinding(workspace, "idx");
         this.clients = createBinding(workspace, "windows")(windows => windows.map(w => new NiriClient(w, context)));
         this.isFocused = createBinding(workspace, "isFocused");
     }
@@ -96,7 +97,7 @@ export class NiriMonitor implements IMonitor {
             height: logical.get_height()
         }
 
-        this.workspaces = this._context.workspaces(ws => ws.filter(w => w.get_output() === monitor.get_model()).map(w => new NiriWorkspace(w, context)));
+        this.workspaces = this._context.workspaces(ws => ws.filter(w => w.get_output() === monitor.get_name()).map(w => new NiriWorkspace(w, context)));
 
         // Busca workspace focado deste monitor
         this.focusedWorkspace = createBinding(monitor, "workspaces")(aw => new NiriWorkspace(aw.find(w => w.get_is_focused())!, context));
@@ -146,22 +147,11 @@ export class Niri implements ICompositor {
     }
 
     private areMonitorsEqual(monitor: Gdk.Monitor, compMonitor: AstalNiri.Output): boolean {
-        const geometry = monitor.get_geometry();
-        const logical = compMonitor.get_logical();
-        if (!logical) return false;
-
-        return compMonitor.get_model() === monitor.get_model()
-            && logical.get_x() === geometry.x
-            && logical.get_y() === geometry.y;
+        return compMonitor.get_model() === monitor.get_model();
     }
 
-    public getCompositorMonitor(monitor: Gdk.Monitor): IMonitor {
-        const compMonitor = this._context.getNiri().get_outputs().find(cm => this.areMonitorsEqual(monitor, cm));
-        if (!compMonitor) {
-            throw new Error(`Monitor compositor não encontrado: ${monitor.get_model()}`);
-        }
-
-        return new NiriMonitor(compMonitor, this._context);
+    public getCompositorMonitor(monitor: Gdk.Monitor) {
+        return this._context.outputs(mons => mons.find(cm => this.areMonitorsEqual(monitor, cm)))(mon => mon && new NiriMonitor(mon, this._context));
     }
 
     public getAnimationState(): boolean {

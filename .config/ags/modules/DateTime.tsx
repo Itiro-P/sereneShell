@@ -1,31 +1,49 @@
-import { Accessor } from "ags";
 import GLib from "gi://GLib?version=2.0";
-import { createPoll } from "ags/time";
-
-const pollTime = 60000;
+import { Accessor, createState, Setter } from "ags";
 
 class DateTimeClass {
     private formatterTime = "%H:%M";
-    private formatterDate = "Today is: %A, %d de %B de %Y";
-    private _dateTime: Accessor<{ date: string, time: string }>;
+    private formatterDate = "%A, %x";
+    private state: Accessor<{ date: string, time: string}>;
+    private setState: Setter<{ date: string, time: string }>;
 
-    public constructor() {
-        this._dateTime = createPoll({ date: "", time: "" }, pollTime, () => {
-            const now = GLib.DateTime.new_now_local();
-            return {
-                date: now.format(this.formatterDate)!,
-                time: now.format(this.formatterTime)!
-            };
+    constructor() {
+        [this.state, this.setState] = createState({ date: "", time: "" });
+        this.update();
+        this.scheduleNextTick();
+    }
+
+    private update() {
+        const now = GLib.DateTime.new_now_local();
+        this.setState({
+            date: now.format(this.formatterDate)!,
+            time: now.format(this.formatterTime)!,
+        });
+    }
+
+    private scheduleNextTick() {
+        const now = GLib.DateTime.new_now_local();
+        const seconds = now.get_second();
+        const delay = 60 - seconds;
+
+        GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, delay, () => {
+            this.update();
+            this.scheduleNextTick();
+            return GLib.SOURCE_REMOVE;
         });
     }
 
     public get DateTime() {
         return (
-            <label cssClasses={["Time"]} label={this._dateTime(t => " " + t.time)} tooltipMarkup={this._dateTime(d => "󰃭 " + d.date)} />
+            <label
+                cssClasses={["Time"]}
+                label={this.state(t => " " + t.time)}
+                tooltipMarkup={this.state(d => "󰃭 " + d.date)}
+            />
         );
     }
 }
 
-const dateTime = new DateTimeClass;
+const dateTime = new DateTimeClass();
 
 export default dateTime;

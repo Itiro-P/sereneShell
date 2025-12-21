@@ -43,7 +43,6 @@ function main() {
                     <This this={app}>
                         <Bar gdkmonitor={monitor} />
                         <CavaBackground gdkmonitor={monitor} />
-                        <controlMenu.ControlMenu gdkmonitor={monitor} />
                     </This>
                 );
             }}

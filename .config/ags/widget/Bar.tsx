@@ -5,14 +5,13 @@ import dateTime from "../modules/DateTime";
 import audioControl from "../modules/AudioControl";
 import controlMenu from "../modules/ControlMenu";
 import workspaces from "../modules/Workspaces";
-import { createBinding, onCleanup } from "ags";
-import compositorManager from "../services/CompositorManager";
-import AstalMpris from "gi://AstalMpris?version=0.1";
+import { onCleanup, With } from "ags";
 import media from "../modules/Media";
+import compositorManager from "../services/CompositorManager";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
-    const compMonitor = compositorManager.getCompositorMonitor(gdkmonitor);
+    const monitor = compositorManager.getCompositorMonitor(gdkmonitor);
 
     return (
         <window
@@ -31,7 +30,9 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                     {systemTray.SystemTray}
                 </box>
                 <box $type="center">
-                    {compMonitor ? workspaces.Workspaces(compMonitor) : <box/>}
+                    <With value={monitor}>
+                        {out => out && workspaces.Workspaces(out)}
+                    </With>
                 </box>
                 <box $type="end">
                     {media.Media}

@@ -5,14 +5,13 @@ binds {
     Mod+T { spawn-sh "killall rofi || rofi -show drun"; }
     Mod+L { spawn "gtklock"; }
     Mod+Escape { spawn-sh "killall wlogout || wlogout"; }
-    Mod+H { spawn "ags" "toggle" "Cheatsheet"; }
     Mod+E { spawn "thunar"; }
     Mod+Space { spawn "niri" "msg" "action" "switch-layout" "next"; }
 
-    XF86AudioNext { spawn "playerctl" "next"; }
-    XF86AudioPause { spawn "playerctl" "play-pause"; }
-    XF86AudioPlay { spawn "playerctl" "play-pause"; }
-    XF86AudioPrev { spawn "playerctl" "previous"; }
+    XF86AudioNext { spawn "swayosd-client" "--playerctl" "next"; }
+    XF86AudioPause { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioPlay { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioPrev { spawn "swayosd-client" "--playerctl" "prev"; }
 
     XF86AudioRaiseVolume repeat=false { spawn "swayosd-client" "--output-volume" "+2" "--max-volume" "100"; }
     XF86AudioLowerVolume repeat=false { spawn "swayosd-client" "--output-volume" "-2"; }

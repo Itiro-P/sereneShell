@@ -3,7 +3,7 @@ import { exec } from "ags/process";
 import { ICompositor } from "../types";
 import { Hyprland, Niri } from "./Compositors";
 import settingsService from "./Settings";
-import { createEffect, createRoot } from "ags";
+import { createEffect, createRoot, createState } from "ags";
 
 class CompositorManagerClass {
     private compositor: ICompositor | null = null;
@@ -17,8 +17,8 @@ class CompositorManagerClass {
                 break;
             case "niri":
             case "Niri":
-                //this.compositor = new Niri;
-                //break;
+                this.compositor = new Niri;
+                break;
             default:
                 console.warn("Compositor not identified/supported " + out);
                 this.compositor = null;
@@ -48,7 +48,7 @@ class CompositorManagerClass {
     }
 
     public getCompositorMonitor(monitor: Gdk.Monitor) {
-        return this.compositor?.getCompositorMonitor(monitor);
+        return this.compositor?.getCompositorMonitor(monitor) ?? createState(undefined)[0];
     }
 
     public get animationState() {

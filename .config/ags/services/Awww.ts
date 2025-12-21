@@ -69,7 +69,7 @@ export namespace Awww {
                 const out = await execAsync("awww query --json");
                 const data = JSON.parse(out);
 
-                const monitor = data[""].find((m: any) => m.name === connector);
+                const monitor = (data[""] ?? []).find((m: any) => m.name === connector);
                 return monitor?.displaying?.image || null;
             } catch (error) {
                 console.error("Failed to get wallpaper:", error);
@@ -78,28 +78,30 @@ export namespace Awww {
         }
 
         public async setWallpaper(path: string, options: Partial<ParserOptions>): Promise<boolean> {
-            if (path === undefined) return false;
+            if (!path) return false;
 
-            let command = `awww img ${path}`;
-            if (options) {
-                if (options.resize) command += ` --resize ${options.resize}`;
-                if (options.filter) command += ` -f ${options.filter}`;
-                if (options.invertY) command += ` --invert-y ${options.invertY.valueOf()}`;
-                if (options.transitionAngle) command += ` --transition-angle ${options.transitionAngle}`;
-                if (options.transitionDurantion) command += ` --transition-duration ${options.transitionDurantion}`;
-                if (options.transitionPos) command += ` --transition-pos ${options.transitionPos}`;
-                if (options.transitionStep) command += ` --transition-step ${options.transitionStep}`;
-                if (options.transitionType) command += ` --transition-type ${options.transitionType}`;
-                if (options.transitionWave) command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
-                if (options.outputs) command += ` --outputs ${options.outputs}`;
-            }
+            let command = `awww img "${path}"`;
+
+            if (options.resize) command += ` --resize ${options.resize}`;
+            if (options.filter) command += ` -f ${options.filter}`;
+            if (options.invertY === true) command += ` --invert-y`;
+            if (options.transitionAngle) command += ` --transition-angle ${options.transitionAngle}`;
+            if (options.transitionDurantion) command += ` --transition-duration ${options.transitionDurantion}`;
+            if (options.transitionPos) command += ` --transition-pos ${options.transitionPos}`;
+            if (options.transitionStep) command += ` --transition-step ${options.transitionStep}`;
+            if (options.transitionType) command += ` --transition-type ${options.transitionType}`;
+            if (options.transitionWave)
+                command += ` --transition-wave ${options.transitionWave.x},${options.transitionWave.y}`;
+            if (options.outputs) command += ` --outputs ${options.outputs}`;
 
             try {
-                await execAsync(`matugen image ${path}`);
-                await execAsync(command);
+                await Promise.all([
+                    execAsync(`matugen image "${path}"`),
+                    execAsync(command),
+                ]);
                 return true;
             } catch (error) {
-                console.warn("Failed to process:", error + `\n${command}`);
+                console.warn("Failed to process:", error, `\n${command}`);
                 return false;
             }
         }
