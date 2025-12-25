@@ -29,7 +29,16 @@ $slider-height: 20px;
 
 %component-slider {
     border-radius: 1em;
-    padding: 2px;
+    padding: 0.1em 0.2em;
     min-width: $slider-width;
     min-height: $slider-height;
+}
+
+%slider-interactive {
+    & highlight {
+        border-radius: 1em 0em 0em 1em;
+    }
+    slider {
+       margin: -0.2em;
+   }
 }

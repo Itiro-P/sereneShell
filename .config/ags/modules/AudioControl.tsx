@@ -22,7 +22,7 @@ class AudioControlClass {
         edp.set_volume(Math.min(newVolume, 1));
     }
 
-    private Endpoint(endpoint: Accessor<Wp.Endpoint>) {
+    private Endpoint = ({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) => {
         return (
             <box>
             <With value={endpoint}>
@@ -47,7 +47,7 @@ class AudioControlClass {
         );
     }
 
-    private MixerEntry(endpoint: Accessor<Wp.Endpoint>) {
+    private MixerEntry = ({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) => {
         return (
             <box>
                 <With value={endpoint}>
@@ -69,24 +69,25 @@ class AudioControlClass {
         );
     }
 
-    public get Mixer() {
+    public Mixer = () => {
         return (
             <box cssClasses={["Mixer"]} orientation={Gtk.Orientation.VERTICAL}>
                 <box cssClasses={["Title"]} halign={Gtk.Align.CENTER} hexpand>
                     <label cssClasses={["Label"]} label={"Mixer"} />
                     <button cssClasses={["PavucontrolButton"]} label={"Pavucontrol"} onClicked={(self) => GLib.spawn_command_line_async('pavucontrol')} />
                 </box>
-                {this.MixerEntry(this.defaultSpeaker)}
-                {this.MixerEntry(this.defaultMicrophone)}
+                <this.MixerEntry endpoint={this.defaultSpeaker} />
+                <this.MixerEntry endpoint={this.defaultMicrophone} />
             </box>
         );
     }
 
-    public get AudioControl() {
+    public AudioControl = () => {
         return (
             <box cssClasses={["AudioControl"]}>
                 <Gtk.GestureClick button={Gdk.BUTTON_SECONDARY} onPressed={() => GLib.spawn_command_line_async('pavucontrol')} />
-                {this.Endpoint(this.defaultSpeaker)}
+                <this.Endpoint endpoint={this.defaultSpeaker} />
+                <this.Endpoint endpoint={this.defaultMicrophone} />
             </box>
         );
     }

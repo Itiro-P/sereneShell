@@ -4,8 +4,57 @@
 @use 'common/Transitions';
 
 .Media {
-    @extend %component;
     border-radius: 1em;
+    padding: 0.2em;
+    background-color: Palette.$on_primary;
+    .Metadata {
+        .Title {
+            font-weight: bold;
+            font-size: Font.$font-size-large;
+        }
+        .Artist {
+            font-size: Font.$font-size-normal;
+        }
+        .Album {
+            font-style: italic;
+            font-size: Font.$font-size-small;
+        }
+    }
+
+    .SliderSection {
+        margin: 0.5em;
+
+        .TimeRemaining {
+            font-style: italic;
+            padding: 0.2em;
+        }
+
+        .Slider {
+            @extend %component-slider;
+            @extend %slider-interactive;
+            background-color: Palette.$on_primary_fixed;
+
+            & highlight {
+                background-color: Palette.$primary;
+            }
+
+            slider {
+                @include Transitions.inverse(Palette.$on_secondary, Palette.$inverse_primary);
+            }
+        }
+    }
+
+    .Controllers {
+        .Previous, .PlayPause, .Next {
+            @extend %component-circle;
+            margin: 0.2em;
+            @include Transitions.inverseChild(Palette.$secondary, Palette.$on_secondary);
+        }
+    }
+}
+
+.MediaMinimal {
+    @extend %component;
     label {
         font-weight: bold;
     }
@@ -13,11 +62,7 @@
     .Controllers {
         .Previous, .PlayPause, .Next {
             border-radius: 100%;
-            padding: 1px;
-            margin: 0px 1px;
-            image {
-                margin: 1px;
-            }
+            margin: 0px 2px;
             @include Transitions.inverseChild(Palette.$secondary, Palette.$on_secondary);
         }
     }

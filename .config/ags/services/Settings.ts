@@ -1,5 +1,5 @@
 import GLib from "gi://GLib?version=2.0";
-import { readFile, writeFile } from "ags/file";
+import { readFile, writeFileAsync } from "ags/file";
 import { Accessor, createState, Setter } from "ags";
 
 interface Options {
@@ -46,7 +46,7 @@ class SettingsClass {
             cavaVisible: this._cavaVisible.peek(),
             wallpaperSelectorActive: this._wallpaperSelectorActive.peek()
         }
-        writeFile(path, JSON.stringify(options, null, 2));
+        writeFileAsync(path, JSON.stringify(options, null, 2)).catch(err => console.log(err));
     }
 
     public get animationsEnabled() {
@@ -74,6 +74,4 @@ class SettingsClass {
     }
 }
 
-const settingsService = new SettingsClass;
-
-export default settingsService;
+export const settingsService = new SettingsClass;

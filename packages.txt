@@ -62,3 +62,5 @@ woff2-font-awesome
 xfce-polkit
 zed
 zen-browser-bin
+glycin
+glycin-gtk4

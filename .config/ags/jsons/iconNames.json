@@ -1,34 +1,18 @@
 [
   [
-    null,
-    null
-  ],
-  [
-    "steam",
-    "steam"
+    "vesktop",
+    "vesktop"
   ],
   [
     "zen",
     "zen-browser"
   ],
   [
-    "kitty",
-    "kitty"
-  ],
-  [
-    "org.gnome.Nautilus",
-    "org.gnome.Nautilus"
+    "com.github.th_ch.youtube_music",
+    "youtube-music"
   ],
   [
     "dev.zed.Zed",
     "zed"
-  ],
-  [
-    "org.qbittorrent.qBittorrent",
-    "qbittorrent"
-  ],
-  [
-    "xdg-desktop-portal-gtk",
-    "applications-system-symbolic"
   ]
 ]

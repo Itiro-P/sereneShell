@@ -33,7 +33,7 @@ class DateTimeClass {
         });
     }
 
-    public get DateTime() {
+    public DateTime = () => {
         return (
             <label
                 cssClasses={["Time"]}

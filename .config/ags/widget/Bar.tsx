@@ -7,7 +7,7 @@ import controlMenu from "../modules/ControlMenu";
 import workspaces from "../modules/Workspaces";
 import { onCleanup, With } from "ags";
 import media from "../modules/Media";
-import compositorManager from "../services/CompositorManager";
+import { compositorManager } from "../services";
 
 export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
@@ -27,7 +27,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
         >
             <centerbox cssClasses={["Bar"]}>
                 <box $type="start">
-                    {systemTray.SystemTray}
+                    <systemTray.SystemTray />
                 </box>
                 <box $type="center">
                     <With value={monitor}>
@@ -35,10 +35,10 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
                     </With>
                 </box>
                 <box $type="end">
-                    {media.Media}
-                    {dateTime.DateTime}
-                    {audioControl.AudioControl}
-                    {controlMenu.ControlMenuButton(gdkmonitor.get_connector()!)}
+                    <media.MediaMinimal />
+                    <dateTime.DateTime />
+                    <audioControl.AudioControl />
+                    <controlMenu.ControlMenuButton gdkmonitor={gdkmonitor} />
                 </box>
             </centerbox>
         </window>

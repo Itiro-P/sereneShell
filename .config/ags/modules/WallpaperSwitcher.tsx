@@ -4,187 +4,206 @@ import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 import { Awww } from "../services/Awww";
 import { Gdk, Gtk } from "ags/gtk4";
-import settingsService from "../services/Settings";
-import app from "ags/gtk4/app";
+import { settingsService } from "../services";
 import Adw from "gi://Adw?version=1";
 import Gly from "gi://Gly?version=2";
 import GlyGtk4 from "gi://GlyGtk4?version=2";
 
-const path = GLib.get_home_dir() + "/.config/ags/wallpapers";
-const pollTime = 240000;
-const wallpaperPreviewSize = { width: 288, height:162 };
-const imageExtensions = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-];
+const WALLPAPER_DIR = GLib.get_home_dir() + "/.config/ags/wallpapers";
+const POLL_TIME = 240000;
+const PREVIEW_SIZE = { width: 288, height: 162 };
+const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp"]);
+
+function listDirAsync(path: string): Promise<Gio.FileInfo[]> {
+    return new Promise((resolve, reject) => {
+        const file = Gio.File.new_for_path(path);
+        file.enumerate_children_async(
+            "standard::name,standard::type",
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+            GLib.PRIORITY_DEFAULT,
+            null,
+            (obj, res) => {
+                try {
+                    const enumerator = obj!.enumerate_children_finish(res);
+                    const allFiles: Gio.FileInfo[] = [];
+
+                    const next = () => {
+                        enumerator.next_files_async(10, GLib.PRIORITY_DEFAULT, null, (eObj, eRes) => {
+                            try {
+                                const files = eObj!.next_files_finish(eRes);
+                                if (files.length === 0) {
+                                    resolve(allFiles);
+                                    return;
+                                }
+                                allFiles.push(...files);
+                                next();
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+                    };
+                    next();
+                } catch (e) {
+                    reject(e);
+                }
+            }
+        );
+    });
+}
+
+function loadTextureAsync(fullPath: string, req: Gly.FrameRequest): Promise<Gdk.Texture> {
+    return new Promise((resolve, reject) => {
+        const loader = Gly.Loader.new(Gio.File.new_for_path(fullPath));
+        loader.load_async(null, (l, res) => {
+            try {
+                const image = l!.load_finish(res);
+                image.get_specific_frame_async(req, null, (i, iRes) => {
+                    try {
+                        const frame = i!.get_specific_frame_finish(iRes);
+                        resolve(GlyGtk4.frame_get_texture(frame));
+                    } catch (e) { reject(e); }
+                });
+            } catch (e) { reject(e); }
+        });
+    });
+}
 
 class WallpaperSwitcherClass {
-    private _activeWallpapers: Map<string, string>;
-    private _frameRequest: Gly.FrameRequest;
     private wallpapers: Accessor<Map<string, Gdk.Paintable>>;
     private setWallpapers: Setter<Map<string, Gdk.Paintable>>;
-    private timerActive: Accessor<boolean>;
-    private timer: Accessor<boolean>;
+    private _wallpaperWidgets: Map<string, Gtk.Widget> = new Map();
+    private _frameRequest: Gly.FrameRequest;
+
+    private timer: Accessor<number>;
 
     constructor() {
         [this.wallpapers, this.setWallpapers] = createState<Map<string, Gdk.Paintable>>(new Map());
-        this.timer = createPoll(true, pollTime, (prev) => !prev);
-        this.timerActive = settingsService.wallpaperSelectorActive;
-        this._activeWallpapers = new Map();
+        this.timer = createPoll(0, POLL_TIME, (prev) => prev + 1);
+
         this._frameRequest = new Gly.FrameRequest();
-        this._frameRequest.set_scale(
-            wallpaperPreviewSize.width,
-            wallpaperPreviewSize.height
-        );
-        this.scanForImages();
+        this._frameRequest.set_scale(PREVIEW_SIZE.width, PREVIEW_SIZE.height);
+
+        this.initWallpapers();
     }
 
-    private isImageFile(filename: string) {
-        const extension = filename.toLowerCase().substring(filename.lastIndexOf("."));
-        return imageExtensions.includes(extension) ? extension : null;
+    private isImageFile(filename: string): boolean {
+        const ext = filename.toLowerCase().slice(filename.lastIndexOf("."));
+        return IMAGE_EXTENSIONS.has(ext);
     }
 
-    private async scanForImages() {
+    private async initWallpapers() {
         try {
-            const dir = Gio.File.new_for_path(path);
-            dir.enumerate_children_async("standard::name,standard::type", Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, GLib.PRIORITY_DEFAULT, null,
-                (result, source) => {
-                    try {
-                        const enumerator = result!.enumerate_children_finish(source);
-                        this.proccessEnumerator(enumerator);
-                    } catch (error) {
-                        console.error("Error when looking for images: ", error);
-                    }
-                }
-            );
-        } catch(error) {
-            console.error("Error when looking for images: ", error);
-        }
-    }
+            const files = await listDirAsync(WALLPAPER_DIR);
+            const newMap = new Map<string, Gdk.Paintable>();
 
-    private async proccessEnumerator(enumerator: Gio.FileEnumerator) {
-        try {
-            const proccessFiles = () => {
-                enumerator.next_files_async(4, GLib.PRIORITY_DEFAULT, null,
-                    (result, source) => {
-                        try {
-                            const files = result!.next_files_finish(source);
-                            if(files.length > 0) {
-                                for(const file of files) this.loadImage(file);
-                                proccessFiles();
-                            }
-                        } catch(error) {
-                            console.error("Error when looking for images: ", error);
-                        }
-                    }
-                );
-            }
-            proccessFiles();
-        } catch(error) {
-            console.error("Error when proccessing images: ", error);
-        }
-    }
+            const loadPromises = files.map(async (file) => {
+                const name = file.get_name();
+                if (!this.isImageFile(name)) return;
 
-    private async loadImage(file: Gio.FileInfo) {
-        const fileName = file.get_name();
-        const fullPath = `${path}/${fileName}`;
-        if (this.isImageFile(fileName) && !this.wallpapers.peek().has(fullPath)) {
-            const loader = Gly.Loader.new(Gio.File.new_for_path(fullPath));
-            loader.load_async(null, (loaderObj, result) => {
-                let image: Gly.Image;
+                const fullPath = `${WALLPAPER_DIR}/${name}`;
                 try {
-                    image = loaderObj!.load_finish(result);
-                } catch(error) {
-                    console.error("Error when loading image: ", error);
-                    return;
+                    const texture = await loadTextureAsync(fullPath, this._frameRequest);
+                    newMap.set(fullPath, texture);
+                } catch (e) {
+                    console.warn(`Failed to load wallpaper: ${name}`, e);
                 }
-
-                image.get_specific_frame_async(this._frameRequest, null,
-                    (imageObj, result) => {
-                        let frame: Gly.Frame;
-                        try {
-                            frame = imageObj!.get_specific_frame_finish(result);
-                        } catch (e) {
-                            console.warn("Failed to get frame", e);
-                            return;
-                        }
-                        this.setWallpapers(prev => {
-                            const map = new Map(prev);
-                            map.set(fullPath, GlyGtk4.frame_get_texture(frame));
-                            return map;
-                        });
-                    }
-                );
             });
+
+            await Promise.all(loadPromises);
+
+            this.setWallpapers(newMap);
+            console.log(`Loaded ${newMap.size} wallpapers.`);
+
+        } catch (error) {
+            console.error("Critical error scanning wallpapers:", error);
         }
     }
 
-    public get activeWallpapers() {
-        return this._activeWallpapers;
+    private get randomImg(): string | null {
+        const keys = Array.from(this.wallpapers.peek().keys());
+        if (keys.length === 0) return null;
+        return keys[Math.floor(Math.random() * keys.length)];
     }
 
-    private wallpaperPreview({ fullPath, paintable, connector, setActiveWallpaper, activeWallpaper }: { fullPath: string, paintable: Gdk.Paintable, connector: string, setActiveWallpaper: Setter<string>, activeWallpaper: Accessor<string> }) {
-        const isActive = activeWallpaper(wa => wa === fullPath);
+    private WallpaperItem = (props: {
+        fullPath: string,
+        paintable: Gdk.Paintable,
+        connector: string,
+        isActive: boolean,
+        onClick: () => void
+    }) => {
         return (
             <button
-                cssClasses={isActive( ia => ["Wallpaper", ia ? "Active" : ""])}
-                onClicked={() => {
-                    setActiveWallpaper(fullPath);
-                    Awww.manager.setWallpaper(fullPath, { outputs: connector, transitionType: Awww.TransitionType.GROW });
-                }}
+                cssClasses={["Wallpaper", props.isActive ? "Active" : ""]}
+                $={self => this._wallpaperWidgets.set(props.fullPath, self)}
+                onClicked={props.onClick}
                 overflow={Gtk.Overflow.HIDDEN}
             >
-                <Adw.Clamp maximumSize={wallpaperPreviewSize.height} heightRequest={wallpaperPreviewSize.height}>
-                    <Adw.Clamp maximumSize={wallpaperPreviewSize.width} widthRequest={wallpaperPreviewSize.width}>
-                        <Gtk.Picture contentFit={Gtk.ContentFit.COVER} paintable={paintable} />
+                <Adw.Clamp maximumSize={PREVIEW_SIZE.height} heightRequest={PREVIEW_SIZE.height}>
+                    <Adw.Clamp maximumSize={PREVIEW_SIZE.width} widthRequest={PREVIEW_SIZE.width}>
+                        <Gtk.Picture contentFit={Gtk.ContentFit.COVER} paintable={props.paintable} />
                     </Adw.Clamp>
                 </Adw.Clamp>
             </button>
         );
     }
 
-    private get randomImg() {
-        const names = Array.from(this.wallpapers.peek().keys());
-        return names[Math.floor(Math.random() * names.length)];
-    }
-
-    public WallpaperSwitcher(gdkmonitor: string) {
+    public WallpaperSwitcher = ({ gdkmonitor }: { gdkmonitor: string }) => {
         const [activeWallpaper, setActiveWallpaper] = createState<string>("");
-        createEffect(()=> {
-            if(this.timerActive() && (this.timer() || true)) {
-                Awww.manager.checkLastWallpaper(gdkmonitor).then(img => {
-                    const finalImg = this.randomImg ?? img;
-                    if(finalImg) {
-                        setActiveWallpaper(finalImg);
-                        Awww.manager.setWallpaper(`${activeWallpaper.peek()}`, { outputs: gdkmonitor, transitionType: Awww.TransitionType.GROW });
+        let carousel!: Adw.Carousel;
+
+        createEffect(() => {
+            const tick = this.timer();
+
+            if (!settingsService.wallpaperSelectorActive.peek()) return;
+
+            Awww.manager.checkLastWallpaper(gdkmonitor).then(() => {
+                const nextImg = this.randomImg;
+                if (nextImg && nextImg !== activeWallpaper.peek()) {
+                    setActiveWallpaper(nextImg);
+                    Awww.manager.setWallpaper(nextImg, {
+                        outputs: gdkmonitor,
+                        transitionType: Awww.TransitionType.GROW
+                    });
+
+                    const widget = this._wallpaperWidgets.get(nextImg);
+                    if (widget && carousel) {
+                        carousel.scroll_to(widget, true);
                     }
-                });
-            }
+                }
+            });
         });
 
         return (
             <box cssClasses={["WallpaperSwitcher"]} orientation={Gtk.Orientation.VERTICAL}>
-                <box halign={Gtk.Align.CENTER}>
-                    <label label={'Automatically switch wallpapers '} />
+                <box halign={Gtk.Align.CENTER} spacing={12}>
+                    <label label={'Automatically switch wallpapers'} />
                     <switch
                         active={settingsService.wallpaperSelectorActive}
-                        onStateSet={(src, val) => settingsService.setWallpaperSelectorActive = val}
+                        onStateSet={(_, val) => settingsService.setWallpaperSelectorActive = val}
                     />
                 </box>
-                <Adw.Carousel allowLongSwipes allowScrollWheel allowMouseDrag>
+                <Adw.Carousel
+                    allowLongSwipes
+                    allowScrollWheel
+                    allowMouseDrag
+                    $={self => carousel = self}
+                >
                     <For
                         each={this.wallpapers}
-                        children={
-                            img => this.wallpaperPreview({
-                                fullPath: img[0],
-                                paintable: img[1],
-                                connector: gdkmonitor,
-                                setActiveWallpaper:
-                                setActiveWallpaper,
-                                activeWallpaper: activeWallpaper })
-                        }
+                        children={([path, paintable]) => this.WallpaperItem({
+                            fullPath: path,
+                            paintable: paintable,
+                            connector: gdkmonitor,
+                            isActive: activeWallpaper() === path,
+                            onClick: () => {
+                                setActiveWallpaper(path);
+                                Awww.manager.setWallpaper(path, {
+                                    outputs: gdkmonitor,
+                                    transitionType: Awww.TransitionType.GROW
+                                });
+                            }
+                        })}
                     />
                 </Adw.Carousel>
             </box>
@@ -193,5 +212,4 @@ class WallpaperSwitcherClass {
 }
 
 const wallpaperSwitcher = new WallpaperSwitcherClass();
-
 export default wallpaperSwitcher;

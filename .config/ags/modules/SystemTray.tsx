@@ -39,7 +39,7 @@ class SystemTrayClass {
         );
     }
 
-    public get SystemTray() {
+    public SystemTray = () => {
         return (
             <box cssClasses={["SystemTray"]}>
                 <For each={this.itemsBinding} children={item => this.TrayItem(item)} />

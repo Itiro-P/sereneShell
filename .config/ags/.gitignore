@@ -1,2 +1,5 @@
 node_modules/
+jsons/
 @girs/
+output.css
+output.css.map

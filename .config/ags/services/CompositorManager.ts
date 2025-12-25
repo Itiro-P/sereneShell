@@ -2,7 +2,7 @@ import { Gdk } from "ags/gtk4";
 import { exec } from "ags/process";
 import { ICompositor } from "../types";
 import { Hyprland, Niri } from "./Compositors";
-import settingsService from "./Settings";
+import { settingsService } from "./Settings";
 import { createEffect, createRoot, createState } from "ags";
 
 class CompositorManagerClass {
@@ -56,6 +56,4 @@ class CompositorManagerClass {
     }
 }
 
-const compositorManager = new CompositorManagerClass;
-
-export default compositorManager;
+export const compositorManager = new CompositorManagerClass;

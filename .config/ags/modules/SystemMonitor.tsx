@@ -1,6 +1,6 @@
 import AstalBattery from "gi://AstalBattery"
 import GTop from "gi://GTop?version=2.0";
-import { formatTimeVerbose } from "../services/TimeFormatter";
+import { formatTimeVerbose } from "../services";
 import { Accessor, createBinding, createComputed } from "ags";
 import { createPoll } from "ags/time";
 import { Gtk } from "ags/gtk4";
@@ -106,7 +106,7 @@ class SystemMonitorClass {
         );
     }
 
-    public get SystemMonitor() {
+    public SystemMonitor = () => {
         return (
             <box cssClasses={["SystemMonitor"]} orientation={Gtk.Orientation.VERTICAL}>
                 {this.Cpu}

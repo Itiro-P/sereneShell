@@ -41,6 +41,8 @@
 
         .Slider {
             @extend %component-slider;
+            @extend %slider-interactive;
+
             background-color: Palette.$surface_container_high;
 
             & highlight {
@@ -49,6 +51,11 @@
 
             & through {
                 background-color: Palette.$inverse_on_surface;
+            }
+
+            slider {
+                @include Transitions.inverse(Palette.$on_secondary, Palette.$inverse_primary);
+                margin: -0.15em -0.2em;
             }
         }
 

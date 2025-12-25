@@ -8,7 +8,7 @@
 
 .TrayItem {
     @extend %component-circle;
-    margin: 2px;
+    margin: 0px 2px 0px 2px;
     -gtk-icon-size: Font.$icon-size;
     transition: all 0.25s ease;
 

@@ -1,4 +1,4 @@
-import settingsService from "../services/Settings";
+import { settingsService } from "../services";
 import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
 import AstalCava from "gi://AstalCava?version=0.1";
@@ -123,7 +123,7 @@ class CavaClass {
         return this._visibilityState;
     }
 
-    public Cava(cssClasses: string[]) {
+    public Cava({ cssClasses }: { cssClasses: string[] }) {
         return (
             <box
                 cssClasses={[...cssClasses, "Cava"]}
