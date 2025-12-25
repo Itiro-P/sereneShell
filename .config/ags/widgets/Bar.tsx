@@ -1,17 +1,12 @@
 import { Astal, Gdk } from "ags/gtk4";
-import systemTray from "../modules/SystemTray";
 import app from "ags/gtk4/app";
-import dateTime from "../modules/DateTime";
-import audioControl from "../modules/AudioControl";
-import controlMenu from "../modules/ControlMenu";
-import workspaces from "../modules/Workspaces";
+import { AudioControl, DateTime, ControlMenu, Workspaces, Media, SystemTray } from "../modules";
 import { onCleanup, With } from "ags";
-import media from "../modules/Media";
-import { compositorManager } from "../services";
+import { compositorService } from "../services";
 
-export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
+export function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
-    const monitor = compositorManager.getCompositorMonitor(gdkmonitor);
+    const monitor = compositorService.getCompositorMonitor(gdkmonitor);
 
     return (
         <window
@@ -27,18 +22,18 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
         >
             <centerbox cssClasses={["Bar"]}>
                 <box $type="start">
-                    <systemTray.SystemTray />
+                    <SystemTray.SystemTray />
                 </box>
                 <box $type="center">
                     <With value={monitor}>
-                        {out => out && workspaces.Workspaces(out)}
+                        {out => out && <Workspaces.Workspaces monitor={out} />}
                     </With>
                 </box>
                 <box $type="end">
-                    <media.MediaMinimal />
-                    <dateTime.DateTime />
-                    <audioControl.AudioControl />
-                    <controlMenu.ControlMenuButton gdkmonitor={gdkmonitor} />
+                    <Media.MediaMinimal />
+                    <DateTime.Clock />
+                    <AudioControl.AudioControl />
+                    <ControlMenu.ControlMenuButton gdkmonitor={gdkmonitor} />
                 </box>
             </centerbox>
         </window>

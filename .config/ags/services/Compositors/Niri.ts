@@ -1,5 +1,5 @@
 import AstalNiri from "gi://AstalNiri?version=0.1";
-import { IClient, ICompositor, IMonitor, IWorkspace } from "../../types";
+import { IClient, ICompositor, IMonitor, IWorkspace } from "./types";
 import { Accessor, createBinding } from "ags";
 import { Gdk } from "ags/gtk4";
 

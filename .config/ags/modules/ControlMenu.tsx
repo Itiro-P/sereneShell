@@ -1,19 +1,16 @@
 import { Astal, Gtk } from "ags/gtk4";
 import { Accessor, createState, onCleanup, Setter } from "ags";
-import systemMonitor from "./SystemMonitor";
-import { settingsService, mprisManager } from "../services";
-import audioControl from "./AudioControl";
-import wallpaperSwitcher from "./WallpaperSwitcher";
+import { SystemMonitor } from "./SystemMonitor";
+import { Media } from "./Media";
+import { settingsService, mprisService, systemMonitorService } from "../services";
+import { AudioControl } from "./AudioControl";
 import Adw from "gi://Adw?version=1";
 import Gdk from "gi://Gdk?version=4.0";
 import { Popup } from "../generics";
-import media from "./Media";
+import { WallpaperSwitcher } from "./WallpaperSwitcher";
 
-class ControlMenuClass {
-
-    public constructor() { }
-
-    public ControlMenu = (gdkmonitor: Gdk.Monitor, [openGetter, openSetter]: [Accessor<boolean>, Setter<boolean>]) => {
+export namespace ControlMenu {
+    export function ControlMenu(gdkmonitor: Gdk.Monitor, [openGetter, openSetter]: [Accessor<boolean>, Setter<boolean>]) {
         const [rightStackvisibleChild, setRightStackvisibleChild] = createState<"statsView" | "optionsView">("statsView");
         const [leftStackvisibleChild, setLeftStackvisibleChild] = createState<"calendarView" | "mediaPlayerView">("calendarView");
 
@@ -72,7 +69,7 @@ class ControlMenuClass {
                                 <button
                                     cssClasses={leftStackvisibleChild(vc => ["PageSwitcher", vc === "mediaPlayerView" ? "Active" : "Inactive"])}
                                     halign={Gtk.Align.CENTER}
-                                    sensitive={mprisManager.players(ps => ps.length > 0)}
+                                    sensitive={mprisService.players(ps => ps.length > 0)}
                                     onClicked={() => { if (leftStackvisibleChild.peek() !== "mediaPlayerView") setLeftStackvisibleChild("mediaPlayerView") }}
                                 >
                                     <box>
@@ -91,7 +88,7 @@ class ControlMenuClass {
                                     <Gtk.Calendar cssClasses={["Calendar"]} />
                                 </box>
                                 <box $type={"named"} name={"mediaPlayerView"}>
-                                    <media.Media />
+                                    <Media.Media />
                                 </box>
                             </stack>
                         </box>
@@ -104,8 +101,8 @@ class ControlMenuClass {
                                 <box orientation={Gtk.Orientation.VERTICAL}>
                                     <Adw.PreferencesGroup title={"Main Page"}>
                                         <Gtk.ListBox selectionMode={Gtk.SelectionMode.NONE} cssClasses={[".boxed-list"]}>
-                                            <systemMonitor.SystemMonitor />
-                                            <audioControl.Mixer />
+                                            <SystemMonitor.SystemMonitor />
+                                            <AudioControl.Mixer />
                                         </Gtk.ListBox>
                                     </Adw.PreferencesGroup>
                                 </box>
@@ -130,25 +127,21 @@ class ControlMenuClass {
                             </box>
                         </stack>
                     </box>
-                    <wallpaperSwitcher.WallpaperSwitcher gdkmonitor={gdkmonitor.get_connector()!} />
+                    <WallpaperSwitcher.WallpaperSwitcher gdkmonitor={gdkmonitor.get_connector()!} />
                 </box>
             </Popup>
         );
     }
 
-    public ControlMenuButton = ({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) => {
+    export function ControlMenuButton({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
         const [open, setOpen] = createState(false);
-        const controlMenuPopup = this.ControlMenu(gdkmonitor, [open, setOpen]) as Astal.Window;
+        const controlMenuPopup = ControlMenu(gdkmonitor, [open, setOpen]) as Astal.Window;
         return (
             <button
-                cssClasses={systemMonitor.BatteryCritical(bc => ["ControlMenuButton", bc ? "ControlMenuButtonCritical" : "ControlMenuButtonNormal"])}
+                cssClasses={systemMonitorService.batteryCritical(bc => ["ControlMenuButton", bc ? "ControlMenuButtonCritical" : "ControlMenuButtonNormal"])}
                 label={"󰣇"}
                 onClicked={() => setOpen(!open())}
             />
         );
     }
 }
-
-const controlMenu = new ControlMenuClass();
-
-export default controlMenu;

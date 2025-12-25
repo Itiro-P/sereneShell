@@ -1,17 +1,10 @@
 import { Accessor, createBinding, For, onCleanup } from "ags";
 import { Gtk } from "ags/gtk4";
 import AstalTray from "gi://AstalTray?version=0.1";
+import { trayService } from "../services/Tray";
 
-class SystemTrayClass {
-    private default: AstalTray.Tray;
-    private itemsBinding: Accessor<AstalTray.TrayItem[]>;
-
-    public constructor() {
-        this.default = AstalTray.get_default();
-        this.itemsBinding = createBinding(this.default, "items");
-    }
-
-    private setupTrayItem = (btn: Gtk.MenuButton, item: AstalTray.TrayItem) => {
+export namespace SystemTray {
+    function setupTrayItem (btn: Gtk.MenuButton, item: AstalTray.TrayItem) {
         btn.menuModel = item.menuModel;
         btn.insert_action_group("dbusmenu", item.actionGroup);
 
@@ -25,12 +18,12 @@ class SystemTrayClass {
         });
     };
 
-    private TrayItem(item: AstalTray.TrayItem) {
+    function TrayItem({ item }: { item: AstalTray.TrayItem }) {
         return (
             <menubutton
                 cssClasses={["TrayItem"]}
                 tooltipMarkup={createBinding(item, "tooltipMarkup")}
-                $={(self) => this.setupTrayItem(self, item)}
+                $={(self) => setupTrayItem(self, item)}
                 halign={Gtk.Align.CENTER}
                 valign={Gtk.Align.CENTER}
             >
@@ -39,15 +32,11 @@ class SystemTrayClass {
         );
     }
 
-    public SystemTray = () => {
+    export function SystemTray() {
         return (
             <box cssClasses={["SystemTray"]}>
-                <For each={this.itemsBinding} children={item => this.TrayItem(item)} />
+                <For each={trayService.items} children={item => <TrayItem item={item} />} />
             </box>
         );
     }
 }
-
-const systemTray = new SystemTrayClass;
-
-export default systemTray;

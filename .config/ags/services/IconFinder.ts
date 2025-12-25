@@ -107,4 +107,4 @@ class IconFinderClass {
     }
 }
 
-export const iconFinder = new IconFinderClass();
+export const iconFinderService = new IconFinderClass();

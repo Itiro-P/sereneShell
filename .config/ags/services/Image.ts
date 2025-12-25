@@ -1,38 +1,78 @@
 import { Gdk } from "ags/gtk4";
 import Gio from "gi://Gio?version=2.0";
+import GLib from "gi://GLib?version=2.0";
 import Gly from "gi://Gly?version=2";
 import GlyGtk4 from "gi://GlyGtk4?version=2";
 
-export namespace Image {
-    export async function loadImage(
-        path: string,
-        frameRequest?: Gly.FrameRequest
-    ): Promise<Gdk.Texture | null> {
-        const file = Gio.file_new_for_path(path);
-        const loader = Gly.Loader.new(file);
+const PREVIEW_SIZE_COVER_ART = { width: 92, height: 92 };
+const frameRequestCoverArt = new Gly.FrameRequest;
+frameRequestCoverArt.set_scale(PREVIEW_SIZE_COVER_ART.width, PREVIEW_SIZE_COVER_ART.height);
+const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp"]);
 
-        try {
-            const image = await new Promise<Gly.Image>((resolve, reject) => {
-                loader.load_async(null, (obj, res) => {
-                    try { resolve(obj!.load_finish(res)); } catch (e) { reject(e); }
-                });
-            });
+class ImageClass {
 
-            const frame = await new Promise<Gly.Frame>((resolve, reject) => {
-                const cb = (obj: any, res: Gio.AsyncResult) => {
+    public constructor() {
+
+    }
+
+    public isImage(filename: string): boolean {
+        const ext = filename.toLowerCase().slice(filename.lastIndexOf("."));
+        return IMAGE_EXTENSIONS.has(ext);
+    }
+
+    public async listDir(path: string): Promise<Gio.FileInfo[]> {
+        return new Promise((resolve, reject) => {
+            const file = Gio.File.new_for_path(path);
+            file.enumerate_children_async(
+                "standard::name,standard::type",
+                Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                (obj, res) => {
                     try {
-                        resolve(frameRequest ? obj.get_specific_frame_finish(res) : obj.next_frame_finish(res));
-                    } catch (e) { reject(e); }
-                };
+                        const enumerator = obj!.enumerate_children_finish(res);
+                        const allFiles: Gio.FileInfo[] = [];
 
-                if (frameRequest) image.get_specific_frame_async(frameRequest, null, cb);
-                else image.next_frame_async(null, cb);
+                        const next = () => {
+                            enumerator.next_files_async(10, GLib.PRIORITY_DEFAULT, null, (eObj, eRes) => {
+                                try {
+                                    const files = eObj!.next_files_finish(eRes);
+                                    if (files.length === 0) {
+                                        resolve(allFiles);
+                                        return;
+                                    }
+                                    allFiles.push(...files);
+                                    next();
+                                } catch (e) {
+                                    reject(e);
+                                }
+                            });
+                        };
+                        next();
+                    } catch (e) {
+                        reject(e);
+                    }
+                }
+            );
+        });
+    }
+
+    public async loadTexture(fullPath: string, req: Gly.FrameRequest): Promise<Gdk.Texture> {
+        return new Promise((resolve, reject) => {
+            const loader = Gly.Loader.new(Gio.File.new_for_path(fullPath));
+            loader.load_async(null, (l, res) => {
+                try {
+                    const image = l!.load_finish(res);
+                    image.get_specific_frame_async(req, null, (i, iRes) => {
+                        try {
+                            const frame = i!.get_specific_frame_finish(iRes);
+                            resolve(GlyGtk4.frame_get_texture(frame));
+                        } catch (e) { reject(e); }
+                    });
+                } catch (e) { reject(e); }
             });
-
-            return GlyGtk4.frame_get_texture(frame);
-        } catch (error) {
-            console.error(`Failed to load image ${path}:`, error);
-            return null;
-        }
+        });
     }
 }
+
+export const imageService = new ImageClass;

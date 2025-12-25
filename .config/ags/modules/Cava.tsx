@@ -1,19 +1,8 @@
-import { settingsService } from "../services";
 import { Gtk } from "ags/gtk4";
 import Gsk from 'gi://Gsk';
-import AstalCava from "gi://AstalCava?version=0.1";
 import GObject from 'gi://GObject';
-import { Accessor, createBinding, createEffect, createRoot, createState, Setter } from "ags";
-
-const CavaConfig = {
-    autosens: true,
-    bars: 25,
-    framerate: 60,
-    input: AstalCava.Input.PIPEWIRE,
-    noiseReduction: 0.77,
-    sensitivity: 0.75,
-    stereo: false,
-};
+import { Accessor, createEffect } from "ags";
+import { cavaService } from "../services";
 
 class CavaWidget extends Gtk.DrawingArea {
     private valuesAccessor: Accessor<number[]>;
@@ -84,58 +73,16 @@ class CavaWidget extends Gtk.DrawingArea {
 
 const _cava = GObject.registerClass({ GTypeName: 'Cava' }, CavaWidget);
 
-class CavaClass {
-    private default: AstalCava.Cava | null;
-    private _values: Accessor<number[]>;
-
-    private _visibilityState: Accessor<boolean>;
-    private _setVisibilityState: Setter<boolean>;
-
-    public constructor() {
-        [this._visibilityState, this._setVisibilityState] = createState(settingsService.cavaVisible.peek());
-        createRoot(() => createEffect(() => this._setVisibilityState(settingsService.cavaVisible())));
-
-        this.default = AstalCava.get_default();
-        if (this.default) {
-            this.default.set_autosens(CavaConfig.autosens);
-            this.default.set_bars(CavaConfig.bars);
-            this.default.set_framerate(CavaConfig.framerate);
-            this.default.set_input(CavaConfig.input);
-            this.default.set_noise_reduction(CavaConfig.noiseReduction);
-            this.default.set_stereo(CavaConfig.stereo);
-            this._values = createBinding(this.default, 'values')((v) => {
-                try {
-                    const sens = CavaConfig.sensitivity;
-                    return v.map(i => i * sens);
-                } catch (error) {
-                    console.warn("Erro no handler global do Cava:", error);
-                    return [];
-                }
-            });
-        }
-        else {
-            console.error("Não foi possível inicializar o Cava");
-            this._values = createState<number[]>([])[0];
-        }
-    }
-
-    public get visibilityState() {
-        return this._visibilityState;
-    }
-
-    public Cava({ cssClasses }: { cssClasses: string[] }) {
+export namespace Cava {
+    export function Visualizer({ cssClasses }: { cssClasses: string[] }) {
         return (
             <box
                 cssClasses={[...cssClasses, "Cava"]}
                 overflow={Gtk.Overflow.HIDDEN}
                 halign={Gtk.Align.FILL}
             >
-                {new _cava(this._values)}
+                {new _cava(cavaService.values)}
             </box>
         );
     }
 }
-
-const cava = new CavaClass;
-
-export default cava;

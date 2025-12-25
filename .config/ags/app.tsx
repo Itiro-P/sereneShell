@@ -1,8 +1,7 @@
 import style from "./styles/index.scss";
 import app from "ags/gtk4/app";
 import { createBinding, For, This } from "ags";
-import Bar from "./widget/Bar";
-import CavaBackground from "./widget/CavaBackground";
+import { Bar, CavaBackground } from "./widgets";
 import { execAsync } from "ags/process";
 import GLib from "gi://GLib?version=2.0";
 

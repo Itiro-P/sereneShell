@@ -1,11 +1,10 @@
 import { Accessor, createBinding, createComputed, createState, For, With } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
 import Pango from "gi://Pango?version=1.0";
-import { mprisManager, PlayerButtonIcons } from "../services";
+import { imageService, mprisService, PlayerButtonIcons } from "../services";
 import { formatTime } from "../services/TimeFormatter";
 import AstalMpris from "gi://AstalMpris?version=0.1";
 import Adw from "gi://Adw?version=1";
-import { Image } from "../services";
 import Gly from "gi://Gly?version=2";
 
 const metadataArray: string[] = ["Title", "Artist", "Album"];
@@ -13,18 +12,16 @@ const coverSize = { width: 96, height: 96 };
 const frameRequest = new Gly.FrameRequest();
 frameRequest.set_scale(coverSize.width, coverSize.height);
 
-class MediaClass {
-    public constructor() {
-    }
+export namespace Media {
 
-    private CoverArt({ path }: { path: Accessor<string> }) {
+    export function CoverArt({ path }: { path: Accessor<string> }) {
         return (
             <box cssClasses={["CoverArt"]} halign={Gtk.Align.CENTER}>
                 <With value={path}>
                     {p => {
                         const [img, setImg] = createState<Gdk.Paintable>(Gdk.Paintable.new_empty(coverSize.width, coverSize.height));
 
-                        Image.loadImage(p, frameRequest).then(cover => cover && setImg(cover));
+                        imageService.loadTexture(p, frameRequest).then(cover => cover && setImg(cover));
                         return (
                             <Adw.Clamp maximumSize={coverSize.height} heightRequest={coverSize.height}>
                                 <Adw.Clamp maximumSize={coverSize.width} widthRequest={coverSize.width}>
@@ -38,7 +35,7 @@ class MediaClass {
         );
     }
 
-    private Player(player: AstalMpris.Player) {
+    export function Player(player: AstalMpris.Player) {
         const title = createBinding(player, "title");
         const artist = createBinding(player, "artist");
         const album = createBinding(player, "album");
@@ -49,7 +46,7 @@ class MediaClass {
         return (
             <box cssClasses={["Player"]} orientation={Gtk.Orientation.VERTICAL}>
                 <box cssClasses={["Metadata"]} orientation={Gtk.Orientation.VERTICAL}>
-                    <this.CoverArt path={createBinding(player, "coverArt")} />
+                    <CoverArt path={createBinding(player, "coverArt")} />
                     <box orientation={Gtk.Orientation.VERTICAL}>
                         <label name={"Title"} cssClasses={["Title"]} label={title} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={22} />
                         <label name={"Artist"} cssClasses={["Artist"]} label={artist} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={22} />
@@ -118,7 +115,7 @@ class MediaClass {
         );
     }
 
-    public Media() {
+    export function Media() {
         let carousel !: Adw.Carousel;
         return (
             <box cssClasses={["Media"]}>
@@ -127,8 +124,8 @@ class MediaClass {
                     orientation={Gtk.Orientation.VERTICAL}
                 >
                     <For
-                        each={mprisManager.players}
-                        children={(player: AstalMpris.Player) => this.Player(player)}
+                        each={mprisService.players}
+                        children={(player: AstalMpris.Player) => Player(player)}
                     />
                 </Adw.Carousel>
                 <Adw.CarouselIndicatorLines cssClasses={["Carousel"]} orientation={Gtk.Orientation.VERTICAL} carousel={carousel} />
@@ -136,10 +133,10 @@ class MediaClass {
         );
     }
 
-    public MediaMinimal() {
+    export function MediaMinimal() {
         return (
-            <revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} transitionDuration={500} revealChild={mprisManager.isPlayerActive}>
-            <With value={mprisManager.activePlayer}>
+            <revealer transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT} transitionDuration={500} revealChild={mprisService.isPlayerActive}>
+            <With value={mprisService.activePlayer}>
                 {player => {
                     const [hovered, setHovered] = createState(false);
                     const visibleChild = hovered(h => h ? 'FullStatus' : 'MinimalStatus');
@@ -159,7 +156,7 @@ class MediaClass {
                                 transitionDuration={300}
                             >
                                 <box $type="named" name={'MinimalStatus'} cssClasses={["MinimalStatus"]} halign={Gtk.Align.CENTER}>
-                                    <label label={playbackStatus(ps => mprisManager.playerStatusStr(ps))} widthChars={10} />
+                                    <label label={playbackStatus(ps => mprisService.playerStatusStr(ps))} widthChars={10} />
                                     <label label={timeRemaining} />
                                 </box>
                                 <box $type="named" name={'FullStatus'} cssClasses={["FullStatus"]}>
@@ -204,7 +201,3 @@ class MediaClass {
         );
     }
 }
-
-const media = new MediaClass;
-
-export default media;

@@ -1,28 +1,20 @@
-import Wp from "gi://AstalWp";
+import AstalWp from "gi://AstalWp?version=0.1";
 import GLib from "gi://GLib?version=2.0";
 import { Gtk, Gdk } from "ags/gtk4";
 import { Accessor, createBinding, With } from "ags";
+import { wirePumblerService } from "../services";
 
-class AudioControlClass {
-    private default: Wp.Wp;
-    private defaultSpeaker: Accessor<Wp.Endpoint>;
-    private defaultMicrophone: Accessor<Wp.Endpoint>;
-    private readonly step: number = 0.02;
+export namespace AudioControl {
+    const volumeStep = 0.02;
 
-    public constructor() {
-        this.default = Wp.get_default()!;
-        this.defaultSpeaker = createBinding(this.default, 'defaultSpeaker');
-        this.defaultMicrophone = createBinding(this.default, 'defaultMicrophone');
-    }
-
-    private handleScroll(edp: Wp.Endpoint, dy: number) {
+    function handleScroll(edp: AstalWp.Endpoint, dy: number) {
         let newVolume = edp.get_volume();
-        if(dy < 0) newVolume += this.step;
-        else newVolume -= this.step;
+        if(dy < 0) newVolume += volumeStep;
+        else newVolume -= volumeStep;
         edp.set_volume(Math.min(newVolume, 1));
     }
 
-    private Endpoint = ({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) => {
+    function Endpoint({ endpoint }: { endpoint: Accessor<AstalWp.Endpoint> }) {
         return (
             <box>
             <With value={endpoint}>
@@ -32,7 +24,7 @@ class AudioControlClass {
 
                     return (
                         <box>
-                            <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
+                            <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => handleScroll(edp, dy)} />
                             <button cssClasses={["Endpoint"]} onClicked={() => edp.set_mute(!edp.get_mute())}>
                                 <box>
                                     <image cssClasses={["Icon"]} iconName={icon} />
@@ -47,7 +39,7 @@ class AudioControlClass {
         );
     }
 
-    private MixerEntry = ({ endpoint }: { endpoint: Accessor<Wp.Endpoint> }) => {
+    function MixerEntry({ endpoint }: { endpoint: Accessor<AstalWp.Endpoint> }) {
         return (
             <box>
                 <With value={endpoint}>
@@ -57,7 +49,7 @@ class AudioControlClass {
 
                         return (
                             <box cssClasses={["MixerEntry"]}>
-                                <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => this.handleScroll(edp, dy)} />
+                                <Gtk.EventControllerScroll flags={Gtk.EventControllerScrollFlags.VERTICAL} onScroll={(src, dx, dy) => handleScroll(edp, dy)} />
                                 <button cssClasses={["Icon"]} iconName={icon} onClicked={() => edp.set_mute(!edp.get_mute())} />
                                 <slider cssClasses={["Slider"]} value={volume} step={0.1} min={0} max={1} onChangeValue={({ value }) => edp.set_volume(value)} hexpand />
                                 <label cssClasses={["PercentageLabel"]} label={volume(v => `${Math.round(v * 100)}%`)} widthChars={4} />
@@ -69,30 +61,26 @@ class AudioControlClass {
         );
     }
 
-    public Mixer = () => {
+    export function Mixer() {
         return (
             <box cssClasses={["Mixer"]} orientation={Gtk.Orientation.VERTICAL}>
                 <box cssClasses={["Title"]} halign={Gtk.Align.CENTER} hexpand>
                     <label cssClasses={["Label"]} label={"Mixer"} />
                     <button cssClasses={["PavucontrolButton"]} label={"Pavucontrol"} onClicked={(self) => GLib.spawn_command_line_async('pavucontrol')} />
                 </box>
-                <this.MixerEntry endpoint={this.defaultSpeaker} />
-                <this.MixerEntry endpoint={this.defaultMicrophone} />
+                <MixerEntry endpoint={wirePumblerService.defaultSpeaker} />
+                <MixerEntry endpoint={wirePumblerService.defaultMicrophone} />
             </box>
         );
     }
 
-    public AudioControl = () => {
+    export function AudioControl() {
         return (
             <box cssClasses={["AudioControl"]}>
                 <Gtk.GestureClick button={Gdk.BUTTON_SECONDARY} onPressed={() => GLib.spawn_command_line_async('pavucontrol')} />
-                <this.Endpoint endpoint={this.defaultSpeaker} />
-                <this.Endpoint endpoint={this.defaultMicrophone} />
+                <Endpoint endpoint={wirePumblerService.defaultSpeaker} />
+                <Endpoint endpoint={wirePumblerService.defaultMicrophone} />
             </box>
         );
     }
 }
-
-const audioControl = new AudioControlClass;
-
-export default audioControl;

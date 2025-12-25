@@ -11,7 +11,7 @@ export const PlayerButtonIcons = {
     previous: "media-skip-backward-symbolic"
 }
 
-class MprisManager {
+class Mpris {
     private mpris: AstalMpris.Mpris;
     private _activePlayer: Accessor<AstalMpris.Player>;
     private _players: Accessor<AstalMpris.Player[]>;
@@ -92,4 +92,4 @@ class MprisManager {
     }
 }
 
-export const mprisManager = new MprisManager;
+export const mprisService = new Mpris;
