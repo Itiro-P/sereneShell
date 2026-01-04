@@ -11,13 +11,14 @@ BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 PACKAGE_SCRIPTS=(
   00_bootstrap.sh
-  01_base.sh
-  02_desktop.sh
-  03_wayland.sh
-  04_themes-ui.sh
-  05_dev.sh
-  06_media-gaming.sh
-  07_productivity.sh
+  01_themes-ui.sh
+  02_wayland-session.sh
+  03_widgets.sh
+  04_multimedia.sh
+  05_essential.sh
+  06_productivity.sh
+  07_gaming.sh
+  08_dev.sh
 )
 
 echo
@@ -37,10 +38,11 @@ echo "Pacotes instalados."
 echo "Configurando serviços no Systemd."
 sudo systemctl enable --now warp-svc
 sudo systemctl enable sddm
+sudo systemctl enable swayosd-libinput-backend
 systemctl enable --user stasis
 
-echo "Configurando Stasis"
-sudo usermod -aG input,video $USER
+echo "Configurando Stasis e Docker"
+sudo usermod -aG input,video, docker $USER
 
 echo "Configurando o Warp"
 warp-cli registration new
@@ -69,6 +71,9 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 echo "Copiando configurações."
 cp "$BASE_DIR/../src/.bashrc" ~/.bashrc
 
-cp -r "$BASE_DIR/../src/.config" ~/.config
+cp -r "$BASE_DIR/../src/.config/*" ~/.config
+
+echo "Configurando ags"
+ags types -u
 
 echo "Instalação finalizada. Reinicie o sistema."
