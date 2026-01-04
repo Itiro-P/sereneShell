@@ -15,9 +15,13 @@ yay -S --needed --noconfirm \
     sddm-astronaut-theme \
     awww \
     matugen-bin \
+    noto-fonts \
     noto-fonts-cjk \
     noto-fonts-emoji \
     ttf-fira-code \
+    ttf-dejavu \
+    ttf-liberation \
+    ttf-roboto \
     ttf-nerd-fonts-symbols \
     ttf-nerd-fonts-symbols-common \
     ttf-roboto \

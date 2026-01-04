@@ -5,7 +5,7 @@ echo "Instalando programas de desenvolvimento."
 
 yay -S --needed --noconfirm \
     git \
-    sublime-merge \
+    gittyup \
     gradle \
     jdk21-openjdk \
     junit \

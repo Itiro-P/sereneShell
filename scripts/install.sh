@@ -42,7 +42,7 @@ sudo systemctl enable swayosd-libinput-backend
 systemctl enable --user stasis
 
 echo "Configurando Stasis e Docker"
-sudo usermod -aG input,video, docker $USER
+sudo usermod -aG input,video,docker $USER
 
 echo "Configurando o Warp"
 warp-cli registration new
