@@ -118,6 +118,10 @@ xfce-polkit
 xorg-server
 xorg-xinit
 xwayland-satellite
+docker
+docker-compose
+docker-buildx
+yarn
 zed
 zen-browser-bin
 zip
