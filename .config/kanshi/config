@@ -1,0 +1,54 @@
+output "AU Optronics 0x369F Unknown" {
+    mode 1920x1080@60.038
+    scale 1
+    alias $INTERNAL
+}
+
+output "Data Export Corporation HDMI to VGA 0x0001D850" {
+    mode 1280x720@60
+    scale 1
+    alias $PROJECTOR
+}
+
+output "LG Electronics LG ULTRAWIDE 0x01010101" {
+    mode 2560x1080@60.000
+    scale 1
+    alias $LG_ULTRAWIDE
+}
+
+output "AOC 2470W E72H1XA001302" {
+    mode 1920x1080@60.000
+    scale 1
+    alias $AOC_2470W
+}
+
+output "RDA 18.5JL3 Unknown" {
+    mode 1920x1080@60.000000
+    scale 1
+    alias $RDA_185JL3
+}
+
+profile presentation {
+    output $INTERNAL position 0,0
+    output $PROJECTOR position 1920,0
+    exec wl-present mirror eDP-1 --fullscreen-output HDMI-A-1
+}
+
+profile ultrawide {
+    output $LG_ULTRAWIDE position 0,0
+    output $INTERNAL position 2560,0
+}
+
+profile aoc {
+    output $AOC_2470W position 0,0
+    output $INTERNAL position 1920,0
+}
+
+profile rda {
+    output $RDA_185JL3 position 0,0
+    output $INTERNAL position 1920,0
+}
+
+profile laptop {
+    output $INTERNAL position 0,0
+}

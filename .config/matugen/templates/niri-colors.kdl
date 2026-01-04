@@ -27,3 +27,13 @@ window-rule {
         inactive-gradient from="{{colors.tertiary.default.hex}}" to="{{colors.tertiary_container.default.hex}}" angle=45
     }
 }
+
+recent-windows {
+    // Round the corners on the highlight.
+    highlight {
+        corner-radius 14
+	padding 2
+	active-color "{{colors.primary.default.hex}}" 
+	urgent-color "{{colors.tertiary.default.hex}}"
+    }
+}

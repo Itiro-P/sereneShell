@@ -72,6 +72,7 @@ binds {
     Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
     Mod+F { fullscreen-window; }
+    Mod+A { maximize-window-to-edges; }
 
     Mod+Ctrl+F { expand-column-to-available-width; }
 

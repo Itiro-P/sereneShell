@@ -45,7 +45,7 @@
     "theme": {
         "mode": "dark",
         "light": "Matugen Light",
-        "dark": "Matugen Dark"
+        "dark": "Carbonfox - opaque"
     },
     "show_edit_predictions": true,
     "indent_guides": {

@@ -7,7 +7,7 @@ input {
             variant "abnt2, intl"
             model ", pc105"
         }
-        // numlock
+        numlock
     }
 
     touchpad {

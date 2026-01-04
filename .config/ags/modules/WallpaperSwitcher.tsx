@@ -10,12 +10,12 @@ export namespace WallpaperSwitcher {
         fullPath: string,
         paintable: Gdk.Paintable,
         connector: string,
-        isActive: boolean,
+        isActive: Accessor<boolean>,
         onClick: () => void
     }) {
         return (
             <button
-                cssClasses={["Wallpaper", props.isActive ? "Active" : ""]}
+                cssClasses={props.isActive(ia => ["Wallpaper",  ia ? "Active" : ""])}
                 onClicked={props.onClick}
                 overflow={Gtk.Overflow.HIDDEN}
             >
@@ -70,7 +70,7 @@ export namespace WallpaperSwitcher {
                             fullPath: path,
                             paintable: paintable,
                             connector: gdkmonitor,
-                            isActive: activeWallpaper() === path,
+                            isActive: activeWallpaper(aw => aw === path),
                             onClick: () => {
                                 setActiveWallpaper(path);
                                 Awww.manager.setWallpaper(path, {

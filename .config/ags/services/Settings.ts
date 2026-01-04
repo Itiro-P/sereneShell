@@ -1,6 +1,7 @@
 import GLib from "gi://GLib?version=2.0";
 import { readFile, writeFileAsync } from "ags/file";
 import { Accessor, createState, Setter } from "ags";
+import { pathService } from "./Path";
 
 interface Options {
     animationsEnabled: boolean;
@@ -14,8 +15,6 @@ const optionsFallback: Options = {
     wallpaperSelectorActive: true
 }
 
-const path = GLib.get_home_dir() + '/.config/ags/jsons/options.json';
-
 class SettingsClass {
     private _animationsEnabled: Accessor<boolean>;
     private _setAnimationsEnabled: Setter<boolean>;
@@ -25,8 +24,8 @@ class SettingsClass {
     private _setWallpaperSelectorActive: Setter<boolean>;
 
     constructor() {
-        const fileStr = readFile(path);
         try {
+            const fileStr = readFile(pathService.jsonsDir + "/options.json");
             const parsed = JSON.parse(fileStr) as Options;
             [this._animationsEnabled, this._setAnimationsEnabled] = createState(parsed.animationsEnabled);
             [this._cavaVisible, this._setCavaVisible] = createState(parsed.cavaVisible);
@@ -46,7 +45,7 @@ class SettingsClass {
             cavaVisible: this._cavaVisible.peek(),
             wallpaperSelectorActive: this._wallpaperSelectorActive.peek()
         }
-        writeFileAsync(path, JSON.stringify(options, null, 2)).catch(err => console.log(err));
+        writeFileAsync(pathService.jsonsDir + "/options.json", JSON.stringify(options, null, 2)).catch(err => console.log(err));
     }
 
     public get animationsEnabled() {

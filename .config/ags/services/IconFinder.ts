@@ -1,10 +1,7 @@
 import { readFile, writeFileAsync } from "ags/file";
 import { Gdk, Gtk } from "ags/gtk4";
-// Removi execAsync pois não precisamos mais dele (performance)
 import Gio from "gi://Gio?version=2.0";
-import GLib from "gi://GLib?version=2.0";
-
-const path = GLib.get_home_dir() + "/.config/ags/jsons/iconNames.json";
+import { pathService } from "./Path";
 
 class IconFinderClass {
     private iconMap: Map<string, string>;
@@ -14,7 +11,7 @@ class IconFinderClass {
         this.iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default()!);
 
         try {
-            const file = readFile(path);
+            const file = readFile(pathService.jsonsDir + "/iconNames.json");
             const jsonContent = JSON.parse(file);
             this.iconMap = new Map(jsonContent);
         } catch(e) {
@@ -103,7 +100,7 @@ class IconFinderClass {
 
     public saveIconNames() {
         const toSave = JSON.stringify([...this.iconMap.entries()], null, 2);
-        writeFileAsync(path, toSave).catch(err => console.error("Erro ao salvar ícones", err));
+        writeFileAsync(pathService.jsonsDir + "/iconNames.json", toSave).catch(err => console.error("Erro ao salvar ícones", err));
     }
 }
 

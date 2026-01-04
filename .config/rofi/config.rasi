@@ -7,7 +7,8 @@ configuration {
     drun-display-format: "{name}";
     window-format: "{w} {c} {t}";
     sidebar-mode: true;
-    hover-select: false;
+    hover-select: true;
+    matching: "prefix";
 }
 
 window {
@@ -106,7 +107,6 @@ element normal.active {
     text-color: @on-secondary-container;
 }
 
-/* Estados selecionados */
 element selected.normal {
     background-color: @primary-container;
     text-color: @on-primary-container;

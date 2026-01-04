@@ -2,15 +2,15 @@
 // Layout configuration
 layout {
     tab-indicator {
-        active-color "#8fcff3"
-        inactive-color "#c9c1ea"
+        active-color "#ccbdff"
+        inactive-color "#eeb8ca"
     }
     insert-hint {
-        gradient from="#004c6880" to="#8fcff380" angle=45 relative-to="workspace-view"
+        gradient from="#4a3e7680" to="#ccbdff80" angle=45 relative-to="workspace-view"
     }
     border {
-        active-gradient from="#8fcff3" to="#b5c9d7" angle=45 relative-to="workspace-view"
-        inactive-gradient from="#41484d" to="#8a9297" angle=45 relative-to="workspace-view"
+        active-gradient from="#ccbdff" to="#cac3dc" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#48454e" to="#938f99" angle=45 relative-to="workspace-view"
         urgent-gradient from="#ffb4ab" to="#93000a" angle=45 relative-to="workspace-view"
     }
     shadow {
@@ -23,7 +23,17 @@ window-rule {
     default-floating-position x=32 y=32 relative-to="bottom-right"
     opacity 1.0
     border {
-        active-gradient from="#c9c1ea" to="#484264" angle=45
-        inactive-gradient from="#c9c1ea" to="#484264" angle=45
+        active-gradient from="#eeb8ca" to="#623b4a" angle=45
+        inactive-gradient from="#eeb8ca" to="#623b4a" angle=45
+    }
+}
+
+recent-windows {
+    // Round the corners on the highlight.
+    highlight {
+        corner-radius 14
+	padding 2
+	active-color "#ccbdff" 
+	urgent-color "#eeb8ca"
     }
 }

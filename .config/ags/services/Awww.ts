@@ -1,4 +1,6 @@
+import app from "ags/gtk4/app";
 import { execAsync } from "ags/process";
+import { pathService } from "./Path";
 
 export namespace Awww {
     export enum Resize {
@@ -96,12 +98,17 @@ export namespace Awww {
 
             try {
                 await Promise.all([
-                    execAsync(`matugen image "${path}"`),
+                    execAsync(`matugen --type scheme-expressive image "${path}"`),
                     execAsync(command),
                 ]);
+                await execAsync(`sass ${pathService.stylesDir}/index.scss ${pathService.stylesDir}/output.css`).then(
+                    () => {
+                        app.apply_css(`${pathService.stylesDir}/output.css`, true);
+                    }
+                );
                 return true;
             } catch (error) {
-                console.warn("Failed to process:", error, `\n${command}`);
+                console.warn("Failed to process:", error, `\n${command}`, `\n\nmatugen --type scheme-expressive image "${path}"`);
                 return false;
             }
         }

@@ -26,7 +26,6 @@ output_path = '~/.config/vesktop/themes/midnight-discord.css'
 [templates.ags]
 input_path = '~/.config/matugen/templates/_Palette.scss'
 output_path = '~/.config/ags/styles/common/_Palette.scss'
-post_hook = 'ags request css-reset'
 
 [templates.gtklock]
 input_path = '~/.config/matugen/templates/colors.css'
@@ -58,7 +57,3 @@ post_hook = 'niri msg action load-config-file'
 input_path = '~/.config/matugen/templates/mako-colors'
 output_path = '~/.config/mako/config'
 post_hook = 'makoctl reload'
-
-[templates.zed]
-input_path = '~/.config/matugen/templates/zed-colors.json'
-output_path = '~/.config/zed/themes/matugen.json'

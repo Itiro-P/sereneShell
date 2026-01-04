@@ -4,14 +4,11 @@ import { Gtk, Gdk } from "ags/gtk4";
 import { Accessor, createBinding, With } from "ags";
 import { wirePumblerService } from "../services";
 
-export namespace AudioControl {
-    const volumeStep = 0.02;
+const volumeStep = 0.02;
 
+export namespace AudioControl {
     function handleScroll(edp: AstalWp.Endpoint, dy: number) {
-        let newVolume = edp.get_volume();
-        if(dy < 0) newVolume += volumeStep;
-        else newVolume -= volumeStep;
-        edp.set_volume(Math.min(newVolume, 1));
+        edp.set_volume(Math.min(edp.get_volume() + ((dy < 0 ? 1 : -1) * volumeStep), 1));
     }
 
     function Endpoint({ endpoint }: { endpoint: Accessor<AstalWp.Endpoint> }) {
