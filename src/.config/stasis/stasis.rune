@@ -1,0 +1,65 @@
+@author "Pedro Itiro Nagao"
+@description "Idle Management daemon for SereneShell"
+
+stasis:
+  # trava a sessão antes de suspender
+  pre_suspend_command "gtklock -d"
+
+  monitor_media true
+  ignore_remote_media true
+
+  respect_idle_inhibitors true
+
+  notify_on_unpause true
+  notify_before_action true
+  notify_seconds_before 10
+
+  inhibit_apps [
+    "vlc"
+    "mpv"
+    r"steam_app_.*"
+  ]
+
+  # Perfil quando ligado na tomada
+  on_ac:
+    # bloquear (antes de dpms)
+    lock_screen:
+      timeout 300
+      command "gtklock -d"
+      notification "Bloqueando a tela em 10 segundos..."
+    end
+
+    brightness:
+      timeout 300
+      command "brightnessctl set 50%"
+      notification "Diminuindo brilho em 10 segundos..."
+    end
+
+    suspend:
+      timeout 900
+      command "systemctl suspend"
+      notification "Suspensão em 10 segundos..."
+    end
+  end
+
+  # Perfil quando em bateria
+  on_battery:
+    lock_screen:
+      timeout 60
+      command "gtklock -d"
+      notification "Bloqueando a tela em 10 segundos..."
+    end
+
+    brightness:
+      timeout 90
+      command "brightnessctl set 30%"
+      notification "Diminuindo brilho em 10 segundos..."
+    end
+
+    suspend:
+      timeout 180
+      command "systemctl suspend"
+      notification "Suspensão em 10 segundos..."
+    end
+  end
+end

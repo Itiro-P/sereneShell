@@ -1,6 +1,5 @@
 adw-gtk-theme
 appimagelauncher
-archlinux-java-run
 awww
 aylurs-gtk-shell
 bibata-cursor-theme
@@ -18,6 +17,7 @@ git
 glycin-gtk4
 gnome-disk-utility
 gradle
+seahorse
 grim
 gst-libav
 gst-plugin-pipewire
@@ -32,7 +32,6 @@ junit
 kanshi
 kitty
 kvantum
-kvantum-qt5
 kvantum-theme-libadwaita-git
 labwc
 labwc-theme-adwaita
@@ -76,10 +75,15 @@ python-click
 python-pandas
 python-pip
 qalculate-gtk
-qt5-graphicaleffects
-qt5-quickcontrols2
-qt5-wayland
-qt5ct
+qt6-5compat
+qt6-base
+qt6-declarative
+qt6-multimedia
+qt6-multimedia-ffmpeg
+qt6-shadertools
+qt6-svg
+qt6-translations
+qt6-virtualkeyboard
 qt6-wayland
 qt6ct
 ristretto
@@ -89,8 +93,7 @@ sddm-astronaut-theme
 slurp
 starship
 steam
-swaddle
-swayidle
+stasis
 swayosd
 thunar
 transmission-gtk
@@ -107,6 +110,7 @@ xdg-desktop-portal-wlr
 xdg-utils
 xwayland-satellite
 xfce-polkit
+power-profiles-daemon
 docker
 docker-compose
 docker-buildx

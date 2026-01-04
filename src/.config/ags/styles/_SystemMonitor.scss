@@ -1,0 +1,24 @@
+@use 'common/Palette';
+@use 'common/Layout';
+@use 'common/Transitions';
+@use 'common/Font';
+
+.SystemMonitor {
+    @extend %component;
+    background-color: Palette.$surface_container_high;
+    .PercentageLabel {
+        font-weight: bold;
+    }
+
+    .Cpu {
+        .Icon, .PercentageLabel {
+            color: Palette.$primary;
+        }
+    }
+
+    .Memory {
+        .Icon, .PercentageLabel {
+            color: Palette.$secondary;
+        }
+    }
+}

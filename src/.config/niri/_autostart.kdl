@@ -1,0 +1,11 @@
+// Autostart config
+
+spawn-at-startup "dbus-update-activation-environment" "--all"
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
+//spawn-at-startup "kanshi"
+spawn-at-startup "mako"
+spawn-at-startup "systemctl --user start stasis"
+spawn-at-startup "nm-applet"
+spawn-at-startup "swayosd-server"
+spawn-at-startup "awww-daemon"
+spawn-at-startup "ags" "run"

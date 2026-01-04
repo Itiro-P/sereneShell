@@ -1,0 +1,69 @@
+@use 'common/Palette';
+@use 'common/Layout';
+@use 'common/Font';
+@use 'common/Transitions';
+
+.AudioControl {
+    @extend %component;
+    .Endpoint {
+        @include Transitions.noneToInverseChild(Palette.$on_background, Palette.$on_primary, Palette.$primary);
+    }
+}
+
+.Mixer {
+    @extend %component;
+
+    .Title {
+        @extend %component;
+
+        .Label, .PavucontrolButton {
+            padding: 2px;
+            font-weight: bold;
+            font-size: Font.$font-size-large;
+        }
+
+        .Label {
+            color: Palette.$secondary;
+        }
+
+        .PavucontrolButton {
+            border-radius: 0px 16px 16px 0px;
+            @include Transitions.inverseChild(Palette.$on_secondary, Palette.$secondary);
+        }
+    }
+
+    .MixerEntry {
+        @extend %component;
+        background-color: Palette.$surface_container;
+
+        .Icon {
+            @extend %component-circle;
+            @include Transitions.inverseChild(Palette.$secondary, Palette.$on_secondary);
+        }
+
+        .Slider {
+            @extend %component-slider;
+            @extend %slider-interactive;
+
+            background-color: Palette.$surface_container_high;
+
+            & highlight {
+                background-color: Palette.$on_surface_variant;
+            }
+
+            & through {
+                background-color: Palette.$inverse_on_surface;
+            }
+
+            slider {
+                @include Transitions.inverse(Palette.$on_secondary, Palette.$inverse_primary);
+                margin: -0.15em -0.2em;
+            }
+        }
+
+        .PercentageLabel {
+            font-weight: bold;
+            margin: 2px;
+        }
+    }
+}

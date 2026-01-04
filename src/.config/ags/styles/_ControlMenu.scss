@@ -1,0 +1,131 @@
+@use 'common/Palette';
+@use 'common/Transitions';
+@use 'common/Font';
+@use 'common/Layout';
+
+.ControlMenuButton {
+    @extend %component-circle;
+    padding: 0px 3px 0px 3px;
+    margin: 0px 2px;
+    > label {
+        font-size: Font.$icon-size;
+    }
+}
+
+.ControlMenuButtonNormal {
+    @include Transitions.inverseChild(Palette.$on_primary, Palette.$primary);
+}
+
+.ControlMenuButtonCritical {
+    @include Transitions.inverseChild(Palette.$error, Palette.$on_error);
+}
+
+.ControlMenu {
+    background-color: rgba(Palette.$surface, 0.8);
+    padding: 10px;
+    border-radius: 16px 0px 0px 16px;
+
+    .Title {
+        font-size: Font.$font-size-large;
+        font-weight: bolder;
+    }
+
+    .Subtitle {
+        font-size: Font.$font-size-large;
+        margin: 4px;
+    }
+
+    .Option {
+        @extend %component;
+        switch {
+            @extend %component-switch;
+            background-color: Palette.$secondary;
+            image, slider {
+                background-color: Palette.$on_secondary;
+            }
+            transition: all 0.3s ease-in-out;
+            &:hover {
+                background-color: Palette.$on_secondary;
+                image, slider {
+                    background-color: Palette.$secondary;
+                }
+            }
+        }
+    }
+
+    .StackSwitcher {
+        @extend %component;
+        background-color: rgba(Palette.$surface_container, 0.8);
+
+        .PageSwitcher {
+            @extend %component;
+            font-weight: bold;
+        }
+
+        .Active {
+            background: Palette.$secondary;
+            * {
+                color: Palette.$on_secondary;
+            }
+        }
+
+        .Inactive {
+            @include Transitions.noneToInverseChild(Palette.$secondary, Palette.$secondary, Palette.$on_secondary);
+        }
+    }
+}
+
+.Calendar {
+    * {
+        all: unset;
+        color: Palette.$outline;
+    }
+
+    label.day-number,
+    label.other-month,
+    label.today {
+        @extend %component-circle;
+        margin: 0.2em;
+    }
+
+    header {
+        margin-top: 0.1em;
+        border-radius: 1.2em 1.2em 0em 0em;
+        background-color: rgba(Palette.$on_secondary, 0.7);
+        label {
+            color: Palette.$on_surface;
+        }
+    }
+
+    button {
+        @extend %component-circle;
+        background-color: transparent;
+        @include Transitions.noneToInverse(Palette.$on_surface_variant, Palette.$on_surface, Palette.$surface_container);
+        margin: 0.2em;
+    }
+
+    grid {
+        border-radius: 0em 0em 1.2em 1.2em;
+        background-color: rgba(Palette.$on_secondary, 0.7);
+
+        label.other-month {
+            opacity: 0.5;
+            @include Transitions.inverseChild(rgba(Palette.$on_surface, 0.2), rgba(Palette.$on_surface_variant, 0.5));
+        }
+
+        label.day-number {
+            padding: 0.2em 0.1em;
+            @include Transitions.noneToInverse(Palette.$on_surface_variant, Palette.$surface_container, Palette.$on_surface);
+
+            &:active {
+                background-color: Palette.$inverse_on_surface;
+                color: Palette.$inverse_surface;
+            }
+        }
+
+        label.today {
+            @include Transitions.inverse(Palette.$on_tertiary, Palette.$tertiary);
+            font-weight: 600;
+        }
+    }
+}

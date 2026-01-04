@@ -1,0 +1,39 @@
+@use 'common/Palette';
+@use 'common/Transitions';
+@use 'common/Font';
+@use 'common/Layout';
+
+.WallpaperSwitcher {
+    border-radius: 10em;
+
+    label {
+        font-size: Font.$font-size-normal;
+        margin: 2px;
+    }
+
+    switch {
+        @extend %component;
+        background-color: Palette.$inverse_on_surface;
+        image, slider {
+            @extend %component-switch;
+            background-color: Palette.$surface_container_high;
+        }
+        transition: all 0.3s ease-in-out;
+        &:hover {
+            background-color: Palette.$primary;
+            image, slider {
+                background-color: Palette.$on_primary;
+            }
+        }
+    }
+
+    .Wallpaper {
+        margin: 0.2em;
+        border: 0.1em solid Palette.$on_secondary;
+        border-radius: 2em;
+    }
+
+    .Active {
+        border-color: Palette.$secondary;
+    }
+}

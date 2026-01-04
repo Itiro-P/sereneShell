@@ -1,3 +1,0 @@
-timeout 300 'gtklock -d'
-timeout 600 'systemctl suspend'
-before-sleep 'gtklock -d'
