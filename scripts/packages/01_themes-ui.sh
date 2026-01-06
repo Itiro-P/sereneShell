@@ -35,4 +35,13 @@ yay -S --needed --noconfirm \
     qt6-svg \
     qt6-translations \
     qt6-virtualkeyboard \
-    qt6-wayland
+    qt6-wayland \
+    kvantum-qt5 \
+    qt5-base \
+    qt5-declarative \
+    qt5-svg \
+    qt5-tools \
+    qt5-translations \
+    qt5-wayland \
+    qt5-x11extras \
+    qt5ct
