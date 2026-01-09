@@ -1,0 +1,180 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[ ](primary)\
+$os\
+$username\
+[ ](bg:secondary fg:primary)\
+$directory\
+[ ](bg:tertiary fg:secondary)\
+$git_branch\
+$git_status\
+[ ](fg:tertiary bg:accent)\
+$c\
+$cpp\
+$elixir\
+$elm\
+$golang\
+$gradle\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$scala\
+[ ](fg:accent bg:container)\
+$docker_context\
+[ ](fg:container bg:surface)\
+$time\
+[  ](fg:surface)\
+"""
+
+palette = 'matugen'
+
+[os]
+style = "bg:primary fg:on-primary"
+disabled = true # Disabled by default
+
+[username]
+show_always = true
+style_user = "bg:primary fg:on-primary"
+style_root = "bg:primary fg:on-primary"
+format = '[$user ]($style)'
+disabled = false
+
+[directory]
+style = "bg:secondary fg:on-secondary"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = "  "
+
+[c]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[cpp]
+symbol = "  "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[docker_context]
+symbol = "  "
+style = "bg:container"
+format = '[[ $symbol $context ](fg:on-container bg:container)]($style)'
+
+[elixir]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[elm]
+symbol = "  "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[git_branch]
+symbol = ""
+style = "bg:tertiary"
+format = '[[ $symbol $branch ](fg:on-tertiary bg:tertiary)]($style)'
+
+[git_status]
+style = "bg:tertiary"
+format = '[[($all_status$ahead_behind) ](fg:on-tertiary bg:tertiary)]($style)'
+
+[golang]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[gradle]
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[haskell]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[java]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[julia]
+symbol = "  "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[nim]
+symbol = "󰆥 "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[scala]
+symbol = " "
+style = "bg:accent"
+format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+
+[time]
+disabled = true
+time_format = "%R" # Hour:Minute Format
+style = "bg:surface"
+format = '[[  ♥ $time ](fg:on-surface bg:surface)]($style)'
+
+[palettes.matugen]
+
+primary = '#99ccfa'
+on-primary = '#003352'
+primary-container = '#094b72'
+on-primary-container = '#cde5ff'
+
+secondary = '#b8c8da'
+on-secondary = '#233240'
+secondary-container = '#394857'
+on-secondary-container = '#d4e4f6'
+
+tertiary = '#d2bfe7'
+on-tertiary = '#382a4a'
+tertiary-container = '#4f4061'
+on-tertiary-container = '#eddcff'
+
+error = '#ffb4ab'
+on-error = '#690005'
+error-container = '#93000a'
+on-error-container = '#ffdad6'
+
+surface = '#101418'
+on-surface = '#e0e2e8'
+surface-variant = '#42474e'
+on-surface-variant = '#c2c7ce'
+
+container = '#1c2024'
+on-container = '#e0e2e8'
+container-high = '#272a2e'
+container-low = '#181c20'
+
+accent = '#d2bfe7'
+on-accent = '#382a4a'
+
+success = '#99ccfa'
+
+outline = '#8c9198'
+outline-variant = '#42474e'

@@ -6,4 +6,4 @@ mako &
 systemctl --user start stasis &
 nm-applet &
 swayosd-server &
-ags run &
+(sereneShell run &) || (ags run &)

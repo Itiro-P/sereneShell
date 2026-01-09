@@ -1,3 +1,6 @@
+.vscode
+build/
+builddir/
 node_modules/
 @girs/
 jsons/

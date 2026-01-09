@@ -1,0 +1,65 @@
+#!/bin/bash
+
+DATADIR="@DATADIR@"
+
+if [[ "$DATADIR" == "@"DATADIR"@" ]]; then
+    DATADIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    IS_DEV=true
+else
+    APP_ENTRY="$DATADIR/sereneShellApp"
+    IS_DEV=false
+fi
+
+print_help() {
+    cat <<EOF
+Usage: $(basename "$0") <command> [options]
+
+Available Commands:
+   run            Run the shell
+   quit           Quit the shell
+   restart        Restart the shell
+   help           Show this help message
+
+Available widgets for toggle:
+$(printf "   %s\n" "${WIDGETS[@]}")
+
+Flags:
+   -h, --help     help for sereneShell
+
+Running mode: $([ "$IS_DEV" = true ] && echo "Development" || echo "Installed")
+EOF
+}
+
+main() {
+    if [ $# -lt 1 ]; then
+        print_help
+        exit 0
+    fi
+
+    case $1 in
+        run)
+            if [ "$IS_DEV" = true ]; then
+                exec ags run -d "$DATADIR" --define DATADIR=null
+            else
+                exec "$DATADIR/sereneShellApp"
+            fi
+            ;;
+        quit)
+            ags -i sereneShell quit
+            ;;
+        restart)
+            ags -i sereneShell quit
+            if [ "$IS_DEV" = true ]; then
+                exec ags run -d "$DATADIR" --define DATADIR=null
+            else
+                exec "$DATADIR/sereneShellApp"
+            fi
+            ;;
+        help|-h|--help)
+            print_help
+            ;;
+        *)
+    esac
+}
+
+main "$@"

@@ -1,5 +1,6 @@
 // Switch/Lid events for laptops
 
 switch-events {
-    lid-close { spawn "gtklock" "-d"; }
+    lid-close { spawn "bash" "-c" "stasis pause && gtklock -d"; }
+    lid-open { spawn "stasis resume"; }
 }
