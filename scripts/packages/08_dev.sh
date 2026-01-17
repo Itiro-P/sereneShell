@@ -6,7 +6,7 @@ echo "Instalando programas de desenvolvimento."
 yay -S --needed --noconfirm \
     git \
     gittyup \
-    gradle \
+    #gradle \
     jdk21-openjdk \
     junit \
     dart-sass \
