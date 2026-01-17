@@ -71,7 +71,7 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 echo "Copiando configurações."
 cp "$BASE_DIR/src/.bashrc" ~/.bashrc
 
-cp -r "$BASE_DIR/src/.config/*" ~/.config
+cp -r "$BASE_DIR/src/.config/." ~/.config/
 
 echo "Configurando ags"
 ags types -u
