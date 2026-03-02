@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ "$EUID" -eq 0 ]]; then
   echo "Não execute este script como root."
-  echo "Execute como usuário normal."
+  echo "Execute como usuário normal.\n"
   exit 1
 fi
 
