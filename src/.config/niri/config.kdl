@@ -1,5 +1,4 @@
-// Niri configuration. Intended to be a mirror from Hyprland
-
+// Niri configuration.
 include "_environment.kdl"
 include "_input.kdl"
 include "_outputs.kdl"
