@@ -4,7 +4,6 @@ set -euo pipefail
 echo "Instalando pacotes da sessão Wayland."
 
 yay -S --needed --noconfirm \
-    labwc \
     niri \
     gamescope \
     gtklock \
@@ -16,6 +15,4 @@ yay -S --needed --noconfirm \
     wlogout \
     xdg-desktop-portal-gnome \
     xdg-desktop-portal-gtk \
-    xdg-desktop-portal-wlr \
     xwayland-satellite \
-    kanshi

@@ -6,7 +6,7 @@ echo "Instalando ferramentas de produtividade."
 yay -S --needed --noconfirm \
     neovim \
     nano \
-    obsidian \
+    obsidian-bin \
     visual-studio-code-bin \
     libreoffice-fresh \
     libreoffice-codehighlighter2 \

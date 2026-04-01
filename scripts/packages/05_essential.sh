@@ -4,13 +4,15 @@ set -euo pipefail
 echo "Instalando pacotes essenciais."
 
 yay -S --needed --noconfirm \
-    nautilus \
+    thunar \
+    thunar-vcs-plugin \
+    thunar-volman \
     ristretto \
     gnome-disk-utility \
     seahorse \
     kitty \
-    vesktop \
-    zen-browser-bin \
+    vencord \
+    firefox \
     transmission-gtk \
     qalculate-gtk \
     network-manager-applet \

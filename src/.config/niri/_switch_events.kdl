@@ -2,5 +2,5 @@
 
 switch-events {
     lid-close { spawn "bash" "-c" "stasis pause && gtklock -d"; }
-    lid-open { spawn "stasis resume"; }
+    lid-open { spawn "stasis" "resume"; }
 }

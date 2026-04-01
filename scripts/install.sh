@@ -39,7 +39,6 @@ echo "Configurando serviços no Systemd."
 sudo systemctl enable --now warp-svc
 sudo systemctl enable sddm
 sudo systemctl enable swayosd-libinput-backend
-systemctl enable --user stasis
 
 echo "Configurando Stasis e Docker"
 sudo usermod -aG input,video,docker $USER
@@ -59,21 +58,30 @@ InputMethod=qtvirtualkeyboard" | sudo tee /etc/sddm.conf.d/virtualkbd.conf || tr
 sudo sed -i 's|^ConfigFile=.*|ConfigFile=Themes/pixel_sakura.conf|' \
   /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
 
+echo "Configurando tema Colloid"
+mkdir -p ~/.config/gtk-4.0/
+ln -sf /usr/share/themes/Colloid-Dark/gtk-4.0/{assets,gtk.css,gtk-dark.css} ~/.config/gtk-4.0/
 
 echo "Configurando temas e fontes GTK."
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
-gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Colloid-Dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
 gsettings set org.gnome.desktop.interface font-name 'Monospace Regular 10'
 gsettings set org.gnome.desktop.interface monospace-font-name 'FiraCode Nerd Font 10'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 echo "Copiando configurações."
-cp "$BASE_DIR/src/.bashrc" ~/.bashrc
+cp "$BASE_DIR/../src/.bashrc" ~/.bashrc
 
-cp -r "$BASE_DIR/src/.config/." ~/.config/
+cp -r "$BASE_DIR/../src/.config/." ~/.config/
 
 echo "Configurando ags"
 ags types -u
+
+echo "Removendo cache do Yay"
+yay -Scc --noconfirm
+
+echo "Removendo dependências não usadas"
+yay -Ycc --noconfirm
 
 echo "Instalação finalizada. Reinicie o sistema."

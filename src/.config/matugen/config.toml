@@ -10,24 +10,16 @@ post_hook = 'pkill -USR2 btop || true'
 [templates.cava]
 input_path = '~/.config/matugen/templates/cava-colors.ini'
 output_path = '~/.config/cava/themes/matugen'
-post_hook = 'pkill -USR1 cava'
+post_hook = 'pkill -USR1 cava || true'
 
 [templates.nvim]
 input_path = '~/.config/matugen/templates/nvim-colors.vim'
 output_path = '~/.config/nvim/colors/matugen.vim'
-post_hook = 'pkill -SIGUSR1 nvim'
+post_hook = 'pkill -SIGUSR1 nvim || true'
 
 [templates.zed]
 input_path = '~/.config/matugen/templates/zed-colors.json'
 output_path = '~/.config/zed/themes/matugen.json'
-
-[templates.steam]
-input_path = '~/.config/matugen/templates/steam.css'
-output_path = '~/.config/AdwGtkSteam/custom.css'
-
-[templates.obsidian]
-input_path = '~/.config/matugen/templates/obsidian.css'
-output_path = '~/.config/Repos/5-Periodo/.obsidian/snippets/matugen.css'
 
 [templates.wlogout]
 input_path = '~/.config/matugen/templates/colors.css'
@@ -36,7 +28,7 @@ output_path = '~/.config/wlogout/colors.css'
 [templates.kitty]
 input_path = '~/.config/matugen/templates/kitty-colors.conf'
 output_path = '~/.config/kitty/colors.conf'
-post_hook = 'pkill -SIGUSR1 kitty'
+post_hook = 'pkill -SIGUSR1 kitty || true'
 
 [templates.rofi]
 input_path = '~/.config/matugen/templates/rofi-colors.conf'
@@ -58,10 +50,18 @@ output_path = '~/.config/ags/styles/common/_Palette.scss'
 input_path = '~/.config/matugen/templates/colors.css'
 output_path = '~/.config/gtklock/colors.css'
 
+[templates.kvantum_kvconfig]
+input_path = './templates/kvantum-colors.kvconfig'
+output_path = '~/.config/Kvantum/matugen/matugen.kvconfig'
+
+[templates.kvantum_svg]
+input_path = './templates/kvantum-colors.svg'
+output_path = '~/.config/Kvantum/matugen/matugen.svg'
+
 [templates.gtk3]
 input_path = '~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/colors.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme Colloid-Dark'
 
 [templates.gtk4]
 input_path = '~/.config/matugen/templates/gtk-colors.css'
@@ -69,7 +69,7 @@ output_path = '~/.config/gtk-4.0/colors.css'
 
 [templates.qt6ct]
 input_path = '~/.config/matugen/templates/qtct-colors.conf'
-output_path = '~/.config/qt6ct/colors/style-colors.conf'
+output_path = '~/.config/qt6ct/colors/matugen.conf'
 
 [templates.fastfetch]
 input_path = '~/.config/matugen/templates/fastfetch-colors.jsonc'

@@ -1,3 +1,4 @@
+
 // Binds configuration
 
 binds {
@@ -67,6 +68,28 @@ binds {
 
     Mod+Comma  { consume-window-into-column; }
     Mod+Period { expel-window-from-column; }
+
+    Mod+KP_Left  { focus-column-left; }
+    Mod+KP_Down  { focus-window-down; }
+    Mod+KP_Up    { focus-window-up; }
+    Mod+KP_Right { focus-column-right; }
+
+    Mod+Ctrl+KP_Left  { move-column-left; }
+    Mod+Ctrl+KP_Down  { move-window-down; }
+    Mod+Ctrl+KP_Up    { move-window-up; }
+    Mod+Ctrl+KP_Right { move-column-right; }
+
+    Mod+KP_Home { focus-column-first; }
+    Mod+KP_End  { focus-column-last; }
+
+    Mod+KP_Prior      { focus-workspace-up; }
+    Mod+KP_Next       { focus-workspace-down; }
+
+    Mod+Ctrl+KP_Prior { move-column-to-workspace-up; }
+    Mod+Ctrl+KP_Next  { move-column-to-workspace-down; }
+
+    Mod+Shift+KP_Prior { move-workspace-up; }
+    Mod+Shift+KP_Next  { move-workspace-down; }
 
     Mod+R { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }

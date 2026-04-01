@@ -12,8 +12,8 @@ input {
 
     touchpad {
         tap
-	dwt
-	dwtp
+	    dwt
+	    dwtp
     }
 
     mouse {

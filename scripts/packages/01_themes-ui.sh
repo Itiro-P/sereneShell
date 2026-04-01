@@ -4,14 +4,12 @@ set -euo pipefail
 echo "Instalando pacotes de temas e fontes."
 
 yay -S --needed --noconfirm \
-    adw-gtk-theme \
-    bibata-cursor-theme \
-    kvantum \
-    kvantum-theme-libadwaita-git \
-    labwc-theme-adwaita \
+    colloid-gtk-theme \
+    colloid-icon-theme-git \
+    plasma6-themes-colloid-git \
+    bibata-cursor-theme-bin \
     nwg-look \
     papirus-icon-theme \
-    qt6ct \
     sddm-astronaut-theme \
     awww \
     matugen-bin \
@@ -26,6 +24,8 @@ yay -S --needed --noconfirm \
     ttf-nerd-fonts-symbols-common \
     ttf-roboto \
     starship \
+    qt6ct \
+    kvantum \
     qt6-5compat \
     qt6-base \
     qt6-declarative \
@@ -36,12 +36,3 @@ yay -S --needed --noconfirm \
     qt6-translations \
     qt6-virtualkeyboard \
     qt6-wayland \
-    kvantum-qt5 \
-    qt5-base \
-    qt5-declarative \
-    qt5-svg \
-    qt5-tools \
-    qt5-translations \
-    qt5-wayland \
-    qt5-x11extras \
-    qt5ct

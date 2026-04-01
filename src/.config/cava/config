@@ -63,7 +63,7 @@ frame_delimiter = 10
 synchronized_sync = 0
 
 [color]
-theme = '~/.config/cava/themes/matugen'
+theme = 'matugen'
 
 
 [smoothing]
