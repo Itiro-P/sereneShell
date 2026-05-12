@@ -1,0 +1,19 @@
+using Gtk 4.0;
+
+template $Clock: Box {
+	spacing: 2;
+	EventControllerMotion {
+		enter => $on_hover_enter();
+		leave => $on_hover_leave();
+	}
+	Revealer {
+		reveal-child: bind template.reveal-date;
+		transition-type: slide_left;
+		child: Label {
+			label: bind template.date;
+		};
+	}
+	Label {
+        label: bind template.clock;
+    }
+}

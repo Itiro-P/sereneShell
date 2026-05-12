@@ -1,0 +1,1 @@
+vala_widgets = files('Bar.vala', 'BackgroundPlayer.vala')

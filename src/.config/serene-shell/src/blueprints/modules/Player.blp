@@ -1,0 +1,81 @@
+using Gtk 4.0;
+using AstalMpris 0.1;
+using Adw 1;
+using Astal 4.0;
+
+template $Player : Box {
+  	orientation: vertical;
+  	overflow: hidden;
+
+	Adw.Clamp {
+		height-request: 180;
+		maximum-size: 180;
+		child: Adw.Clamp {
+			width-request: 180;
+			maximum-size: 180;
+			child: Picture {
+				content-fit: cover;
+				file: bind template.cover-file;
+			};
+		};
+	}
+
+	Box {
+	  	halign: center;
+	  	orientation: vertical;
+
+		Box {
+			orientation: vertical;
+			Label {
+				label: bind template.player as <AstalMpris.Player>.title;
+				halign: center;
+				ellipsize: end;
+				max-width-chars: 20;
+			}
+			Label {
+				label: bind template.player as <AstalMpris.Player>.artist;
+				halign: center;
+				ellipsize: end;
+				max-width-chars: 20;
+			}
+		}
+
+		Box {
+			Astal.Slider {
+				width-request: 160;
+				height-request: 20;
+				value: bind template.player as <AstalMpris.Player>.position;
+            	max: bind template.player as <AstalMpris.Player>.length;
+				change-value => $on_slider_change_value();
+			}
+
+			Label {
+				label: bind template.position_label;
+			}
+		}
+
+		Box {
+			halign: center;
+			Button {
+				icon-name: "media-skip-backward-symbolic";
+				sensitive: bind template.player as <AstalMpris.Player>.can-go-previous;
+				clicked => $prev();
+			}
+
+			Button {
+				icon-name: bind $pause_icon(template.player as <AstalMpris.Player>.playback-status) as <string>;
+				clicked => $play_pause();
+			}
+
+			Button {
+				icon-name: "media-skip-forward-symbolic";
+				sensitive: bind template.player as <AstalMpris.Player>.can-go-next;
+				clicked => $next();
+			}
+		}
+	}
+
+	GestureClick {
+		released => $raise();
+	}
+}

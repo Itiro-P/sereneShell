@@ -1,0 +1,23 @@
+using Gtk 4.0;
+
+template $Battery: Box {
+    spacing: 4;
+
+    EventControllerMotion {
+      	enter => $on_hover_enter();
+		leave => $on_hover_leave();
+    }
+
+    Image {
+        icon-name: bind template.battery-icon;
+    }
+
+	Revealer {
+		reveal-child: bind template.reveal-child-battery;
+		transition-type: slide_left;
+		child: Label {
+            width-chars: 4;
+            label: bind template.battery-label;
+        };
+	}
+}

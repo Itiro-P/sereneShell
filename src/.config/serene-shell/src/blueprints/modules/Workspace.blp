@@ -1,0 +1,23 @@
+using Gtk 4.0;
+
+template $Workspace: Box {
+    EventControllerMotion {
+      	enter => $on_hover_enter();
+		leave => $on_hover_leave();
+    }
+
+    Revealer {
+        reveal-child: bind template.reveal-index;
+        transition-type: slide_left;
+        child: Button index_button {
+                label: bind template.index;
+                clicked => $on_clicked();
+            };
+    }
+
+    Revealer {
+        reveal-child: bind template.reveal-clients;
+        transition-type: slide_right;
+        child: Box clients {};
+    }
+}

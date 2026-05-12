@@ -1,0 +1,66 @@
+using Gtk 4.0;
+
+template $Audio : Box {
+	spacing: 4;
+
+  	GestureClick {
+		button: 3;
+		pressed => $on_right_click();
+	}
+
+	Box {
+		EventControllerMotion {
+			enter => $on_hover_enter_spkr();
+			leave => $on_hover_leave_spkr();
+		}
+		EventControllerScroll {
+			flags: vertical;
+			scroll => $on_scroll_spkr();
+		}
+		Button {
+			child: Box {
+				Image {
+					icon-name: bind template.spkr-volume-icon;
+				}
+
+				Revealer {
+					reveal-child: bind template.reveal-child-spkr;
+					transition-type: slide_left;
+					child: Label {
+						width-chars: 4;
+						label: bind template.spkr-percentage;
+					};
+				}
+			};
+			clicked => $toggle_mute_spkr(); 
+		}
+	}
+
+	Box {
+		EventControllerMotion {
+			enter => $on_hover_enter_mic();
+			leave => $on_hover_leave_mic();
+		}
+		EventControllerScroll {
+			flags: vertical;
+			scroll => $on_scroll_mic();
+		}
+		Button {
+			child: Box {
+				Image {
+					icon-name: bind template.mic-volume-icon;
+				}
+
+				Revealer {
+					reveal-child: bind template.reveal-child-mic;
+					transition-type: slide_left;
+					child: Label {
+						width-chars: 4;
+						label: bind template.mic-percentage;
+					};
+				}
+			};
+			clicked => $toggle_mute_mic(); 
+		}
+	}
+}

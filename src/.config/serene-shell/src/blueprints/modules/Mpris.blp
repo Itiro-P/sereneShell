@@ -1,0 +1,36 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $Mpris : Gtk.Box {
+    Adw.Clamp {
+	    height-request: 280;
+		maximum-size: 280;
+		child: Adw.Clamp {
+			width-request: 280;
+			maximum-size: 280;
+			child: Adw.ViewStack stack {
+                Adw.ViewStackPage {
+                    name: "music";
+                    child: Box {
+                        orientation: vertical;
+                        Adw.Carousel players {
+                            spacing: 5;
+                        }
+
+                        Adw.CarouselIndicatorDots {
+                            carousel: players;
+                        }
+                    };
+                }
+                Adw.ViewStackPage {
+                    name: "empty";
+                    child: Adw.StatusPage {
+                        title: _("No Media playing");
+                        description: _("There is currently no media player active.");
+                        icon-name: "audio-x-generic-symbolic";
+                    };
+                }
+            };
+		};
+	} 
+}

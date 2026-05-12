@@ -1,0 +1,32 @@
+using Gtk 4.0;
+using Astal 4.0;
+
+template $Bar: Astal.Window {
+    anchor: top | left | right;
+    exclusivity: exclusive;
+    margin: 4;
+    
+    CenterBox {
+        start-widget: Box {
+            $Tray {}
+        };
+
+        center-widget: Box {
+            $Workspaces {
+                output: bind template.output;
+            }
+        };
+
+        end-widget: Box {
+            spacing: 6;
+
+            $Clock {}
+
+            $Audio {}
+
+            $Battery {}
+
+            $QuickSettings {}
+        };
+    }
+}

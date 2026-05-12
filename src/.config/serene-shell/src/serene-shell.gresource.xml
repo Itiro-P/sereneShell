@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/github/itiro-p/serene-shell">
+    <file compressed="true">styles/style.css</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Audio.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">widgets/Bar.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Battery.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">widgets/BackgroundPlayer.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Cava.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Client.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Clock.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Mpris.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Player.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/QuickSettings.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Tray.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Workspace.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">modules/Workspaces.ui</file>
+    <file compressed="true">assets/arch-linux-symbolic.svg</file>
+  </gresource>
+</gresources>

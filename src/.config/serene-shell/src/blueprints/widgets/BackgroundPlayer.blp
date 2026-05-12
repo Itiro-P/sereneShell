@@ -1,0 +1,62 @@
+using Gtk 4.0;
+using Astal 4.0;
+using AstalMpris 0.1;
+
+template $BackgroundPlayer: Astal.Window {
+    anchor: bottom | right;
+    layer: bind template.current-layer;
+    exclusivity: ignore;
+    visible: bind template.should-be-visible;
+    margin: 12;
+
+    Box {
+        orientation: vertical;
+
+        Label {
+            label: bind template.player as <AstalMpris.Player>.title;
+            halign: center;
+            ellipsize: end;
+            max-width-chars: 20;
+        }
+
+        $Cava {
+            valign: end;
+            width-request: 640;
+            height-request: 320;
+            follow-default-speaker: true;
+        }
+
+        Box {
+            Box {
+                Button {
+                    icon-name: "media-skip-backward-symbolic";
+                    sensitive: bind template.player as <AstalMpris.Player>.can-go-previous;
+                    clicked => $prev();
+                }
+
+                Button {
+                    icon-name: bind $pause_icon(template.player as <AstalMpris.Player>.playback-status) as <string>;
+                    clicked => $play_pause();
+                }
+
+                Button {
+                    icon-name: "media-skip-forward-symbolic";
+                    sensitive: bind template.player as <AstalMpris.Player>.can-go-next;
+                    clicked => $next();
+                }
+            }
+
+            Astal.Slider {
+                hexpand: true;
+                height-request: 20;
+                value: bind template.player as <AstalMpris.Player>.position;
+                max: bind template.player as <AstalMpris.Player>.length;
+                change-value => $on_slider_change_value();
+            }
+
+            Label {
+                label: bind template.position_label;
+            }
+        }
+    }
+}

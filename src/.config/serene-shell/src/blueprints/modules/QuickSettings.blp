@@ -1,0 +1,19 @@
+using Gtk 4.0;
+template $QuickSettings: Box {
+  	MenuButton menuButton {
+		child: Image {
+			icon-name: "arch-linux-symbolic";
+			pixel-size: 16;
+		};
+
+		popover: Popover popover {
+			has-arrow: false;
+			child: Box {
+				spacing: 4;
+				Calendar calendar {}
+				
+				$Mpris {}
+			};
+		};
+	}
+}
