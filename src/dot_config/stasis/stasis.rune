@@ -1,0 +1,121 @@
+@author "Pedro"
+@description "Stasis idle manager para SereneShell/Niri (laptop)"
+
+lock_after        300
+screen_off_after  600
+suspend_after     1800
+debounce_seconds  4
+notify_seconds    10
+
+default:
+  enable_loginctl true
+  enable_dbus_inhibit true
+  pre_suspend_command None
+  prepare_sleep_command "hyprlock"
+
+  monitor_media true
+  ignore_remote_media true
+
+  debounce_seconds debounce_seconds
+  notify_before_action true
+  notify_seconds_before notify_seconds
+  notify_on_unpause true
+  notification_icon "stasis"
+
+
+  lid_close_action "hyprlock"
+  lid_open_action ""
+
+  inhibit_apps [
+    "mpv"
+    "vlc"
+    "Spotify"
+    r".*\.exe"
+    r"steam_app_.*"
+    r".*\.x86_64"
+    r"firefox.*"
+  ]
+
+  lock_screen:
+    timeout lock_after
+    command "hyprlock"
+  end
+
+  dpms:
+    timeout screen_off_after
+    command "niri msg action power-off-monitors"
+    resume_command "niri msg action power-on-monitors"
+  end
+
+  suspend:
+    timeout suspend_after
+    command "systemctl suspend"
+  end
+
+  ac:
+    brightness:
+      timeout 120
+      command "brightnessctl -s set 30%"
+      resume_command "brightnessctl -r"
+    end
+
+    dpms:
+      timeout 180
+      command "niri msg action power-off-monitors"
+      resume_command "niri msg action power-on-monitors"
+    end
+
+    lock_screen:
+      timeout lock_after
+      command "hyprlock"
+    end
+
+    suspend:
+      timeout suspend_after
+      command "systemctl suspend"
+    end
+  end
+
+  battery:
+    brightness:
+      timeout 60
+      command "brightnessctl -s set 15%"
+      resume_command "brightnessctl -r"
+    end
+
+    dpms:
+      timeout 90
+      command "niri msg action power-off-monitors"
+      resume_command "niri msg action power-on-monitors"
+    end
+
+    lock_screen:
+      timeout 180
+      command "hyprlock"
+    end
+
+    suspend:
+      timeout 300
+      command "systemctl suspend"
+    end
+  end
+end
+
+presentation:
+  mode "fresh"
+  pre_suspend_command None
+  enable_dbus_inhibit true
+  monitor_media false
+  ignore_remote_media true
+  debounce_seconds 0
+  notify_on_unpause false
+  notify_before_action false
+  inhibit_apps []
+  lid_close_action ""
+  lid_open_action ""
+end
+
+
+
+
+

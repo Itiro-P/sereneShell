@@ -5,14 +5,18 @@ echo "Instalando pacotes da sessão Wayland."
 
 yay -S --needed --noconfirm \
     niri \
+    niri-focused-booster \
     gamescope \
-    gtklock \
-    gtklock-dpms-module \
-    gtklock-playerctl-module \
-    gtklock-powerbar-module \
-    gtklock-userinfo-module \
-    sddm \
+    greetd \
+    greetd-regreet \
+    hyprlock \
     wlogout \
     xdg-desktop-portal-gnome \
-    xdg-desktop-portal-gtk \
     xwayland-satellite \
+    xorg-server \
+    xorg-xinit \
+    frameworkintegration \
+    layer-shell-qt \
+    libportal-gtk4 \
+    xdg-user-dirs \
+    shikane

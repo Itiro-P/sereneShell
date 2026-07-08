@@ -4,7 +4,6 @@ set -euo pipefail
 echo "Instalando widgets e utilitários."
 
 yay -S --needed --noconfirm \
-    aylurs-gtk-shell \
     libastal-meta \
     libastal-niri-git \
     rofi \
@@ -15,4 +14,5 @@ yay -S --needed --noconfirm \
     swayosd \
     grim \
     slurp \
-    wl-mirror
+    wl-mirror \
+    wev

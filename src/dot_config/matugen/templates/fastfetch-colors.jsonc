@@ -1,0 +1,119 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "source": "$HOME/.config/fastfetch/ascii.txt",
+        "padding": {
+            "top": 1,
+            "right": 2
+	},
+	"color": {
+            "1": "{{colors.primary.default.hex}}",
+            "2": "{{colors.secondary.default.hex}}"
+        }
+    },
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "{{colors.primary.default.hex}}",
+            "title": "{{colors.secondary.default.hex}}",
+            "output": "{{colors.on_surface.default.hex}}",
+            "separator": "{{colors.outline.default.hex}}"
+        }
+    },
+    "modules": [
+        {
+            "type": "title",
+            "format": "{#{{colors.primary.default.hex}}}╭────── User : {#}{user-name-colored}@{host-name-colored}"
+        },
+        {
+            "type": "custom",
+            "format": "{#{{colors.primary.default.hex}}}│ {#}System Information"
+        },
+        {
+            "type": "os",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰍹 OS"
+        },
+        {
+            "type": "kernel",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰒋 Kernel"
+        },
+        {
+            "type": "uptime",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰅐 Uptime"
+        },
+        {
+            "type": "packages",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰏓 Packages"
+        },
+        {
+            "type": "custom",
+            "format": "{#{{colors.outline.default.hex}}}│"
+        },
+        // Desktop Environment
+        {
+            "type": "custom",
+            "format": "{#{{colors.primary.default.hex}}}│ {#}Desktop Environment"
+        },
+        {
+            "type": "de",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰧨 DE"
+        },
+        {
+            "type": "wm",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󱂬 WM"
+        },
+        {
+            "type": "wmtheme",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰉼 Theme"
+        },
+        {
+            "type": "shell",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰞷 Shell"
+        },
+        {
+            "type": "custom",
+            "format": "{#{{colors.outline.default.hex}}}│"
+        },
+        // Hardware Information
+        {
+            "type": "custom",
+            "format": "{#{{colors.primary.default.hex}}}│ {#}Hardware Information"
+        },
+        {
+            "type": "cpu",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰻠 CPU"
+        },
+        {
+            "type": "gpu",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰢮 GPU"
+        },
+        {
+            "type": "memory",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰍛 Memory"
+        },
+        {
+            "type": "swap",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰍛 Swap"
+        },
+        {
+            "type": "disk",
+            "key": "{#{{colors.outline.default.hex}}}│  {#{{colors.primary.default.hex}}}󰋊 Disk (/)",
+            "folders": "/"
+        },
+        {
+            "type": "custom",
+            "format": "{#{{colors.outline.default.hex}}}│"
+        },
+        // Colors
+        {
+            "type": "colors",
+            "key": "{#{{colors.outline.default.hex}}}│",
+            "symbol": "circle"
+        },
+        // Footer
+        {
+            "type": "custom",
+            "format": "{#{{colors.outline.default.hex}}}╰───────────────────────────────╯"
+        }
+    ]
+}

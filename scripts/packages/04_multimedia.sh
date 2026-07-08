@@ -7,16 +7,15 @@ yay -S --needed --noconfirm \
     cava \
     clapper \
     obs-studio \
-    pipewire \
     pipewire-alsa \
-    pipewire-jack \
     pipewire-pulse \
-    wireplumber \
-    libpulse \
     pavucontrol \
     overskride \
     gst-libav \
     gst-plugin-pipewire \
-    glycin \
+    gst-plugins-bad \
+    gst-plugins-good \
+    gst-plugins-ugly \
     glycin-gtk4 \
-    pear-desktop
+    pear-desktop \
+    alsa-utils

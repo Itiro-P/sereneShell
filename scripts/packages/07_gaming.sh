@@ -8,4 +8,10 @@ yay -S --needed --noconfirm \
     lib32-mangohud \
     mangohud \
     mangojuice \
-    steam
+    steam \
+    hydra-launcher-bin \
+    proton-ge-custom-bin \
+    protonup-qt \
+    wine \
+    gamemode \
+    pdx-unlimiter

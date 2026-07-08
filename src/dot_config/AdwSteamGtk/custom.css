@@ -1,0 +1,13 @@
+/* ------------------ */
+/* --- Custom CSS --- */
+/* ------------------ */
+
+/* --- EXAMPLE: Override Theme Colors --- */
+/* -- DELETE BOTH LINES TO ENABLE
+:root
+{
+	--adw-accent-bg-rgb: 53, 132, 228;
+	--adw-accent-fg-rgb: 255, 255, 255;
+	--adw-accent-rgb: 120, 174, 237;
+}
+-- DELETE BOTH LINES TO ENABLE */

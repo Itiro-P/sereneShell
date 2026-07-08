@@ -1,9 +1,0 @@
-// Layer rules
-
-// Put swww and Cava to backdrop
-layer-rule {
-    match namespace="^CavaBackground$"
-    match namespace="^awww-daemon$"
-
-    place-within-backdrop true
-}

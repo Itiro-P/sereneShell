@@ -1,0 +1,83 @@
+## Configuration file for CAVA.
+[general]
+
+live-config = 1
+
+framerate = 165
+
+autosens = 1
+
+sensitivity = 75
+
+bars = 0
+bar_width = 1
+bar_spacing = 0
+bar_height = 32
+
+center_align = 1
+
+max_height = 80
+
+lower_cutoff_freq = 50
+higher_cutoff_freq = 10000
+
+sleep_timer = 0
+
+
+[input]
+
+method = pipewire
+source = auto
+
+sample_rate = 44100
+sample_bits = 16
+channels = 2
+autoconnect = 2
+active = 1
+
+
+[output]
+
+method = noncurses
+
+orientation = bottom
+
+channels = stereo
+mono_option = average
+reverse = 0
+
+horizontal_stereo = 0
+left_bottom = 1
+
+raw_target = /dev/stdout
+
+data_format = binary
+
+bit_format = 16bit
+
+ascii_max_range = 1000
+
+bar_delimiter = 59
+frame_delimiter = 10
+
+synchronized_sync = 0
+
+[color]
+theme = 'matugen'
+
+
+[smoothing]
+
+monstercat = 0
+waves = 0
+
+noise_reduction = 77
+
+
+[eq]
+
+1 = 1 # bass
+2 = 1
+3 = 1 # midtone
+4 = 1
+5 = 1 # treble

@@ -1,0 +1,119 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "source": "$HOME/.config/fastfetch/ascii.txt",
+        "padding": {
+            "top": 1,
+            "right": 2
+	},
+	"color": {
+            "1": "#c1cd7d",
+            "2": "#c6c9a7"
+        }
+    },
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "#c1cd7d",
+            "title": "#c6c9a7",
+            "output": "#e4e3d6",
+            "separator": "#919283"
+        }
+    },
+    "modules": [
+        {
+            "type": "title",
+            "format": "{##c1cd7d}╭────── User : {#}{user-name-colored}@{host-name-colored}"
+        },
+        {
+            "type": "custom",
+            "format": "{##c1cd7d}│ {#}System Information"
+        },
+        {
+            "type": "os",
+            "key": "{##919283}│  {##c1cd7d}󰍹 OS"
+        },
+        {
+            "type": "kernel",
+            "key": "{##919283}│  {##c1cd7d}󰒋 Kernel"
+        },
+        {
+            "type": "uptime",
+            "key": "{##919283}│  {##c1cd7d}󰅐 Uptime"
+        },
+        {
+            "type": "packages",
+            "key": "{##919283}│  {##c1cd7d}󰏓 Packages"
+        },
+        {
+            "type": "custom",
+            "format": "{##919283}│"
+        },
+        // Desktop Environment
+        {
+            "type": "custom",
+            "format": "{##c1cd7d}│ {#}Desktop Environment"
+        },
+        {
+            "type": "de",
+            "key": "{##919283}│  {##c1cd7d}󰧨 DE"
+        },
+        {
+            "type": "wm",
+            "key": "{##919283}│  {##c1cd7d}󱂬 WM"
+        },
+        {
+            "type": "wmtheme",
+            "key": "{##919283}│  {##c1cd7d}󰉼 Theme"
+        },
+        {
+            "type": "shell",
+            "key": "{##919283}│  {##c1cd7d}󰞷 Shell"
+        },
+        {
+            "type": "custom",
+            "format": "{##919283}│"
+        },
+        // Hardware Information
+        {
+            "type": "custom",
+            "format": "{##c1cd7d}│ {#}Hardware Information"
+        },
+        {
+            "type": "cpu",
+            "key": "{##919283}│  {##c1cd7d}󰻠 CPU"
+        },
+        {
+            "type": "gpu",
+            "key": "{##919283}│  {##c1cd7d}󰢮 GPU"
+        },
+        {
+            "type": "memory",
+            "key": "{##919283}│  {##c1cd7d}󰍛 Memory"
+        },
+        {
+            "type": "swap",
+            "key": "{##919283}│  {##c1cd7d}󰍛 Swap"
+        },
+        {
+            "type": "disk",
+            "key": "{##919283}│  {##c1cd7d}󰋊 Disk (/)",
+            "folders": "/"
+        },
+        {
+            "type": "custom",
+            "format": "{##919283}│"
+        },
+        // Colors
+        {
+            "type": "colors",
+            "key": "{##919283}│",
+            "symbol": "circle"
+        },
+        // Footer
+        {
+            "type": "custom",
+            "format": "{##919283}╰───────────────────────────────╯"
+        }
+    ]
+}

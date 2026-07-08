@@ -1,0 +1,79 @@
+[[profile]]
+name = "home"
+exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""]
+
+    [[profile.output]]
+    search = "m=0x0D39"
+    enable = true
+    adaptive_sync = false
+    mode = "best"
+    position = "0,0"
+
+    [[profile.output]]
+    search = "m=18.5JL3"
+    enable = true
+    mode = "best"
+    position = "1920,0"
+
+[[profile]]
+name = "outside"
+exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""]
+
+    [[profile.output]]
+    search = "m=0x0D39"
+    enable = true
+    adaptive_sync = true
+    mode = "preferred"
+    position = "0,0"
+
+[[profile]]
+name = "hackerspace_1"
+exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""]
+
+    [[profile.output]]
+    search = "m=0x0D39"
+    enable = true
+    adaptive_sync = true
+    mode = "preferred"
+    position = "0,1080"
+
+    [[profile.output]]
+    search = "ms=2470WE72H1XA001302"
+    enable = true
+    mode = "best"
+    position = "0,0"
+
+[[profile]]
+name = "hackerspace_2"
+exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""]
+
+    [[profile.output]]
+    search = "m=0x0D39"
+    enable = true
+    adaptive_sync = true
+    mode = "preferred"
+    position = "0,1080"
+
+    [[profile.output]]
+    search = "m=0x01010101"
+    enable = true
+    mode = "best"
+    position = "0,0"
+
+[[profile]]
+name = "presentation"
+exec = ["stasis profile presentation", "notify-send Shikane \"Profile $SHIKANE_PROFILE_NAME has been applied\""]
+
+    [[profile.output]]
+    search = "m=0x0D39"
+    enable = true
+    adaptive_sync = true
+    mode = "preferred"
+    position = "0,0"
+
+    [[profile.output]]
+    search = [ "v%Epson", "v%MS" ]
+    enable = true
+    exec = ["wl-mirror --fullscreen-output $SHIKANE_OUTPUT_NAME eDP-1"]
+    mode = "preferred"
+    position = "0,0"

@@ -1,0 +1,67 @@
+# Matugen generated colors for Mako
+
+# Appearance - Modern translucent design
+background-color=#2a2b22bb
+text-color=#e4e3d6
+border-color=#c1cd7daa
+progress-color=#c1cd7d
+
+# Enhanced layout and positioning for visual appeal
+width=400
+height=110
+margin=12
+padding=20
+border-size=1
+border-radius=16
+outer-margin=8
+
+# Typography - Clean and modern
+font=monospace 11
+markup=1
+format=<b>%s</b>\n<span size='10pt'>%b</span>
+
+# Behavior - Smooth and user-friendly
+default-timeout=6000
+ignore-timeout=1
+max-visible=5
+sort=-time
+layer=overlay
+anchor=top-left
+
+# Icons - Larger and more prominent
+icons=1
+max-icon-size=48
+
+[urgency=low]
+background-color=#1f201899
+border-color=#91928366
+text-color=#c8c7b7cc
+border-size=1
+default-timeout=4000
+padding=16
+border-radius=14
+
+[urgency=normal]
+background-color=#2a2b22bb
+border-color=#c1cd7daa
+text-color=#e4e3d6
+border-size=1
+default-timeout=6000
+padding=20
+border-radius=16
+
+[urgency=critical]
+background-color=#93000aee
+border-color=#ffb4abff
+text-color=#ffdad6
+border-size=2
+default-timeout=0
+padding=22
+border-radius=18
+
+[grouped=true]
+background-color=#2a2b22f0
+border-color=#c1cd7dcc
+format=<b>%s (%g)</b>\n<span size='10pt'>%b</span>
+padding=22
+border-radius=18

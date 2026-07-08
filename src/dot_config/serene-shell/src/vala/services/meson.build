@@ -1,0 +1,1 @@
+vala_services = files('Awww.vala', 'Wallpapers.vala')

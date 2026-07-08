@@ -4,10 +4,6 @@ set -euo pipefail
 echo "Instalando pacotes essenciais."
 
 yay -S --needed --noconfirm \
-    thunar \
-    thunar-vcs-plugin \
-    thunar-volman \
-    ristretto \
     gnome-disk-utility \
     seahorse \
     kitty \
@@ -21,7 +17,21 @@ yay -S --needed --noconfirm \
     downgrade \
     power-profiles-daemon \
     xdg-utils \
-    xfce-polkit \
     stasis \
     cloudflare-warp-bin \
-    appimagelauncher
+    appimagelauncher \
+    7zip \
+    pacman-contrib \
+    gnome-keyring \
+    gnome-online-accounts-gtk \
+    gvfs \
+    libgnome-keyring \
+    polkit-qt6 \
+    vulkan-tools \
+    sudo \
+    nvtop \
+    smartmontools \
+    upower \
+    zram-generator \
+    bluez \
+    bluez-utils

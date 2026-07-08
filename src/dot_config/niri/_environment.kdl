@@ -1,0 +1,23 @@
+// Environment variables
+environment {
+    QT_QPA_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    SECRET_SERVICE_BUS_NAME "org.freedesktop.secrets"
+    XDG_MENU_PREFIX "arch-"
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
+    XDG_SESSION_DESKTOP "niri"
+    MOZ_ENABLE_WAYLAND "1"
+    _JAVA_AWT_WM_NONREPARENTING "1"
+    ELECTRON_OZONE_PLATFORM_HINT "wayland"
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Classic"
+    xcursor-size 24
+}
+
+debug {
+    render-drm-device "/dev/dri/renderD128"
+    ignore-drm-device "/dev/dri/renderD129"
+}

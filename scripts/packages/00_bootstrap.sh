@@ -4,7 +4,7 @@ set -euo pipefail
 echo "Instalando yay."
 
 if ! command -v yay &>/dev/null; then
-    echo "yay não encontrado. Instanlando-o..."
+    echo "yay não encontrado. Instalando-o..."
     sudo pacman -S --needed --noconfirm base-devel git
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     cd /tmp/yay

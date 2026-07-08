@@ -1,0 +1,28 @@
+[background]
+# Path to the background image/video
+path = "/etc/greetd/milk_outside.png"
+
+fit = "Contain"
+
+[GTK]
+# Whether to use the dark theme
+application_prefer_dark_theme = true
+
+# Cursor theme name
+cursor_theme_name = "Bibata-Modern-Classic"
+
+# Whether to blink the cursor
+cursor_blink = true
+
+# Font name and size
+font_name = "Noto Sans Regular 10"
+
+# Icon theme name
+icon_theme_name = "Tela circle dark"
+
+# GTK theme name
+theme_name = "adw-gtk3-dark"
+
+[commands]
+reboot = [ "systemctl", "reboot" ]
+poweroff = [ "systemctl", "poweroff" ]

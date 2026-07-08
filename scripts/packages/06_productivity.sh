@@ -5,7 +5,6 @@ echo "Instalando ferramentas de produtividade."
 
 yay -S --needed --noconfirm \
     neovim \
-    nano \
     obsidian-bin \
     visual-studio-code-bin \
     libreoffice-fresh \
@@ -14,4 +13,11 @@ yay -S --needed --noconfirm \
     man-pages \
     unrar \
     unzip \
-    zip
+    zip \
+    nautilus \
+    loupe \
+    planify \
+    gnome-calendar \
+    anki \
+    komikku \
+    kana
