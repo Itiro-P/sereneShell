@@ -37,9 +37,6 @@ echo "Pacotes instalados."
 
 echo "Configurando serviços no Systemd."
 sudo systemctl enable --now warp-svc
-sudo systemctl enable sddm
-sudo systemctl enable swayosd-libinput-backend
-sudo systemctl enable greetd
 
 echo "Configurando Stasis e Docker"
 sudo usermod -aG input,video,docker $USER
@@ -48,21 +45,21 @@ echo "Configurando o Warp"
 warp-cli registration new
 warp-cli trusted ethernet enable
 
-echo "Configurando tema Colloid"
+echo "Configurando tema Adw"
 mkdir -p ~/.config/gtk-4.0/
-ln -sf /usr/share/themes/adw-gtk3-dark/gtk-4.0/{assets,gtk.css,gtk-dark.css} ~/.config/gtk-4.0/
+ln -sf /usr/share/themes/Layan-Dark/gtk-4.0/{assets,gtk.css,gtk-dark.css} ~/.config/gtk-4.0/
 
 echo "Configurando temas e fontes GTK."
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
-gsettings set org.gnome.desktop.interface icon-theme 'Tela circle dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Tela-circle-dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
-gsettings set org.gnome.desktop.interface font-name 'Monospace Regular 10'
+gsettings set org.gnome.desktop.interface font-name 'Noto Sans Regular 10'
 gsettings set org.gnome.desktop.interface monospace-font-name 'FiraCode Nerd Font 10'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 echo "Copiando configurações."
 cp "$BASE_DIR/../src/dot_bashrc" ~/.bashrc
-cp -r "$BASE_DIR/../src/etc" /etc
+sudo cp -r "$BASE_DIR/../src/etc/." /etc/
 cp -r "$BASE_DIR/../src/dot_config/." ~/.config/
 
 echo "Removendo cache do Yay"

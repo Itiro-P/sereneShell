@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo "Instalando dependências  base"
+sudo pacman -S automake autoconf debugedit fakeroot
+
 echo "Instalando yay."
 
 if ! command -v yay &>/dev/null; then

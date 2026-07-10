@@ -14,10 +14,7 @@ yay -S --needed --noconfirm \
     unrar \
     unzip \
     zip \
-    nautilus \
-    loupe \
     planify \
-    gnome-calendar \
     anki \
     komikku \
     kana

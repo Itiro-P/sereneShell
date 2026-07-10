@@ -7,14 +7,8 @@ yay -S --needed --noconfirm \
     niri \
     niri-focused-booster \
     gamescope \
-    greetd \
-    greetd-regreet \
-    hyprlock \
-    wlogout \
     xdg-desktop-portal-gnome \
     xwayland-satellite \
-    xorg-server \
-    xorg-xinit \
     frameworkintegration \
     layer-shell-qt \
     libportal-gtk4 \

@@ -8,7 +8,10 @@ yay -S --needed --noconfirm \
     nwg-look \
     awww \
     matugen-bin \
-    adw-gtk-theme \
+    plasma6-themes-layan-git \
+    layan-gtk-theme-git \
+    kvantum \
+    kvantum-qt5 \
     adwsteamgtk \
     darkly-bin \
     kde-material-you-colors \
@@ -25,9 +28,6 @@ yay -S --needed --noconfirm \
     ttf-nerd-fonts-symbols-common \
     ttf-roboto \
     starship \
-    qt6ct-kde \
-    qt6-virtualkeyboard \
-    qt6-wayland \
     fcitx5 \
     fcitx5-configtool \
     fcitx5-gtk \
