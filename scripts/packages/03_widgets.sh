@@ -4,9 +4,9 @@ set -euo pipefail
 echo "Instalando widgets e utilitários."
 
 yay -S --needed --noconfirm \
-    libastal-meta \
-    libastal-niri-git \
     grim \
     slurp \
     wl-mirror \
+    quickshell \
+    qml-niri \
     wev

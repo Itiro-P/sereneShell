@@ -1,5 +1,0 @@
-{
-    "mesonbuild.configureOnOpen": true,
-    "C_Cpp.default.compileCommands": "/home/itiro/Repos/sereneShell/src/.config/serene-shell/builddir/compile_commands.json",
-    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
-}

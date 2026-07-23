@@ -19,8 +19,9 @@ yay -S --needed --noconfirm \
     appimagelauncher \
     7zip \
     pacman-contrib \
-    gvfs \
     vulkan-tools \
     nvtop \
     smartmontools \
     upower \
+    power-profiles-daemon \
+    xfce-polkit

@@ -8,7 +8,7 @@ yay -S --needed --noconfirm \
     obs-studio \
     pipewire-alsa \
     pipewire-pulse \
-    pavucontrol \
+    pavucontrol-qt \
     gst-libav \
     gst-plugin-pipewire \
     gst-plugins-bad \

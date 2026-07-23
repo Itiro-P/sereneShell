@@ -1,11 +1,8 @@
 // Autostart config
+spawn-at-startup "niri-focused-booster"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "DISPLAY" "XDG_CURRENT_DESKTOP" "QT_QPA_PLATFORMTHEME"
 spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
 spawn-at-startup "shikane"
 spawn-at-startup "fcitx5 -d"
-spawn-at-startup "mako"
 spawn-at-startup "nm-applet"
-spawn-at-startup "swayosd-server"
-spawn-at-startup "awww-daemon"
-spawn-at-startup "~/.config/serene-shell/result/bin/serene-shell"
-spawn-at-startup "niri-focused-booster"
+spawn-sh-at-startup "qs -p ~/.config/serene-shell/serene-shell.qml"

@@ -10,6 +10,7 @@ environment {
     MOZ_ENABLE_WAYLAND "1"
     _JAVA_AWT_WM_NONREPARENTING "1"
     ELECTRON_OZONE_PLATFORM_HINT "wayland"
+    SDL_VIDEO_DRIVER "wayland"
 }
 
 cursor {

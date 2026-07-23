@@ -26,22 +26,15 @@ yay -S --needed --noconfirm \
     npm \
     go \
     rust \
-    vala \
-    vala-language-server \
-    blueprint-compiler \
     clang \
     cmake \
     glib2-devel \
     llvm \
     meson \
     ninja \
-    github-cli \
     gitte \
     jq \
-    firejail \
     openvpn \
     zerotier-one \
-    nmap \
     lm-studio-bin \
-    archlinux-java-run \
-    archlinux-xdg-menu
+    archlinux-java-run

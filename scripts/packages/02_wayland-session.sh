@@ -13,4 +13,6 @@ yay -S --needed --noconfirm \
     layer-shell-qt \
     libportal-gtk4 \
     xdg-user-dirs \
+    archlinux-xdg-menu \
+    gnome-keyring \
     shikane

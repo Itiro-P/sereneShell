@@ -3,66 +3,64 @@ version_check = false
 caching = true
 
 [templates.btop]
-input_path = '~/.config/matugen/templates/btop.theme'
+input_path = './templates/btop.theme'
 output_path = '~/.config/btop/themes/matugen.theme'
 post_hook = 'pkill -USR2 btop || true'
 
 [templates.cava]
-input_path = '~/.config/matugen/templates/cava-colors.ini'
+input_path = './templates/cava-colors.ini'
 output_path = '~/.config/cava/themes/matugen'
 post_hook = 'pkill -USR1 cava || true'
 
 [templates.nvim]
-input_path = '~/.config/matugen/templates/nvim-colors.vim'
+input_path = './templates/nvim-colors.vim'
 output_path = '~/.config/nvim/colors/matugen.vim'
 post_hook = 'pkill -SIGUSR1 nvim || true'
 
-[templates.wlogout]
-input_path = '~/.config/matugen/templates/colors.css'
-output_path = '~/.config/wlogout/colors.css'
-
 [templates.kitty]
-input_path = '~/.config/matugen/templates/kitty-colors.conf'
+input_path = './templates/kitty-colors.conf'
 output_path = '~/.config/kitty/colors.conf'
 post_hook = 'pkill -SIGUSR1 kitty || true'
 
-[templates.rofi]
-input_path = '~/.config/matugen/templates/rofi-colors.conf'
-output_path = '~/.config/rofi/colors.rasi'
-
 [templates.starship]
-input_path = '~/.config/matugen/templates/starship-colors.toml'
+input_path = './templates/starship-colors.toml'
 output_path = '~/.config/starship.toml'
 
 [templates.vesktop]
-input_path = '~/.config/matugen/templates/midnight-discord.css'
+input_path = './templates/midnight-discord.css'
 output_path = '~/.config/vesktop/themes/midnight-discord.css'
 
 [templates.fastfetch]
-input_path = '~/.config/matugen/templates/fastfetch-colors.jsonc'
+input_path = './templates/fastfetch-colors.jsonc'
 output_path = '~/.config/fastfetch/config.jsonc'
 
 [templates.niri]
-input_path = '~/.config/matugen/templates/niri-colors.kdl'
+input_path = './templates/niri-colors.kdl'
 output_path = '~/.config/niri/_colors.kdl'
 post_hook = 'niri msg action load-config-file'
 
-[templates.mako]
-input_path = '~/.config/matugen/templates/mako-colors'
-output_path = '~/.config/mako/config'
-post_hook = 'makoctl reload'
-
-[templates.hyprland]
-input_path = '~/.config/matugen/templates/hyprland-colors.conf'
-output_path = '~/.config/hypr/colors.conf'
+[templates.quickshell]
+input_path = './templates/quickshell.json'
+output_path = '~/.local/state/quickshell/generated/colors.json'
 
 [templates.gtk3]
-input_path = '~/.config/matugen/templates/gtk-3.0/gtk.css'
+input_path = './templates/gtk-3.0/gtk.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
 
 [templates.gtk4]
-input_path = '~/.config/matugen/templates/gtk-4.0/gtk.css'
+input_path = './templates/gtk-4.0/gtk.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
-post_hook = 'kde-material-you-colors --file {{ image }} &'
+post_hook = './scripts/gtk-hot-reload.sh'
 
+[templates.kvantum_kvconfig]
+input_path = './templates/kvantum/kvantum-colors.kvconfig'
+output_path = '~/.config/Kvantum/matugen/matugen.kvconfig'
+
+[templates.kvantum_svg]
+input_path = './templates/kvantum/kvantum-colors.svg'
+output_path = '~/.config/Kvantum/matugen/matugen.svg'
+
+[templates.qt6ct]
+input_path = './templates/qtct-colors.conf'
+output_path = '~/.config/qt6ct/colors/matugen.conf'

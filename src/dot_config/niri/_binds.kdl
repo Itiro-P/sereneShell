@@ -3,30 +3,29 @@
 
 binds {
     Mod+Return { spawn "kitty"; }
-    Mod+T { spawn-sh "killall rofi || rofi -show drun"; }
-    Mod+L { spawn "hyprlock"; }
-    Mod+Escape { spawn-sh "killall wlogout || wlogout"; }
-    Mod+E { spawn "nautilus"; }
+    Mod+T { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call launcher toggle"; }
+    Mod+L { spawn-sh "qs -p ~/.config/serene-shell/serene-locker.qml &"; }
+    Mod+Escape { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call logout toggle"; }
+    Mod+E { spawn "dolphin"; }
     Mod+Space { spawn "niri" "msg" "action" "switch-layout" "next"; }
 
-    Mod+Alt+KP_Left { spawn "swayosd-client" "--playerctl" "prev"; }
-    Mod+Alt+KP_Begin { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    Mod+Alt+KP_Right { spawn "swayosd-client" "--playerctl" "next"; }
+    Mod+Alt+KP_Left { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris previous"; }
+    Mod+Alt+KP_Begin { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris togglePlaying"; }
+    Mod+Alt+KP_Right { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris next"; }
 
-    XF86AudioNext { spawn "swayosd-client" "--playerctl" "next"; }
-    XF86AudioPause { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioPlay { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioPrev { spawn "swayosd-client" "--playerctl" "prev"; }
+    XF86AudioPause { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris togglePlaying"; }
+    XF86AudioPlay { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris togglePlaying"; }
+    XF86AudioPrev { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris previous"; }
+    XF86AudioNext { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris next"; }
 
-    XF86AudioRaiseVolume { spawn "swayosd-client" "--output-volume" "+2" "--max-volume" "100"; }
-    XF86AudioLowerVolume { spawn "swayosd-client" "--output-volume" "-2"; }
-    XF86AudioMute { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
-    XF86AudioMicMute { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
-    //XF86Launch6 { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
+    XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "2%+"; }
+    XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "2%-"; }
+    XF86AudioMute { spawn  "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
     XF86Launch6 { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 
-    XF86MonBrightnessUp { spawn "swayosd-client" "--brightness" "raise"; }
-    XF86MonBrightnessDown { spawn "swayosd-client" "--brightness" "lower"; }
+    XF86MonBrightnessUp { spawn "brightnessctl" "set" "+2%"; }
+    XF86MonBrightnessDown { spawn "brightnessctl" "set" "2%-"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Q repeat=false { close-window; }

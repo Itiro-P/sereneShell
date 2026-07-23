@@ -11,7 +11,7 @@ default:
   enable_loginctl true
   enable_dbus_inhibit true
   pre_suspend_command None
-  prepare_sleep_command "hyprlock"
+  prepare_sleep_command "qs -p ~/.config/serene-shell/serene-locker.qml &"
 
   monitor_media true
   ignore_remote_media true
@@ -23,7 +23,7 @@ default:
   notification_icon "stasis"
 
 
-  lid_close_action "hyprlock"
+  lid_close_action "qs -p ~/.config/serene-shell/serene-locker.qml &"
   lid_open_action ""
 
   inhibit_apps [
@@ -38,7 +38,7 @@ default:
 
   lock_screen:
     timeout lock_after
-    command "hyprlock"
+    command "qs -p ~/.config/serene-shell/serene-locker.qml &"
   end
 
   dpms:
