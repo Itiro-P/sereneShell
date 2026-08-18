@@ -4,17 +4,10 @@ set -euo pipefail
 echo "Instalando ferramentas de produtividade."
 
 yay -S --needed --noconfirm \
-    neovim \
     obsidian-bin \
-    visual-studio-code-bin \
     libreoffice-fresh \
     libreoffice-codehighlighter2 \
     mendeley-reference-manager \
-    man-pages \
-    unrar \
-    unzip \
-    zip \
     planify \
     anki \
-    komikku \
     kana

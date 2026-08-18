@@ -11,6 +11,8 @@ ShellRoot {
     id: root
     settings.watchFiles: true
 
+   property int tick: Awww.tick
+
     IpcHandler {
         target: "launcher"
 
@@ -56,14 +58,25 @@ ShellRoot {
         }
     }
 
+    IpcHandler {
+        target: "wallpaperSelector"
+
+        function toggle() {
+            States.wallpaperSelectorOpen ^= 1
+        }
+    }
+
 
     Variants {
         model: Quickshell.screens
 
         Bar {}
     }
+    
     Osd {}
     Launcher {}
     Logout {}
     Notifications {}
+    WallpaperSelector {}
+    Polkit {}
 }

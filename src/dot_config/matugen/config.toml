@@ -13,8 +13,8 @@ output_path = '~/.config/cava/themes/matugen'
 post_hook = 'pkill -USR1 cava || true'
 
 [templates.nvim]
-input_path = './templates/nvim-colors.vim'
-output_path = '~/.config/nvim/colors/matugen.vim'
+input_path = './templates/nvim-colors.json'
+output_path = "~/.config/matugen/themes/nvim-colors.json"
 post_hook = 'pkill -SIGUSR1 nvim || true'
 
 [templates.kitty]
@@ -51,7 +51,7 @@ post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings s
 [templates.gtk4]
 input_path = './templates/gtk-4.0/gtk.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
-post_hook = './scripts/gtk-hot-reload.sh'
+post_hook = '~/.config/matugen/scripts/gtk-hot-reload.sh'
 
 [templates.kvantum_kvconfig]
 input_path = './templates/kvantum/kvantum-colors.kvconfig'
@@ -64,3 +64,11 @@ output_path = '~/.config/Kvantum/matugen/matugen.svg'
 [templates.qt6ct]
 input_path = './templates/qtct-colors.conf'
 output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.vscode-raw]
+input_path = './templates/vscode-colors'
+output_path = '~/.cache/matugen/vscode-colors'
+
+[templates.vscode-json]
+input_path = './templates/vscode-colors.json'
+output_path = '~/.cache/matugen/vscode-colors.json'

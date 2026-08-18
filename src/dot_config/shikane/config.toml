@@ -5,15 +5,15 @@ exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_N
     [[profile.output]]
     search = "m=0x0D39"
     enable = true
-    adaptive_sync = false
-    mode = "best"
-    position = "0,0"
-
-    [[profile.output]]
-    search = "m=18.5JL3"
-    enable = true
+    adaptive_sync = true
     mode = "best"
     position = "1920,0"
+
+    [[profile.output]]
+    search = "m=24G42HE"
+    enable = true
+    mode = "1920x1080@200"
+    position = "0,0"
 
 [[profile]]
 name = "outside"
@@ -22,7 +22,7 @@ exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_N
     [[profile.output]]
     search = "m=0x0D39"
     enable = true
-    adaptive_sync = true
+    adaptive_sync = false
     mode = "preferred"
     position = "0,0"
 
@@ -33,7 +33,7 @@ exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_N
     [[profile.output]]
     search = "m=0x0D39"
     enable = true
-    adaptive_sync = true
+    adaptive_sync = false
     mode = "preferred"
     position = "0,1080"
 
@@ -50,7 +50,7 @@ exec = ["stasis profile none", "notify-send Shikane \"Profile $SHIKANE_PROFILE_N
     [[profile.output]]
     search = "m=0x0D39"
     enable = true
-    adaptive_sync = true
+    adaptive_sync = false
     mode = "preferred"
     position = "0,1080"
 
@@ -67,7 +67,7 @@ exec = ["stasis profile presentation", "notify-send Shikane \"Profile $SHIKANE_P
     [[profile.output]]
     search = "m=0x0D39"
     enable = true
-    adaptive_sync = true
+    adaptive_sync = false
     mode = "preferred"
     position = "0,0"
 

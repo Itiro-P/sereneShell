@@ -9,11 +9,6 @@ Singleton {
 
     property bool paused: false
 
-    Process {
-        running: true
-        command: ["stasis"]
-    }
-
     function pause() {
         paused = true
         Quickshell.execDetached(["stasis", "pause"])

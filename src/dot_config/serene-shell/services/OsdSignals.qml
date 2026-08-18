@@ -12,7 +12,6 @@ Singleton {
     enum Kind {
         Volume,
         Muted,
-        Mpris, 
         Stasis
     }
 

@@ -1,19 +1,19 @@
 // Outputs
 output "eDP-1" {
     mode "1920x1080@165"
+    position x=1920 y=0
+    hot-corners {
+        top-right
+    	bottom-right
+    }
+}
+
+output "PNP(AOC) 24G42HE 204Q3XA013974" {
+    mode "1920x1080@200"
     position x=0 y=0
     focus-at-startup
     hot-corners {
         top-left
-	bottom-left
-    }
-}
-
-output "PNP(RDA) 18.5JL3 Unknown" {
-    mode "1920x1080@60"
-    position x=1920 y=0
-    hot-corners {
-        top-right
-        bottom-right
+        bottom-left
     }
 }

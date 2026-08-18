@@ -1,6 +1,6 @@
 // Switch/Lid events for laptops
 
 switch-events {
-    lid-close { spawn "stasis" "trigger" "lock_screen"; }
+    lid-close { spawn "stasis" "pause"; }
     lid-open { spawn "stasis" "resume"; }
 }

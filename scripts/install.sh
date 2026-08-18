@@ -39,7 +39,7 @@ echo "Configurando serviços no Systemd."
 sudo systemctl enable --now warp-svc
 
 echo "Configurando Stasis e Docker"
-sudo usermod -aG input,video,docker $USER
+sudo usermod -aG input,video,docker,gamemode $USER
 
 sudo systemctl enable sddm
 
@@ -64,5 +64,9 @@ yay -Scc --noconfirm
 
 echo "Removendo dependências não usadas"
 yay -Ycc --noconfirm
+
+echo "Aplicando Matugen"
+matugen image --source-color-index 0 ~/.config/serene-shell/wallpapers/lyw2zl_1920x1080.png
+awww img ~/.config/serene-shell/wallpapers/lyw2zl_1920x1080.png
 
 echo "Instalação finalizada. Reinicie o sistema."

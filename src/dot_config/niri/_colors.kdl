@@ -2,15 +2,15 @@
 // Layout configuration
 layout {
     tab-indicator {
-        active-color "#c1cd7d"
-        inactive-color "#a2d0c3"
+        active-color "#a5c8fe"
+        inactive-color "#d9bde3"
     }
     insert-hint {
-        gradient from="#424b0780" to="#c1cd7d80" angle=45 relative-to="workspace-view"
+        gradient from="#21487680" to="#a5c8fe80" angle=45 relative-to="workspace-view"
     }
     border {
-        active-gradient from="#c1cd7d" to="#c6c9a7" angle=45 relative-to="workspace-view"
-        inactive-gradient from="#47483b" to="#919283" angle=45 relative-to="workspace-view"
+        active-gradient from="#a5c8fe" to="#bcc7dc" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#43474e" to="#8d9199" angle=45 relative-to="workspace-view"
         urgent-gradient from="#ffb4ab" to="#93000a" angle=45 relative-to="workspace-view"
     }
     shadow {
@@ -23,8 +23,8 @@ window-rule {
     default-floating-position x=32 y=32 relative-to="bottom-right"
     opacity 1.0
     border {
-        active-gradient from="#a2d0c3" to="#224e44" angle=45
-        inactive-gradient from="#a2d0c3" to="#224e44" angle=45
+        active-gradient from="#d9bde3" to="#543f5e" angle=45
+        inactive-gradient from="#d9bde3" to="#543f5e" angle=45
     }
 }
 
@@ -33,7 +33,7 @@ recent-windows {
     highlight {
         corner-radius 14
         padding 2
-        active-color "#c1cd7d" 
-        urgent-color "#a2d0c3"
+        active-color "#a5c8fe" 
+        urgent-color "#d9bde3"
     }
 }

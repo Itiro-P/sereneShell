@@ -13,6 +13,8 @@ Singleton {
         p => p?.isPlaying || p.playbackState === MprisPlaybackState.Paused
     ) ?? null
 
+    readonly property int playbackState: player?.playbackState ?? MprisPlaybackState.Stopped
+    readonly property string playbackStateString: MprisPlaybackState.toString(playbackState)
     readonly property string title: player?.trackTitle || "Unknown Title"
     readonly property string artist: player?.trackArtist || "Unknown Artist"
     readonly property real position: player?.position ?? 0
@@ -36,30 +38,6 @@ Singleton {
     function next() {
         if (player?.canGoNext ?? false) {
             player.next()
-        }
-    }
-
-    Connections {
-        target: player
-
-        function onPlaybackStateChanged() {
-            if (!player) return;
-            OsdSignals.show(
-                OsdSignals.Kind.Mpris, 
-                `image://icon/${player.isPlaying ? "media-playback-pause-symbolic": "media-playback-start-symbolic"}`,
-                0,
-                `${Utils.limitString(title, 32)} - ${Utils.limitString(artist, 32)}`
-            );
-        }
-
-        function onPostTrackChanged() {
-            if (!player) return;
-            OsdSignals.show(
-                OsdSignals.Kind.Mpris, 
-                "image://icon/media-playback-pause-symbolic",
-                0,
-                `${Utils.limitString(title, 32)} - ${Utils.limitString(artist, 32)}`
-            );
         }
     }
 }

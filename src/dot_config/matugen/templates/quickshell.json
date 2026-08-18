@@ -7,5 +7,6 @@
   },
   "base16": {<* for name, color in base16 *>
     "{{ name }}": "{{ color.default.hex }}"<* if {{ loop.last }} *><* else *>,<* endif *><* endfor *>
-  }
+  },
+  "image": "{{ image }}"
 }

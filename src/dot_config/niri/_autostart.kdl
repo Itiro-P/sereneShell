@@ -1,5 +1,7 @@
 // Autostart config
 spawn-at-startup "niri-focused-booster"
+spawn-at-startup "awww-daemon"
+spawn-at-startup "systemctl --user start stasis"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "DISPLAY" "XDG_CURRENT_DESKTOP" "QT_QPA_PLATFORMTHEME"
 spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
 spawn-at-startup "shikane"

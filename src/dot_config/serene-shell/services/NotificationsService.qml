@@ -12,12 +12,13 @@ Singleton {
 
     NotificationServer {
         id: server
-        bodySupported: true
         keepOnReload: false
+        bodySupported: true
         persistenceSupported: false
         actionsSupported: true
         imageSupported: true
         actionIconsSupported: true
+        inlineReplySupported: true
 
         onNotification: n => n.tracked = true
     }

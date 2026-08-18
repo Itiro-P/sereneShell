@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Instalando pacotes essenciais."
+echo "Instalando pacotes essenciais de sistema."
 
 yay -S --needed --noconfirm \
     seahorse \
@@ -10,18 +10,20 @@ yay -S --needed --noconfirm \
     firefox \
     transmission-gtk \
     qalculate-gtk \
-    network-manager-applet \
     btop \
     fastfetch \
+    nvtop \
     downgrade \
     xdg-utils \
     cloudflare-warp-bin \
+    openvpn \
+    zerotier-one \
     appimagelauncher \
     7zip \
+    unrar \
+    unzip \
+    zip \
     pacman-contrib \
     vulkan-tools \
-    nvtop \
     smartmontools \
-    upower \
-    power-profiles-daemon \
-    xfce-polkit
+    power-profiles-daemon

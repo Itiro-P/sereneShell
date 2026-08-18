@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
+import qs.styles
+
 WrapperItem {
     id: root
     property PwNode defaultSink: Pipewire.defaultAudioSink
@@ -34,11 +36,12 @@ WrapperItem {
             RowLayout {
                 id: sinkRow
                 IconImage {
-                    implicitWidth: 16
-                    implicitHeight: 16
+                    implicitWidth: Metrics.iconS
+                implicitHeight: Metrics.iconS
                     source: `image://icon/${sinkIcon}`
                 }
-                Text {
+                StyledText {
+                    font.pixelSize: Metrics.fontM
                     text: defaultSink?.audio ? `${Math.round(defaultSink.audio.volume * 100)}%` : "--"
                 }
             }
@@ -60,11 +63,12 @@ WrapperItem {
             RowLayout {
                 id: sourceRow
                 IconImage {
-                    implicitWidth: 16
-                    implicitHeight: 16
+                    implicitWidth: Metrics.iconS
+                implicitHeight: Metrics.iconS
                     source: `image://icon/${sourceIcon}`
                 }
-                Text {
+                StyledText {
+                    font.pixelSize: Metrics.fontM
                     text: defaultSource?.audio ? `${Math.round(defaultSource.audio.volume * 100)}%` : "--"
                 }
             }
@@ -84,8 +88,8 @@ WrapperItem {
             cursorShape: Qt.PointingHandCursor
             onClicked: Quickshell.execDetached(["pavucontrol-qt"])
             IconImage {
-                implicitWidth: 16
-                implicitHeight: 16
+                implicitWidth: Metrics.iconS
+                implicitHeight: Metrics.iconS
                 source: "image://icon/settings-symbolic"
             }
         }

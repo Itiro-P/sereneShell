@@ -1,6 +1,7 @@
 import QtQuick
-import Quickshell
 import QtQuick.Layouts
+import Quickshell
+import Quickshell.Wayland
 
 import qs.services
 import qs.components
@@ -10,6 +11,7 @@ LazyLoader {
     active: true
 
     PanelWindow {
+        WlrLayershell.layer: WlrLayer.Overlay
         anchors {
             top: true
             right: true

@@ -3,14 +3,18 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
 import Quickshell.Widgets
+import Quickshell.Wayland
 
 import qs.services
+import qs.styles
+import qs.components
 
 LazyLoader {
     active: States.launcherOpen
 
     PanelWindow {
         id: launcherWindow
+        WlrLayershell.layer: WlrLayer.Overlay
 
         anchors {
             top: true
@@ -20,154 +24,156 @@ LazyLoader {
         }
 
         color: "transparent"
-        aboveWindows: true 
+        aboveWindows: true
         focusable: true
+        exclusionMode: ExclusionMode.Ignore
         property string query: ""
+
+        readonly property var allApps: {
+            return [...DesktopEntries.applications.values]
+                .filter(d => d.name)
+                .sort((a, b) => a.name.localeCompare(b.name));
+        }
 
         ScriptModel {
             id: filtered
             values: {
-                const all = [...DesktopEntries.applications.values]
-                    .filter(d => d.name)
-                    .sort((a, b) => a.name.localeCompare(b.name));
-
                 const q = query?.trim().toLowerCase() ?? "";
-                if (q === "") return all;
+                if (q === "") return allApps;
 
-                return all.filter(d => {
+                const scored = [];
+                for (const d of allApps) {
                     const name = (d.name || "").toLowerCase();
                     const comment = (d.comment || "").toLowerCase();
                     const keywords = (d.keywords || []).join(" ").toLowerCase();
                     const categories = (d.categories || []).join(" ").toLowerCase();
-                    return name.includes(q) || comment.includes(q)
-                        || keywords.includes(q) || categories.includes(q);
-                });
+
+                    let score = -1;
+                    if (name.startsWith(q)) score = 0;
+                    else if (name.includes(q)) score = 1;
+                    else if (keywords.includes(q)) score = 2;
+                    else if (comment.includes(q)) score = 3;
+                    else if (categories.includes(q)) score = 4;
+
+                    if (score >= 0) scored.push({ entry: d, score });
+                }
+
+                scored.sort((a, b) => a.score - b.score || a.entry.name.localeCompare(b.entry.name));
+                return scored.map(s => s.entry);
             }
+        }
+
+        Shortcut {
+            sequence: "Escape"
+            onActivated: States.launcherOpen = false
         }
 
         MouseArea {
             anchors.fill: parent
-            propagateComposedEvents: false 
-            Keys.onPressed: event => {
-                let key = event.key
-                switch (key) {
-                    case Qt.Key_Control:
-                    case Qt.Key_Shift:
-                    case Qt.Key_Alt:
-                    case Qt.Key_Meta:
-                    case Qt.Key_AltGr:
-                    case Qt.Key_CapsLock:
-                    case Qt.Key_Up:
-                    case Qt.Key_Down:
-                    case Qt.Key_PageUp:
-                    case Qt.Key_PageDown:
-                        return;
-                    case Qt.Key_9:
-                    case Qt.Key_3:
-                        if (event.modifiers() & Qt.KeypadModifier)
-                            return;
-                    case Qt.Key_Escape:
-                        States.launcherOpen = false
-                        return;
-                    default:
-                        searchField.forceActiveFocus()
-                }                
+            onClicked: States.launcherOpen = false
+        }
+
+        Rectangle {
+            id: card
+            anchors.centerIn: parent
+            implicitHeight: 400
+            implicitWidth: 400
+            radius: Metrics.radiusL
+            color: Colors.md3.surface
+            border.width: 1
+            border.color: Colors.md3.on_primary_container
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {}
             }
 
-            onClicked: {
-                States.launcherOpen = false;
-            }
+            ColumnLayout {
+                spacing: Metrics.spacingS
+                anchors.fill: parent
+                anchors.margins: Metrics.paddingM
 
-            Rectangle {
-                anchors.centerIn: parent
-                implicitHeight: 400
-                implicitWidth: 400
-
-                ColumnLayout {
-                    spacing: 8
-                    anchors.fill: parent
-                    TextField {
-                        id: searchField
-                        Layout.fillWidth: true
-                        placeholderText: "Buscar aplicativo..."
-                        onTextChanged: query = text
-
-                        Keys.onDownPressed: {
-                            if (resultsList.count > 0) {
-                                resultsList.forceActiveFocus();
-                            }
-                        }
-                        Keys.onReturnPressed: {
-                            if (resultsList.count > 0) {
-                                filtered.values[0].execute();
-                            }
-                        }
+                TextField {
+                    id: searchField
+                    Layout.fillWidth: true
+                    placeholderText: "Buscar aplicativo..."
+                    onTextChanged: {
+                        query = text;
+                        resultsList.currentIndex = 0; 
                     }
 
-                    ListView {
-                        id: resultsList
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        clip: true
-                        model: filtered
-                        keyNavigationEnabled: true
+                    font.pixelSize: Metrics.fontM
+                    color: Colors.md3.on_surface
 
-                        delegate: Rectangle {
-                            required property var modelData
-                            width: resultsList.width
-                            height: 48
-                            radius: 6
-                            color: ListView.isCurrentItem ? "#3a3f5a" : "transparent"
+                    background: Rectangle {
+                        radius: Metrics.radiusM
+                        color: Colors.md3.surface_variant
+                    }
 
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 8
-                                spacing: 12
-
-                                IconImage {
-                                    implicitWidth: 32
-                                    implicitHeight: 32
-                                    source: Quickshell.iconPath(modelData.icon, true)
-                                }
-
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 0
-
-                                    Text {
-                                        text: modelData.name
-                                        color: "white"
-                                        font.pixelSize: 14
-                                    }
-
-                                    Text {
-                                        visible: !!modelData.comment
-                                        text: modelData.comment
-                                        color: "#888"
-                                        font.pixelSize: 11
-                                        elide: Text.ElideRight
-                                        Layout.fillWidth: true
-                                    }
-                                }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: modelData.execute()
-                            }
+                    Keys.onDownPressed: {
+                        if (resultsList.count > 0) {
+                            if (resultsList.currentIndex < 0)
+                                resultsList.currentIndex = 0;
+                            resultsList.forceActiveFocus();
                         }
-
-                        Keys.onReturnPressed: {
-                            if (currentItem) {
-                                currentItem.modelData.execute();
+                    }
+                    Keys.onReturnPressed: {
+                        if (resultsList.count > 0) {
+                            const first = filtered.values[0];
+                            if (first) {
                                 States.launcherOpen = false;
+                                first.execute();
                             }
                         }
                     }
                 }
-                Component.onCompleted: searchField.forceActiveFocus()
+
+                ListView {
+                    id: resultsList
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    model: filtered
+                    keyNavigationEnabled: true
+                    spacing: Metrics.spacingXs
+                    
+                    Keys.onPressed: event => {
+                        switch (event.key) {
+                            case Qt.Key_Up:
+                            case Qt.Key_Down:
+                            case Qt.Key_Return:
+                            case Qt.Key_Enter:
+                            case Qt.Key_Escape:
+                            case Qt.Key_Control:
+                            case Qt.Key_Shift:
+                            case Qt.Key_Alt:
+                            case Qt.Key_Meta:
+                            case Qt.Key_AltGr:
+                            case Qt.Key_CapsLock:
+                                return;
+                            default:
+                                searchField.forceActiveFocus();
+                                if (event.text.length > 0) {
+                                    resultsList.currentIndex = 0;
+                                    searchField.text += event.text;
+                                    searchField.cursorPosition = searchField.text.length;
+                                }
+                                event.accepted = true;
+                        }
+                    }
+
+                    Keys.onReturnPressed: {
+                        const item = currentItem;
+                        if (item && item.modelData) {
+                            States.launcherOpen = false;
+                            item.modelData.execute();
+                        }
+                    }
+
+                    delegate: LauncherEntry {}
+                }
             }
+            Component.onCompleted: searchField.forceActiveFocus()
         }
     }
 }

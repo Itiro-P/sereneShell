@@ -4,9 +4,10 @@
 binds {
     Mod+Return { spawn "kitty"; }
     Mod+T { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call launcher toggle"; }
-    Mod+L { spawn-sh "qs -p ~/.config/serene-shell/serene-locker.qml &"; }
+    Mod+L { spawn "stasis" "trigger" "lock_screen"; }
+    Mod+W { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call wallpaperSelector toggle"; }
     Mod+Escape { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call logout toggle"; }
-    Mod+E { spawn "dolphin"; }
+    Mod+E { spawn "nautilus"; }
     Mod+Space { spawn "niri" "msg" "action" "switch-layout" "next"; }
 
     Mod+Alt+KP_Left { spawn-sh "qs -p ~/.config/serene-shell/serene-shell.qml ipc call mpris previous"; }

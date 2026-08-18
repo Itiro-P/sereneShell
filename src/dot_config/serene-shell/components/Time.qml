@@ -4,11 +4,13 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 
 import qs.services
+import qs.styles
 
 WrapperItem {
     id: root
 
-    Text {
+    StyledText {
+        font.pixelSize: Metrics.fontM
         text: `${Clock.time} ${Clock.date}`
     }
 }

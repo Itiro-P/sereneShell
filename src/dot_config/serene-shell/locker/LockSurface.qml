@@ -1,55 +1,67 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls.Fusion
+import QtQuick.Controls
 import Quickshell.Wayland
+import QtQuick.Effects
+
+import qs.services
+import qs.styles
 
 Rectangle {
 	id: root
 	required property LockContext context
 	readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
 
-	color: colors.window
+	color: "transparent"
 
-	Button {
-		text: "Its not working, let me out"
-		onClicked: context.unlocked();
+	Image {
+		id: bgImage
+		anchors.fill: parent
+		source: "file://" + Colors.image
+		fillMode: Image.PreserveAspectCrop
+		asynchronous: true
+		cache: true
+		visible: false
+	}
+	
+	MultiEffect {
+		anchors.fill: bgImage
+		source: bgImage
+		blurEnabled: true
+		blur: 0.6
+		blurMax: 32
+		brightness: -0.2
 	}
 
 	Label {
-		id: clock
-		property var date: new Date()
-
+		id: timeLabel
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			top: parent.top
 			topMargin: 100
 		}
 
-		// The native font renderer tends to look nicer at large sizes.
 		renderType: Text.NativeRendering
 		font.pointSize: 80
 
-		// updates the clock every second
-		Timer {
-			running: true
-			repeat: true
-			interval: 1000
+		text: Clock.time
+	}
 
-			onTriggered: clock.date = new Date();
+	Label {
+		id: dateLabel
+		anchors {
+			horizontalCenter: parent.horizontalCenter
+			top: timeLabel.top
+			topMargin: 120
 		}
 
-		// updated when the date changes
-		text: {
-			const hours = this.date.getHours().toString().padStart(2, '0');
-			const minutes = this.date.getMinutes().toString().padStart(2, '0');
-			return `${hours}:${minutes}`;
-		}
+		renderType: Text.NativeRendering
+		font.pointSize: 24
+
+		text: Clock.date
 	}
 
 	ColumnLayout {
-		// Uncommenting this will make the password entry invisible except on the active monitor.
-		// visible: Window.active
-
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			top: parent.verticalCenter
@@ -66,6 +78,26 @@ Rectangle {
 				enabled: !root.context.unlockInProgress
 				echoMode: TextInput.Password
 				inputMethodHints: Qt.ImhSensitiveData
+
+				color: Colors.md3.on_surface
+				placeholderTextColor: Colors.md3.on_surface_variant
+				selectionColor: Colors.md3.primary
+				selectedTextColor: Colors.md3.on_primary
+
+				renderType: Text.NativeRendering
+
+				background: Rectangle {
+					radius: Metrics.radiusS
+					color: Colors.md3.surface_container_highest
+					border.color: passwordBox.activeFocus
+						? Colors.md3.primary
+						: Colors.md3.outline
+					border.width: passwordBox.activeFocus ? 2 : 1
+
+					Behavior on border.color {
+						ColorAnimation { duration: 100 }
+					}
+				}
 
 				// Update the text in the context when the text in the box changes.
 				onTextChanged: root.context.currentText = this.text;
@@ -84,7 +116,7 @@ Rectangle {
 				}
 			}
 
-			Button {
+			StyledButton {
 				text: "Unlock"
 				padding: 10
 

@@ -4,8 +4,6 @@ set -euo pipefail
 echo "Instalando pacotes de temas e fontes."
 
 yay -S --needed --noconfirm \
-    pkgconf \
-    automake \
     bibata-cursor-theme-bin \
     nwg-look \
     awww \
@@ -29,10 +27,4 @@ yay -S --needed --noconfirm \
     ttf-nerd-fonts-symbols \
     ttf-nerd-fonts-symbols-common \
     ttf-roboto \
-    starship \
-    fcitx5 \
-    fcitx5-configtool \
-    fcitx5-gtk \
-    fcitx5-material-color \
-    fcitx5-qt \
-    sddm
+    starship

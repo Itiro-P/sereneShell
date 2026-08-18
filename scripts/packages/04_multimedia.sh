@@ -8,7 +8,7 @@ yay -S --needed --noconfirm \
     obs-studio \
     pipewire-alsa \
     pipewire-pulse \
-    pavucontrol-qt \
+    alsa-utils \
     gst-libav \
     gst-plugin-pipewire \
     gst-plugins-bad \
@@ -16,4 +16,4 @@ yay -S --needed --noconfirm \
     gst-plugins-ugly \
     glycin-gtk4 \
     pear-desktop \
-    alsa-utils
+    komikku

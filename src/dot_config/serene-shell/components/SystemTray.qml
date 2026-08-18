@@ -12,7 +12,7 @@ RowLayout {
 
     Repeater {
         model: SystemTray.items
-        delegate: MouseArea {
+        delegate: WrapperMouseArea {
             id: trayItem
 
             required property SystemTrayItem modelData
@@ -20,9 +20,7 @@ RowLayout {
             cursorShape: Qt.PointingHandCursor
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             hoverEnabled: true
-            implicitWidth: 24
-            implicitHeight: 24
-
+            
             onClicked: mouse => {
                 if (mouse.button === Qt.LeftButton) {
                     modelData.activate();

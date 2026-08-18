@@ -4,12 +4,12 @@ format = """
 [ ](primary)\
 $os\
 $username\
-[ ](bg:secondary fg:primary)\
+[](bg:secondary fg:primary)\
 $directory\
-[ ](bg:tertiary fg:secondary)\
+[](bg:tertiary fg:secondary)\
 $git_branch\
 $git_status\
-[ ](fg:tertiary bg:accent)\
+[](bg:accent fg:tertiary)\
 $c\
 $cpp\
 $elixir\
@@ -23,18 +23,23 @@ $nodejs\
 $nim\
 $rust\
 $scala\
-[ ](fg:accent bg:container)\
+$vala\
+[](bg:container fg:accent)\
 $docker_context\
-[ ](fg:container bg:surface)\
+[](bg:surface fg:container)\
 $time\
-[  ](fg:surface)\
-"""
+[ ](fg:surface)\
+$character"""
 
 palette = 'matugen'
 
 [os]
+disabled = false
 style = "bg:primary fg:on-primary"
-disabled = true # Disabled by default
+format = "[ $symbol]($style)"
+
+[os.symbols]
+Arch = "󰣇 "
 
 [username]
 show_always = true
@@ -55,92 +60,95 @@ truncation_symbol = "…/"
 "Music" = " "
 "Pictures" = "  "
 
+[git_branch]
+symbol = ""
+style = "bg:tertiary fg:on-tertiary"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:tertiary fg:on-tertiary"
+format = '[$all_status$ahead_behind ]($style)'
+
 [c]
 symbol = " "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [cpp]
 symbol = "  "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
-
-[docker_context]
-symbol = "  "
-style = "bg:container"
-format = '[[ $symbol $context ](fg:on-container bg:container)]($style)'
-
-[elixir]
-symbol = " "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
-
-[elm]
-symbol = "  "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
-
-[git_branch]
-symbol = ""
-style = "bg:tertiary"
-format = '[[ $symbol $branch ](fg:on-tertiary bg:tertiary)]($style)'
-
-[git_status]
-style = "bg:tertiary"
-format = '[[($all_status$ahead_behind) ](fg:on-tertiary bg:tertiary)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [golang]
 symbol = " "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
+
+[elixir]
+symbol = " "
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = "  "
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [gradle]
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [haskell]
 symbol = " "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [java]
 symbol = " "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [julia]
 symbol = "  "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [nim]
 symbol = "󰆥 "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [rust]
 symbol = ""
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
 
 [scala]
 symbol = " "
-style = "bg:accent"
-format = '[[ $symbol ($version) ](fg:on-accent bg:accent)]($style)'
+style = "bg:accent fg:on-accent"
+format = '[ $symbol ($version) ]($style)'
+
+[docker_context]
+symbol = "  "
+style = "bg:container fg:on-container"
+format = '[ $symbol $context ]($style)'
 
 [time]
 disabled = true
-time_format = "%R" # Hour:Minute Format
-style = "bg:surface"
-format = '[[  ♥ $time ](fg:on-surface bg:surface)]($style)'
+time_format = "%R"
+style = "bg:surface fg:on-surface"
+format = '[ ♥ $time ]($style)'
+
+[character]
+success_symbol = "[❯](fg:success)"
+error_symbol = "[❯](fg:error)"
 
 [palettes.matugen]
-
 primary = '{{colors.primary.default.hex}}'
 on-primary = '{{colors.on_primary.default.hex}}'
 primary-container = '{{colors.primary_container.default.hex}}'

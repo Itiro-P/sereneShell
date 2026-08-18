@@ -2,38 +2,50 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
+import Quickshell.Wayland
 
 import qs.services
 import qs.components.osd
+import qs.styles
 
 LazyLoader {
     id: root
     active: OsdSignals.visible
 
     PanelWindow {
-        anchors.bottom: true
-        margins.bottom: screen.height / 5
+        WlrLayershell.layer: WlrLayer.Overlay
+        anchors {
+            left: true
+        }
         exclusiveZone: 0
 
-        implicitWidth: 240
-        implicitHeight: 60
-        color: "transparent"
+        implicitWidth: wrapper.implicitWidth
+        implicitHeight: wrapper.implicitHeight
 
+        color: "transparent"
         mask: Region {}
 
-        Rectangle {
-            anchors.fill: parent
-            radius: height / 2
-            color: "#80000000"
+        WrapperItem {
+            id: wrapper
 
-            StackLayout {
-                anchors.fill: parent
-                currentIndex: OsdSignals.kind
-                
-                Volume {}
-                Muted {}
-                Mpris {}
-                Stasis {}
+            StyledRect {
+                id: styledRect
+                radius: Metrics.radiusL * 2
+
+                implicitWidth: stack.currentItem ? stack.currentItem.implicitWidth + Metrics.paddingL : 60
+                implicitHeight: stack.currentItem ? stack.currentItem.implicitHeight + Metrics.paddingL : 240
+
+                StackLayout {
+                    id: stack
+                    anchors.fill: parent
+                    currentIndex: OsdSignals.kind
+
+                    readonly property Item currentItem: children[currentIndex]
+
+                    Volume {}
+                    Muted {}
+                    Stasis {}
+                }
             }
         }
     }

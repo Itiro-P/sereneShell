@@ -1,9 +1,11 @@
 //@ pragma UseQApplication
 import Quickshell
+import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 
 import qs.components
+import qs.styles
 
 PanelWindow {
     id: root
@@ -16,30 +18,50 @@ PanelWindow {
         right: true
     }
 
-    implicitHeight: 24
+    implicitHeight: Metrics.barHeight
 
-    Item {
-        anchors.fill: parent
+    margins {
+        left: Metrics.paddingS
+        right: Metrics.paddingS
+    }
+    
+    color: "transparent"
+
+    StyledRect {
+        id: barContent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        radius: Metrics.radiusL
+        color: Colors.md3.surface
+
+        implicitHeight: Math.max(leftRow.implicitHeight, centerRow.implicitHeight, rightRow.implicitHeight)
+            + Metrics.paddingS * 2
 
         RowLayout {
-            id: leftContent
+            id: leftRow
             anchors.left: parent.left
+            anchors.leftMargin: Metrics.paddingM
             anchors.verticalCenter: parent.verticalCenter
+            spacing: Metrics.paddingM
 
             SystemTray { rootBar: root }
         }
 
         RowLayout {
-            id: centerContent
+            id: centerRow
             anchors.centerIn: parent
-            
+            spacing: Metrics.paddingM
+
             Workspaces { rootBar: root }
         }
 
         RowLayout {
-            id: rightContent
+            id: rightRow
             anchors.right: parent.right
+            anchors.rightMargin: Metrics.paddingM
             anchors.verticalCenter: parent.verticalCenter
+            spacing: Metrics.paddingM
 
             MainPlayer {}
             Time {}

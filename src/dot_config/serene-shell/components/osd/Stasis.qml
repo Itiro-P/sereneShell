@@ -4,31 +4,34 @@ import Quickshell
 import Quickshell.Widgets
 
 import qs.services
+import qs.styles
 
 WrapperItem {
     id: root
-    RowLayout {
-        spacing: 8
-        anchors {
-            fill: parent
-            leftMargin: 8
-            rightMargin: 16
-        }
+
+    topMargin: Metrics.paddingM
+    bottomMargin: Metrics.paddingM
+
+    ColumnLayout {
+        spacing: Metrics.spacingS
 
         IconImage {
-            implicitSize: 32
+            implicitSize: Metrics.iconL
+            Layout.alignment: Qt.AlignHCenter
             source: Quickshell.iconPath(OsdSignals.iconName)
         }
 
-        WrapperItem {
-            Text {
-                anchors {
-                    left: parent.left
-                    top: parent.top
-                    bottom: parent.bottom
-                }
+        Item {
+            Layout.alignment: Qt.AlignHCenter
+            implicitWidth: osdText.implicitHeight
+            implicitHeight: osdText.implicitWidth
+
+            StyledText {
+                id: osdText
+                anchors.centerIn: parent
                 text: OsdSignals.message
-                color: "white"
+                font.pixelSize: Metrics.fontL
+                rotation: 90
             }
         }
     }

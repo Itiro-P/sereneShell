@@ -4,38 +4,47 @@ import Quickshell
 import Quickshell.Widgets
 
 import qs.services
+import qs.styles
 
 WrapperItem {
     id: root
-    RowLayout {
-        spacing: 8
-        anchors {
-            fill: parent
-            leftMargin: 8
-            rightMargin: 16
-        }
+
+    topMargin: Metrics.paddingM
+    bottomMargin: Metrics.paddingM
+
+    ColumnLayout {
+        spacing: Metrics.spacingS
 
         IconImage {
-            implicitSize: 32
+            implicitSize: Metrics.iconL
+            Layout.alignment: Qt.AlignHCenter
             source: Quickshell.iconPath(OsdSignals.iconName)
         }
-
+        
+        Text {
+            text: `${Math.round(OsdSignals.value * 100)}%`
+            font.pixelSize: Metrics.fontS
+            font.bold: true
+            color: Colors.md3.primary
+            Layout.alignment: Qt.AlignHCenter
+        }
         Rectangle {
-            Layout.fillWidth: true
-            implicitHeight: 12
-            radius: 24
-            color: "#50ffffff"
+            implicitWidth: 12
+            implicitHeight: 200
+            radius: Metrics.radiusL
+            color: Colors.md3.on_primary
+            Layout.alignment: Qt.AlignHCenter
 
             Rectangle {
                 anchors {
                     left: parent.left
-                    top: parent.top
                     bottom: parent.bottom
+                    right: parent.right
                 }
 
-                implicitWidth: parent.width * OsdSignals.value
+                implicitHeight: parent.height * OsdSignals.value
                 radius: parent.radius
-                color: "white"
+                color: Colors.md3.primary
             }
         }
     }

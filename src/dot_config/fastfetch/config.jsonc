@@ -7,113 +7,113 @@
             "right": 2
 	},
 	"color": {
-            "1": "#d5bbfc",
-            "2": "#cec2db"
+            "1": "#a5c8fe",
+            "2": "#bcc7dc"
         }
     },
     "display": {
         "separator": "  ",
         "color": {
-            "keys": "#d5bbfc",
-            "title": "#cec2db",
-            "output": "#e7e0e8",
-            "separator": "#958e99"
+            "keys": "#a5c8fe",
+            "title": "#bcc7dc",
+            "output": "#e1e2e9",
+            "separator": "#8d9199"
         }
     },
     "modules": [
         {
             "type": "title",
-            "format": "{##d5bbfc}╭────── User : {#}{user-name-colored}@{host-name-colored}"
+            "format": "{##a5c8fe}╭────── User : {#}{user-name-colored}@{host-name-colored}"
         },
         {
             "type": "custom",
-            "format": "{##d5bbfc}│ {#}System Information"
+            "format": "{##a5c8fe}│ {#}System Information"
         },
         {
             "type": "os",
-            "key": "{##958e99}│  {##d5bbfc}󰍹 OS"
+            "key": "{##8d9199}│  {##a5c8fe}󰍹 OS"
         },
         {
             "type": "kernel",
-            "key": "{##958e99}│  {##d5bbfc}󰒋 Kernel"
+            "key": "{##8d9199}│  {##a5c8fe}󰒋 Kernel"
         },
         {
             "type": "uptime",
-            "key": "{##958e99}│  {##d5bbfc}󰅐 Uptime"
+            "key": "{##8d9199}│  {##a5c8fe}󰅐 Uptime"
         },
         {
             "type": "packages",
-            "key": "{##958e99}│  {##d5bbfc}󰏓 Packages"
+            "key": "{##8d9199}│  {##a5c8fe}󰏓 Packages"
         },
         {
             "type": "custom",
-            "format": "{##958e99}│"
+            "format": "{##8d9199}│"
         },
         // Desktop Environment
         {
             "type": "custom",
-            "format": "{##d5bbfc}│ {#}Desktop Environment"
+            "format": "{##a5c8fe}│ {#}Desktop Environment"
         },
         {
             "type": "de",
-            "key": "{##958e99}│  {##d5bbfc}󰧨 DE"
+            "key": "{##8d9199}│  {##a5c8fe}󰧨 DE"
         },
         {
             "type": "wm",
-            "key": "{##958e99}│  {##d5bbfc}󱂬 WM"
+            "key": "{##8d9199}│  {##a5c8fe}󱂬 WM"
         },
         {
             "type": "wmtheme",
-            "key": "{##958e99}│  {##d5bbfc}󰉼 Theme"
+            "key": "{##8d9199}│  {##a5c8fe}󰉼 Theme"
         },
         {
             "type": "shell",
-            "key": "{##958e99}│  {##d5bbfc}󰞷 Shell"
+            "key": "{##8d9199}│  {##a5c8fe}󰞷 Shell"
         },
         {
             "type": "custom",
-            "format": "{##958e99}│"
+            "format": "{##8d9199}│"
         },
         // Hardware Information
         {
             "type": "custom",
-            "format": "{##d5bbfc}│ {#}Hardware Information"
+            "format": "{##a5c8fe}│ {#}Hardware Information"
         },
         {
             "type": "cpu",
-            "key": "{##958e99}│  {##d5bbfc}󰻠 CPU"
+            "key": "{##8d9199}│  {##a5c8fe}󰻠 CPU"
         },
         {
             "type": "gpu",
-            "key": "{##958e99}│  {##d5bbfc}󰢮 GPU"
+            "key": "{##8d9199}│  {##a5c8fe}󰢮 GPU"
         },
         {
             "type": "memory",
-            "key": "{##958e99}│  {##d5bbfc}󰍛 Memory"
+            "key": "{##8d9199}│  {##a5c8fe}󰍛 Memory"
         },
         {
             "type": "swap",
-            "key": "{##958e99}│  {##d5bbfc}󰍛 Swap"
+            "key": "{##8d9199}│  {##a5c8fe}󰍛 Swap"
         },
         {
             "type": "disk",
-            "key": "{##958e99}│  {##d5bbfc}󰋊 Disk (/)",
+            "key": "{##8d9199}│  {##a5c8fe}󰋊 Disk (/)",
             "folders": "/"
         },
         {
             "type": "custom",
-            "format": "{##958e99}│"
+            "format": "{##8d9199}│"
         },
         // Colors
         {
             "type": "colors",
-            "key": "{##958e99}│",
+            "key": "{##8d9199}│",
             "symbol": "circle"
         },
         // Footer
         {
             "type": "custom",
-            "format": "{##958e99}╰───────────────────────────────╯"
+            "format": "{##8d9199}╰───────────────────────────────╯"
         }
     ]
 }

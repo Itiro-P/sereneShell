@@ -4,31 +4,46 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 
 import qs.services
+import qs.styles
 
-WrapperItem {
+Item {
     id: root
     visible: Mpris.player != null
+    
+    implicitWidth: row.implicitWidth
+    implicitHeight: row.implicitHeight
+
+
 
     RowLayout {
-        Text {
-            text: `${Utils.limitString(Mpris.title, 20)} - ${Utils.limitString(Mpris.artist, 20)} ${Utils.formatSeconds(Mpris.position)}/${Utils.formatSeconds(Mpris.length)}`
-        }
+        id: row
+        anchors.centerIn: parent
+        spacing: Metrics.spacingS
 
         WrapperMouseArea {
             IconImage {
                 implicitWidth: 16
                 implicitHeight: 16
-                source: "image://icon/media-skip-backward-symbolic"
+                source: Quickshell.iconPath("media-skip-backward-symbolic")
             }
             cursorShape: Qt.PointingHandCursor
             onClicked: Mpris.previous()
         }
 
         WrapperMouseArea {
-            IconImage {
-                implicitWidth: 16
-                implicitHeight: 16
-                source: `image://icon/${Mpris.player?.isPlaying ? "media-playback-pause-symbolic": "media-playback-start-symbolic"}`
+            RowLayout {
+                anchors.fill: parent
+                spacing: Metrics.spacingS
+
+                IconImage {
+                    implicitWidth: 16
+                    implicitHeight: 16
+                    source: Quickshell.iconPath(Mpris.player?.isPlaying ? "media-playback-pause-symbolic": "media-playback-start-symbolic")
+                }
+                StyledText {
+                    font.pixelSize: Metrics.fontM
+                    text: `${Utils.limitString(Mpris.title, 20)} - ${Utils.limitString(Mpris.artist, 20)}`
+                }
             }
             cursorShape: Qt.PointingHandCursor
             onClicked: Mpris.togglePlaying()
@@ -38,7 +53,7 @@ WrapperItem {
             IconImage {
                 implicitWidth: 16
                 implicitHeight: 16
-                source: "image://icon/media-skip-forward-symbolic"
+                source: Quickshell.iconPath("media-skip-forward-symbolic")
             }
             cursorShape: Qt.PointingHandCursor
             onClicked: Mpris.next()

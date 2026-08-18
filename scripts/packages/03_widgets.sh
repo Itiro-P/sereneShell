@@ -9,4 +9,6 @@ yay -S --needed --noconfirm \
     wl-mirror \
     quickshell \
     qml-niri \
-    wev
+    wev \
+    network-manager-applet \
+    pavucontrol-qt

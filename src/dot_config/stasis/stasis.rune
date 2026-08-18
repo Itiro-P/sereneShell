@@ -8,10 +8,10 @@ debounce_seconds  4
 notify_seconds    10
 
 default:
-  enable_loginctl true
+  enable_loginctl_integration true
   enable_dbus_inhibit true
   pre_suspend_command None
-  prepare_sleep_command "qs -p ~/.config/serene-shell/serene-locker.qml &"
+  prepare_sleep_command "~/.config/serene-shell/lock.sh"
 
   monitor_media true
   ignore_remote_media true
@@ -23,7 +23,7 @@ default:
   notification_icon "stasis"
 
 
-  lid_close_action "qs -p ~/.config/serene-shell/serene-locker.qml &"
+  lid_close_action ""
   lid_open_action ""
 
   inhibit_apps [
@@ -33,12 +33,11 @@ default:
     r".*\.exe"
     r"steam_app_.*"
     r".*\.x86_64"
-    r"firefox.*"
   ]
 
   lock_screen:
     timeout lock_after
-    command "qs -p ~/.config/serene-shell/serene-locker.qml &"
+    command "~/.config/serene-shell/lock.sh"
   end
 
   dpms:
@@ -55,20 +54,21 @@ default:
   ac:
     brightness:
       timeout 120
-      command "brightnessctl -s set 30%"
+      command "brightnessctl -s set 2%"
       resume_command "brightnessctl -r"
     end
 
-    dpms:
+    lock_screen:
       timeout 180
+      command "~/.config/serene-shell/lock.sh"
+    end
+
+    dpms:
+      timeout 240
       command "niri msg action power-off-monitors"
       resume_command "niri msg action power-on-monitors"
     end
 
-    lock_screen:
-      timeout lock_after
-      command "hyprlock"
-    end
 
     suspend:
       timeout suspend_after
@@ -79,23 +79,24 @@ default:
   battery:
     brightness:
       timeout 60
-      command "brightnessctl -s set 15%"
+      command "brightnessctl -s set 2%"
       resume_command "brightnessctl -r"
     end
 
-    dpms:
+    lock_screen:
       timeout 90
+      command "~/.config/serene-shell/lock.sh"
+    end
+    
+    dpms:
+      timeout 180
       command "niri msg action power-off-monitors"
       resume_command "niri msg action power-on-monitors"
     end
 
-    lock_screen:
-      timeout 180
-      command "hyprlock"
-    end
 
     suspend:
-      timeout 300
+      timeout 240
       command "systemctl suspend"
     end
   end
@@ -114,8 +115,3 @@ presentation:
   lid_close_action ""
   lid_open_action ""
 end
-
-
-
-
-
