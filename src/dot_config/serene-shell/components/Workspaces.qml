@@ -23,9 +23,16 @@ WrapperRectangle {
                 onClicked: modelData.activate()
                 Rectangle {
                     implicitHeight: Metrics.iconS
-                    implicitWidth: Metrics.iconS * (modelData.active ? 1.6 : 1)
+                    implicitWidth: Metrics.iconS * (modelData.active ? 1.5 : 1)
                     radius: Metrics.radiusFull
                     color: modelData.active ? Colors.md3.primary : Colors.md3.surface_variant
+
+                    StyledText {
+                        anchors.centerIn: parent
+                        text: modelData.name
+                        font.bold: true
+                        color: modelData.active ? Colors.md3.surface_variant : Colors.md3.outline
+                    }
 
                     Behavior on implicitWidth {
                         NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
