@@ -38,41 +38,41 @@ LazyLoader {
             onActivated: States.wallpaperSelectorOpen = false
         }
 
-    Rectangle {
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: Colors.md3.surface
-        implicitHeight: Metrics.imagePreviewHeight + (Metrics.paddingS * 2)
-        implicitWidth: Metrics.imagePreviewWidth * 5 + Metrics.paddingL
-        radius: Metrics.radiusL
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Colors.md3.surface
+            implicitHeight: Metrics.imagePreviewHeight + (Metrics.paddingS * 2)
+            implicitWidth: Metrics.imagePreviewWidth * 5 + Metrics.paddingL
+            radius: Metrics.radiusL
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {}
-        }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {}
+            }
 
-        RowLayout {
-            anchors.fill: parent
-            anchors.margins: Metrics.paddingS
-            
-            ListView {
-                id: resultsList
-                Layout.fillWidth: true
-                Layout.preferredHeight: Metrics.imagePreviewHeight
-                orientation: ListView.Horizontal
-                spacing: Metrics.spacingS
-                clip: true
-                model: Awww.wallpapers
-                keyNavigationEnabled: true
-                Keys.onReturnPressed: {
-                    if (currentItem) {
-                        States.wallpaperSelectorOpen = false
-                        Awww.apply(screen.name, currentItem.modelData.filePath)
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: Metrics.paddingS
+                
+                ListView {
+                    id: resultsList
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Metrics.imagePreviewHeight
+                    orientation: ListView.Horizontal
+                    spacing: Metrics.spacingS
+                    clip: true
+                    model: Awww.wallpapers
+                    keyNavigationEnabled: true
+                    Keys.onReturnPressed: {
+                        if (currentItem) {
+                            States.wallpaperSelectorOpen = false
+                            Awww.apply(screen.name, currentItem.modelData.filePath)
+                        }
                     }
+                    delegate: WallpaperPreview { output: screen.name }
                 }
-                delegate: WallpaperPreview { output: screen.name }
             }
         }
-    }
     }
 }

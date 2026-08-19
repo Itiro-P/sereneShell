@@ -8,14 +8,14 @@ Singleton {
     id: root
 
     readonly property int tick: 0
-    readonly property string wallpapersPath: `${Quickshell.workingDirectory}/wallpapers`
+    readonly property string wallpapersPath: `file://${Quickshell.env("HOME")}/.config/serene-shell/wallpapers`
     readonly property string matugenPath: `${Quickshell.env("HOME")}/.config/matugen/config.toml`
 
     readonly property alias wallpapers: folderModel
 
     FolderListModel {
         id: folderModel
-        folder: "file://" + wallpapersPath
+        folder: wallpapersPath
 
         showDirs: false
         

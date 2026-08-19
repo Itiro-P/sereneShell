@@ -10,6 +10,7 @@ WrapperRectangle {
     id: root
     required property QtObject rootBar
     readonly property var workspaces: WindowManager.screenProjection(rootBar.screen).windowsets
+
     color: "transparent"
 
     RowLayout {
@@ -17,14 +18,27 @@ WrapperRectangle {
         spacing: Metrics.spacingS
 
         Repeater {
-            model: root.workspaces
+            model: ScriptModel {
+                values: {
+                    const arr = root.workspaces.slice()
+                    arr.sort((a, b) => {
+                        const na = Number(a.name)
+                        const nb = Number(b.name)
+                        if (!isNaN(na) && !isNaN(nb))
+                            return na - nb
+                        return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)
+                    })
+                    return arr
+                }
+            }
+
             delegate: WrapperMouseArea {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: modelData.activate()
                 Rectangle {
                     implicitHeight: Metrics.iconS
-                    implicitWidth: Metrics.iconS * (modelData.active ? 1.5 : 1)
-                    radius: Metrics.radiusFull
+                    implicitWidth: Metrics.iconS * (modelData.active ? 1.4 : 1)
+                    radius: modelData.active ? Metrics.radiusM : Metrics.radiusFull
                     color: modelData.active ? Colors.md3.primary : Colors.md3.surface_variant
 
                     StyledText {
@@ -39,13 +53,6 @@ WrapperRectangle {
                     }
                 }
             }
-            
-            /*
-            Workspace {
-                workspace: modelData
-                rootBar: root.rootBar
-            }
-            */
         }
     }
 }
