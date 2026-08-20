@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 echo "Instalando programas e otimizações para jogos."
-
 yay -S --needed --noconfirm \
     heroic-games-launcher-bin \
     steam \
@@ -15,4 +13,5 @@ yay -S --needed --noconfirm \
     proton-ge-custom-bin \
     protonup-qt \
     wine \
-    pdx-unlimiter
+    pdx-unlimiter \
+    creamlinux-installer-bin

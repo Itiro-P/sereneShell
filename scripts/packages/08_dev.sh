@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 echo "Instalando programas e bibliotecas de desenvolvimento."
-
 yay -S --needed --noconfirm \
     pkgconf \
     automake \
@@ -10,6 +8,7 @@ yay -S --needed --noconfirm \
     visual-studio-code-bin \
     man-pages \
     git \
+    github-cli \
     gitte \
     jq \
     gradle \
@@ -21,20 +20,75 @@ yay -S --needed --noconfirm \
     junit \
     maven \
     dart-sass \
+    sassc \
+    sccache \
     python-pandas \
     python-pip \
     python-pipx \
     python-automat \
     python-github3py \
+    python-build \
+    python-html5lib \
+    python-sphinx \
     docker \
     docker-compose \
     docker-buildx \
     fuse-overlayfs \
     yarn \
+    pnpm \
     npm \
     go \
     clang \
     cmake \
+    corrosion \
     glib2-devel \
     llvm \
-    lm-studio-bin
+    lm-studio-bin \
+    bison \
+    flex \
+    boost \
+    eigen \
+    check \
+    doxygen \
+    gi-docgen \
+    extra-cmake-modules \
+    blueprint-compiler \
+    intltool \
+    itstool \
+    texinfo \
+    xmlto \
+    libdbusmenu-qt5 \
+    libolm \
+    libspectre \
+    microsoft-gsl \
+    xapian-core \
+    xerces-c \
+    ruby-test-unit \
+    shiboken6-generator \
+    qca-qt5 \
+    qgpgme \
+    qt5-script \
+    qt5-tools \
+    qt6-3d \
+    qt6-canvaspainter \
+    qt6-charts \
+    qt6-datavis3d \
+    qt6-doc \
+    qt6-examples \
+    qt6-graphs \
+    qt6-grpc \
+    qt6-httpserver \
+    qt6-languageserver \
+    qt6-lottie \
+    qt6-networkauth \
+    qt6-openapi \
+    qt6-quick3dphysics \
+    qt6-quickeffectmaker \
+    qt6-remoteobjects \
+    qt6-scxml \
+    qt6-serialbus \
+    qt6-tasktree \
+    qt6-virtualkeyboard \
+    qt6-wayland \
+    vulkan-headers \
+    xorg-server-devel

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 echo "Instalando pacotes essenciais de sistema."
-
 yay -S --needed --noconfirm \
     seahorse \
     kitty \
@@ -13,17 +11,54 @@ yay -S --needed --noconfirm \
     btop \
     fastfetch \
     nvtop \
+    tree \
+    nano \
+    less \
+    wget \
+    man-db \
     downgrade \
     xdg-utils \
+    xdotool \
     cloudflare-warp-bin \
     openvpn \
     zerotier-one \
+    nmap \
+    ufw \
+    socat \
     appimagelauncher \
     7zip \
+    lzip \
     unrar \
     unzip \
     zip \
     pacman-contrib \
-    vulkan-tools \
+    packagekit \
+    thunar \
+    thunar-archive-plugin \
+    thunar-media-tags-plugin \
+    thunar-shares-plugin \
+    thunar-volman \
+    tumbler \
+    gvfs-mtp \
+    cups \
+    cups-pk-helper \
+    system-config-printer \
+    sane \
+    firejail \
     smartmontools \
-    power-profiles-daemon
+    btrfs-progs \
+    zram-generator \
+    power-profiles-daemon \
+    amd-ucode \
+    dkms \
+    linuwu-sense-dkms \
+    mkinitcpio \
+    efibootmgr \
+    vulkan-tools \
+    vulkan-radeon \
+    lib32-vulkan-radeon \
+    nvidia-open \
+    nvidia-prime \
+    nvidia-container-toolkit \
+    libva-nvidia-driver \
+    libgnome-keyring

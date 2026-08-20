@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 echo "Instalando pacotes de temas e fontes."
-
 yay -S --needed --noconfirm \
     bibata-cursor-theme-bin \
     nwg-look \
@@ -16,6 +14,7 @@ yay -S --needed --noconfirm \
     adwsteamgtk \
     kvantum-theme-materia \
     tela-circle-icon-theme-standard \
+    sddm-astronaut-theme \
     noto-fonts-cjk \
     noto-fonts-emoji \
     noto-fonts-extra \
