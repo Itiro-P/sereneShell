@@ -11,7 +11,7 @@ Singleton {
   	}
 
   	readonly property string date: {
-    	Qt.formatDate(clock.date, Locale.LongFormat)
+    	Qt.formatDate(clock.date, "dddd dd/MM/yyyy")
   	}
 
   	SystemClock {
